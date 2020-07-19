@@ -75,12 +75,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn' => '',
-	// 'hostname' => '178.128.84.97',
-	'hostname' => 'localhost',
+	'hostname' => '178.128.84.97',
+	// 'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => 'root',
-	'port'	=> '8889',
-	// 'password' => '37dd5a0741',
+	// 'password' => 'root',
+	// 'port'	=> '8889',
+	'password' => '37dd5a0741',
 	'database' => 'evaluate_db',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => 'evaluate_',
