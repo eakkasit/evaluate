@@ -52,7 +52,7 @@
 							<img class="nav-user-photo" src="<?php echo $profile_picture; ?>" alt="User Photo"/>
 							<span class="user-info">
 									<small>ผู้ใช้</small>
-									<?php echo $this->Commons_model->getPrefixList($this->session->userdata('prename')) . ' ' . $this->session->userdata('name') . '   ' . $this->session->userdata('surname'); ?>
+									<?php //echo $this->Commons_model->getPrefixList($this->session->userdata('prename')) . ' ' . $this->session->userdata('name') . '   ' . $this->session->userdata('surname'); ?>
 								</span>
 
 							<i class="ace-icon fa fa-caret-down"></i>

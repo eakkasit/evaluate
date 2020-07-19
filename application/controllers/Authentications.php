@@ -9,7 +9,7 @@ class Authentications extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session'));
-		$this->load->model(array('Commons_model', 'Logs_model', 'Configs_model', 'Users_model'));
+		$this->load->model(array('Commons_model', 'Logs_model'));
 		$this->load->helper();
 	}
 
@@ -36,7 +36,7 @@ class Authentications extends CI_Controller
 		$user = (array)$this->db->select('*')->from('user')->where('user_id', $user_id)->get()->result()[0];
 		$this->session->set_userdata($user);
 		$this->Logs_model->insertLog('login');
-		redirect(base_url("users/dashboard_users"));
+		redirect(base_url("criteria_themes/dashboard_criteria_themes"));
 	}
 
 	public function logout()
