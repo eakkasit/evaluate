@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Criteria_themes extends CI_Controller
+class Criteria_assessments extends CI_Controller
 {
 	private $theme = 'default';
 
@@ -20,7 +20,7 @@ class Criteria_themes extends CI_Controller
 
 	public function index()
 	{
-		redirect(base_url("criteria_themes/dashboard_criteria_themes"));
+		redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
 		exit;
 	}
 
@@ -43,48 +43,48 @@ class Criteria_themes extends CI_Controller
 		return $cond;
 	}
 
-	public function dashboard_criteria_themes()
+	public function dashboard_criteria_assessments()
 	{
 
 		$data['content_data'] = array(
 
 		);
 
-		$data['content_view'] = 'pages/dashboard_criteria_theme';
+		$data['content_view'] = 'pages/dashboard_criteria_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function view_criteria_theme($id = null)
+	public function view_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/view_criteria_theme';
+		$data['content_view'] = 'pages/view_criteria_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_criteria_theme($id = null)
+	public function new_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
 		);
-		$data['content_view'] = 'pages/form_criteria_theme';
+		$data['content_view'] = 'pages/form_criteria_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function edit_criteria_theme($id = null)
+	public function edit_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/form_criteria_theme';
+		$data['content_view'] = 'pages/form_criteria_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
 
 
-	public function delete_criteria_theme($id = null)
+	public function delete_criteria_assessment($id = null)
 	{
-		redirect(base_url("criteria_theme/dashboard_criteria_themes"));
+		redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
 		exit;
 	}
 

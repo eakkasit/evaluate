@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Criteria_themes extends CI_Controller
+class Criteria_variables extends CI_Controller
 {
 	private $theme = 'default';
 
@@ -20,7 +20,7 @@ class Criteria_themes extends CI_Controller
 
 	public function index()
 	{
-		redirect(base_url("criteria_themes/dashboard_criteria_themes"));
+		redirect(base_url("criteria_variables/dashboard_criteria_variables"));
 		exit;
 	}
 
@@ -43,48 +43,49 @@ class Criteria_themes extends CI_Controller
 		return $cond;
 	}
 
-	public function dashboard_criteria_themes()
+	public function dashboard_criteria_variables()
 	{
 
 		$data['content_data'] = array(
 
 		);
 
-		$data['content_view'] = 'pages/dashboard_criteria_theme';
+		$data['content_view'] = 'pages/dashboard_criteria_variable';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function view_criteria_theme($id = null)
+	public function view_criteria_variable($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/view_criteria_theme';
+		$data['content_view'] = 'pages/view_criteria_variable';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_criteria_theme($id = null)
-	{
-		$data['content_data'] = array(
-		);
-		$data['content_view'] = 'pages/form_criteria_theme';
-		$this->load->view($this->theme, $data);
-	}
-
-	public function edit_criteria_theme($id = null)
+	public function new_criteria_variable($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/form_criteria_theme';
+		$data['content_view'] = 'pages/form_criteria_variable';
+		$this->load->view($this->theme, $data);
+	}
+
+	public function edit_criteria_variable($id = null)
+	{
+		$data['content_data'] = array(
+
+		);
+		$data['content_view'] = 'pages/form_criteria_variable';
 		$this->load->view($this->theme, $data);
 	}
 
 
 
-	public function delete_criteria_theme($id = null)
+	public function delete_criteria_variable($id = null)
 	{
-		redirect(base_url("criteria_theme/dashboard_criteria_themes"));
+		redirect(base_url("criteria_variables/dashboard_criteria_variables"));
 		exit;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Criteria_themes extends CI_Controller
+class Evaluate_datas extends CI_Controller
 {
 	private $theme = 'default';
 
@@ -20,7 +20,7 @@ class Criteria_themes extends CI_Controller
 
 	public function index()
 	{
-		redirect(base_url("criteria_themes/dashboard_criteria_themes"));
+		redirect(base_url("evaluate_datas/dashboard_evaluate_datas"));
 		exit;
 	}
 
@@ -43,48 +43,52 @@ class Criteria_themes extends CI_Controller
 		return $cond;
 	}
 
-	public function dashboard_criteria_themes()
+	public function dashboard_evaluate_datas()
 	{
 
 		$data['content_data'] = array(
 
 		);
 
-		$data['content_view'] = 'pages/dashboard_criteria_theme';
+		$data['content_view'] = 'pages/dashboard_evaluate_data';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function view_criteria_theme($id = null)
+	public function view_evaluate_data($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/view_criteria_theme';
+		$data['content_view'] = 'pages/view_evaluate_data';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_criteria_theme($id = null)
+	public function new_evaluate_data($id = null)
 	{
 		$data['content_data'] = array(
+			'status_list'=>({
+				''
+				})
 		);
-		$data['content_view'] = 'pages/form_criteria_theme';
+		$data['content_view'] = 'pages/form_evaluate_data';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function edit_criteria_theme($id = null)
+	public function edit_evaluate_data($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/form_criteria_theme';
+		$data['content_view'] = 'pages/form_evaluate_data';
 		$this->load->view($this->theme, $data);
 	}
 
 
 
-	public function delete_criteria_theme($id = null)
+	public function delete_evaluate_data($id = null)
 	{
-		redirect(base_url("criteria_theme/dashboard_criteria_themes"));
+		// $this->Users_model->deleteUser($id);
+		redirect(base_url("evaluate_datas/dashboard_evaluate_datas"));
 		exit;
 	}
 

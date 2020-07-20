@@ -11,7 +11,7 @@
 			<th class="text-center" width="12%">รายละเอียด</th>
 			<th class="text-center" width="6%">สถานะ</th>
 			<th class="text-center" width="24%">
-				<a href="<?php echo base_url("criteria_themes/new_criteria_theme"); ?>" title="เพิ่ม">
+				<a href="<?php echo base_url("criteria_variables/new_criteria_variable"); ?>" title="เพิ่ม">
 					<button type="button" class="btn btn-sm btn-success">
 						<i class="fa fa-plus"></i> เพิ่ม
 					</button>
@@ -52,13 +52,13 @@
 					</td>
 					<td class="text-center white">
 						<div>
-							<a href="<?php echo base_url("criteria_themes/view_criteria_theme/{$data->user_id}"); ?>"
+							<a href="<?php echo base_url("criteria_variables/view_criteria_variable/{$data->user_id}"); ?>"
 							   class="table-link" title="แสดง">
 								<button type="button" class="btn btn-xs btn-info">
 									<i class="fa fa-eye"></i> แสดง
 								</button></a>
 
-							<a href="<?php echo base_url("criteria_themes/edit_criteria_theme/{$data->user_id}"); ?>"
+							<a href="<?php echo base_url("criteria_variables/edit_criteria_variable/{$data->user_id}"); ?>"
 							   class="table-link" title="แก้ไข">
 								<button type="button" class="btn btn-xs btn-warning">
 									<i class="fa fa-edit"></i> แก้ไข
@@ -67,7 +67,7 @@
 							<?php if (in_array(strtolower($data->user_status), array('active'))) { ?>
 								<a href="#"
 								   class="table-link"
-								   onclick="delete_criteria_theme(<?php echo $data->user_id; ?>);" title="ระงับ">
+								   onclick="delete_criteria_variable(<?php echo $data->user_id; ?>);" title="ระงับ">
 									<button type="button" class="btn btn-xs btn-danger">
 										<i class="fa fa-trash-o"></i> ระงับ
 									</button></a>
@@ -86,7 +86,7 @@
 	<?php $this->load->view("template/pagination"); ?>
 </div>
 <script type="text/javascript">
-    function delete_criteria_theme(user_id) {
+    function delete_criteria_variable(user_id) {
         swal({
                 title: "แจ้งเตือน",
                 text: "ต้องการระงับผู้ใช้งานนี้",
@@ -99,7 +99,7 @@
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    location.href = '<?php echo base_url("criteria_themes/delete_criteria_theme/"); ?>' + user_id;
+                    location.href = '<?php echo base_url("criteria_variables/delete_criteria_variable/"); ?>' + user_id;
                 }
             });
     }
