@@ -122,17 +122,17 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'base_url' => '',
 			'menu' => array(
 				'datas' => array(
-					'name' => 'เป้าหมายโครงการ',
+					'name' => 'บันทึกเป้าหมายโครงการ',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_targets',
 				),
 				'agendas' => array(
-					'name' => 'รายงานประเมินผล',
+					'name' => 'บันทึกรายงานประเมินผล',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_datas',
 				),
 				'attends' => array(
-					'name' => 'รายงานโครงการระยะ 5 ปี',
+					'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_five_years',
 				),
@@ -156,12 +156,12 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 				'report_result' => array(
 					'name' => 'รายงานประเมินผล',
 					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'report_evaluate',
+					'base_url' => 'report_evaluates',
 				),
 				'report_total' => array(
 					'name' => 'รายงานโครงการ 5 ปี',
 					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'report_five_year',
+					'base_url' => 'report_five_years',
 				),
 			),
 		),

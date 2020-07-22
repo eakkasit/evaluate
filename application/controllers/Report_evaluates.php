@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Evaluate_datas extends CI_Controller
+class Reports_assessments extends CI_Controller
 {
 	private $theme = 'default';
 
@@ -20,7 +20,7 @@ class Evaluate_datas extends CI_Controller
 
 	public function index()
 	{
-		redirect(base_url("evaluate_datas/dashboard_evaluate_datas"));
+		redirect(base_url("reports_assessments/dashboard_reports_assessments"));
 		exit;
 	}
 
@@ -43,47 +43,51 @@ class Evaluate_datas extends CI_Controller
 		return $cond;
 	}
 
-	public function dashboard_evaluate_datas()
+	public function dashboard_reports_assessments()
 	{
 
 		$data['content_data'] = array(
 
 		);
 
-		$data['content_view'] = 'pages/dashboard_evaluate_data';
+		$data['content_view'] = 'pages/dashboard_reports_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function view_evaluate_data($id = null)
+	public function view_reports_assessment($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/view_evaluate_data';
+		$data['content_view'] = 'pages/view_reports_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_evaluate_data($id = null)
+	public function new_reports_assessment($id = null)
 	{
-		$data['content_data'] = array();
-		$data['content_view'] = 'pages/form_evaluate_data';
+		$data['content_data'] = array(
+			'status_list'=>({
+				''
+				})
+		);
+		$data['content_view'] = 'pages/form_reports_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function edit_evaluate_data($id = null)
+	public function edit_reports_assessment($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/form_evaluate_data';
+		$data['content_view'] = 'pages/form_reports_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
 
 
-	public function delete_evaluate_data($id = null)
+	public function delete_reports_assessment($id = null)
 	{
-		redirect(base_url("evaluate_datas/dashboard_evaluate_datas"));
+		redirect(base_url("reports_assessments/dashboard_reports_assessments"));
 		exit;
 	}
 
