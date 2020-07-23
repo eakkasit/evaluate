@@ -90,6 +90,18 @@ defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatic
 define('SYSTEM_MENU', json_encode(// เมนูระบบ
 	array(
 		array(
+			'name' => 'โครงการ / กิจกรรม',
+			'icon' => 'fa fa-book',
+			'base_url' => '',
+			'menu' => array(
+				'activity' => array(
+					'name' => 'บันทึกโครงการ / กิจกรรม',
+					'icon' => 'fa  fa-book',
+					'base_url' => 'activities',
+				),
+			),
+		),
+		array(
 			'name' => 'ประเมินองค์กรรายปี',
 			'icon' => 'fa fa-users',
 			'base_url' => '',
