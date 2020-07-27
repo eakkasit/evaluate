@@ -2,27 +2,14 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("criteria_variables/save");
 $prev = base_url("criteria_variables/dashboard_criteria_variables");
-$profile_picture_default = base_url("assets/images/no_images.jpg");
-$profile_picture = $profile_picture_default;
-$btn_img_txt = 'เพิ่มรูป';
-$btn_img_dsp = false;
-if (isset($user_data->user_id) && $user_data->user_id != '') {
+if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
-	$action .= "/{$user_data->user_id}";
-	$prev = base_url("criteria_variables/view_user/{$user_data->user_id}");
-	if (isset($user_data->profile_picture_tmp) && $user_data->profile_picture_tmp != '') {
-		$profile_picture = base_url("assets/uploads/{$user_data->profile_picture_tmp}");
-		$btn_img_txt = 'แก้ไขรูป';
-		$btn_img_dsp = true;
-	} else if (isset($user_data->profile_picture) && $user_data->profile_picture != '') {
-		$profile_picture = base_url("assets/uploads/{$user_data->profile_picture}");
-		$btn_img_txt = 'แก้ไขรูป';
-		$btn_img_dsp = true;
-	}
+	$action .= "/{$data->id}";
+	$prev = base_url("criteria_variables/view_criteria_variable/{$data->id}");
 }
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>รายชื่อผู้ประชุม
+	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>ตัวแปรเกณฑ์การประเมิน
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -35,48 +22,99 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">แม่แบบเกณฑ์การประเมิน</label>
+								<label for="stext">ชื่อตัวแปรเกณฑ์การประเมิน</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" name="citizen_id" class="form-control"
-									   value="" placeholder="ระบุ">
+								<input type="text" name="variable_name" class="form-control"
+									   value="<?php if (isset($data->variable_name)) { echo $data->variable_name;	} ?>" placeholder="ระบุ">
+							</div>
+							<label 	class="col-md-12 text-danger"><?php echo form_error("variable_name"); ?></label>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">หน่วยวัด</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<select class="form-control" name="units">
+									<?php foreach ($units_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->units) && $data->units == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<label 	class="col-md-12 text-danger"><?php echo form_error("units"); ?></label>
+							</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">ชนิดของการแสดงผล</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<select class="form-control" name="type_show">
+									<?php foreach ($show_type_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->type_show) && $data->type_show == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("type_show"); ?></label>
 						</div>
+
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">รายละเอียด</label>
+								<label for="stext">ประเภทการนำเข้าข้อมูล</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<textarea type="text" name="citizen_id" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
-							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">สถานะการใช้งาน</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<?php foreach ($status_list as $key => $value) { ?>
-									<input type="radio" name="user_status"
-										   id="user_status_<?php echo $key; ?>"
-										   class=""
-										   value="<?php echo $key; ?>" <?php if (isset($user_data->user_status) && $user_data->user_status == $key) {
+								<?php foreach ($field_type_list as $key => $value) { ?>
+									<input type="radio" name="type_field"
+											 id="units_<?php echo $key; ?>"
+											 class=""
+											 value="<?php echo $key; ?>" <?php if (isset($data->type_field) && $data->type_field == $key) {
 										echo 'checked="checked"';
 									} ?>>&nbsp;<label
-										for="user_status_<?php echo $key; ?>"><?php echo $value; ?></label>&emsp;
+										for="units_<?php echo $key; ?>"><?php echo $value; ?></label>&emsp;
 								<?php } ?>
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("user_status"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("field_type"); ?></label>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">ค่าตัวแปร</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="text" name="variable_value" class="form-control"  value="<?php if (isset($data->variable_value)) { echo $data->variable_value;	} ?>" placeholder="ระบุ">
+							</div>
+							<label 	class="col-md-12 text-danger"><?php echo form_error("variable_value"); ?></label>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">sql</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<textarea type="text" name="sql_text" cols="4" rows="5" class="form-control" placeholder="ระบุ"><?php if (isset($data->sql_text)) { echo $data->sql_text;	} ?></textarea>
+							</div>
+							<label
+								class="col-md-12 text-danger"><?php echo form_error("sql_text"); ?></label>
 						</div>
 					</div>
 				</div>

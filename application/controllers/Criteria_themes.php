@@ -58,7 +58,6 @@ class Criteria_themes extends CI_Controller
 		$data['content_data'] = array(
 			'search_url' => base_url("criteria_themes/dashboard_criteria_themes"),
 			'status_list' => $this->Commons_model->getActiveList(),
-
 			'datas' => $this->CriteriaProfiles_model->getCriteriaProfiles($cond, array(), $config_pager['per_page'], $page),
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,

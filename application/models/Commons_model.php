@@ -41,6 +41,22 @@ class Commons_model extends CI_Model
 			'0' => 'ไม่ใช้งาน',
 			'1' => 'ใช้งาน'
 		);
+
+		$this->show_type = array(
+			'1' => 'Boolean',
+			'2' => 'Number',
+		);
+
+		$this->field_type = array(
+			'1' => 'บันทึก',
+			'2' => 'อัตโนมัติ',
+			'3' => 'ค่าคงที่',
+		);
+
+		$this->units = array(
+			'1' => 'คน',
+			'2' => 'วัน',
+		);
 	}
 
 		public function getPrefixList($prename_id = null)
@@ -93,6 +109,45 @@ class Commons_model extends CI_Model
 				}
 			} else {
 				return $this->active_status;
+			}
+		}
+
+		public function getShowTypeList($show_type = null)
+		{
+			if ($show_type != null) {
+				if (isset($this->show_type[$show_type])) {
+					return $this->show_type[$show_type];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->show_type;
+			}
+		}
+
+		public function getFieldTypeList($field_type = null)
+		{
+			if ($field_type != null) {
+				if (isset($this->field_type[$field_type])) {
+					return $this->field_type[$field_type];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->field_type;
+			}
+		}
+
+		public function getUnitsList($units = null)
+		{
+			if ($units != null) {
+				if (isset($this->units[$units])) {
+					return $this->units[$units];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->units;
 			}
 		}
 
