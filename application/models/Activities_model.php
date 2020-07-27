@@ -1,13 +1,18 @@
 <?php
 
-class Users_model extends CI_Model
+class Activities_model extends CI_Model
 {
-	private $default_user_type_id = 5;
+	// private $default_user_type_id = 5;
+	function __construct(){
+			 parent::__construct();
+			 //load our second db and put in $db2
+			 $this->db = $this->load->database('db_activity', TRUE);
+	 }
 
-	public function countUsers($cond = array())
+	public function countActivities($cond = array())
 	{
 		$this->db->select('*');
-		$this->db->from('user');
+		$this->db->from('project');
 		if (!empty($cond)) {
 			foreach ($cond as $k => $v) {
 				if (is_string($k)) {
@@ -24,10 +29,10 @@ class Users_model extends CI_Model
 		return $this->db->get()->num_rows();
 	}
 
-	public function getUsers($cond = array(), $order = array(), $limit = null, $start = 0)
+	public function getActivities($cond = array(), $order = array(), $limit = null, $start = 0)
 	{
 		$this->db->select('*');
-		$this->db->from('user');
+		$this->db->from('project');
 		if (!empty($cond)) {
 			foreach ($cond as $k => $v) {
 				if (is_string($k)) {
@@ -50,7 +55,7 @@ class Users_model extends CI_Model
 				}
 			}
 		} else {//default order
-			$this->db->order_by('create_date', 'desc');
+			$this->db->order_by('create_dt', 'desc');
 		}
 		if ($limit != null) {
 			$this->db->limit($limit, $start);
@@ -58,80 +63,38 @@ class Users_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
-	public function insertUser($data = array())
+	public function insertActivities($data = array())
 	{
-		$this->db->set('citizen_id', $data['citizen_id']);
-		$this->db->set('prename', $data['prename']);
-		$this->db->set('name', $data['name']);
-		$this->db->set('surname', $data['surname']);
-		$this->db->set('position_code', $data['position_code']);
-		$this->db->set('level_code', $data['level_code']);
-		$this->db->set('gender', $data['gender']);
-		$this->db->set('department', $data['department']);
-		$this->db->set('email', $data['email']);
-		$this->db->set('telephone', $data['telephone']);
-		$this->db->set('user_status', $data['user_status']);
-		if (isset($data['user_type']) && $data['user_type'] != '') $this->db->set('user_type', $data['user_type']);
-		$this->db->set('profile_picture', $data['profile_picture']);
+		$this->db->set('project_name', $data['project_name']);
+		$this->db->set('year', $data['year']);
+		$this->db->set('date_start', $data['date_start']);
+		$this->db->set('date_end', $data['date_end']);
+		$this->db->set('detail', $data['detail']);
+		$this->db->set('status', $data['status']);
 
-		$this->db->set('create_date', 'NOW()', false);
-		$this->db->insert('user');
+		$this->db->set('create_dt', 'NOW()', false);
+		$this->db->insert('project');
 		return $this->db->insert_id();
 	}
 
-	public function updateUser($user_id = null, $data = array())
+	public function updateActivities($project_id = null, $data = array())
 	{
-		$this->db->set('citizen_id', $data['citizen_id']);
-		$this->db->set('prename', $data['prename']);
-		$this->db->set('name', $data['name']);
-		$this->db->set('surname', $data['surname']);
-		$this->db->set('position_code', $data['position_code']);
-		$this->db->set('level_code', $data['level_code']);
-		$this->db->set('gender', $data['gender']);
-		$this->db->set('department', $data['department']);
-		$this->db->set('email', $data['email']);
-		$this->db->set('telephone', $data['telephone']);
-		$this->db->set('user_status', $data['user_status']);
-		if (isset($data['user_type']) && $data['user_type'] != '') $this->db->set('user_type', $data['user_type']);
-		$this->db->set('profile_picture', $data['profile_picture']);
-		$this->db->where('user_id', $user_id);
-		$this->db->update('user', $update);
-		return $user_id;
+		$this->db->set('project_name', $data['project_name']);
+		$this->db->set('year', $data['year']);
+		$this->db->set('date_start', $data['date_start']);
+		$this->db->set('date_end', $data['date_end']);
+		$this->db->set('detail', $data['detail']);
+		$this->db->set('status', $data['status']);
+		$this->db->where('id', $project_id);
+		$this->db->update('project', $update);
+		return $project_id;
 	}
 
-	public function deleteUser($user_id = null)
+	public function deleteActivities($project_id = null)
 	{
-		$update = ['user_status' => 'invoke'];
-		$this->db->where('user_id', $user_id);
-		$this->db->update('user', $update);
-		return $user_id;
-	}
-
-	public function saveTemporaryUsers($meeting_id = null, $users = array())
-	{
-		if (isset($users['new']) && !empty($users['new'])) {
-			foreach ($users['new'] as $user) {
-				$user['user_status'] = 'active';
-				$user['user_type'] = 'temporary';
-				$user_id = $this->insertUser($user);
-				$this->db->set('meeting_id', $meeting_id);
-				$this->db->set('group_id', 0);
-				$this->db->set('user_id', $user_id);
-				$this->db->set('user_type_id', $this->default_user_type_id);
-				$this->db->set('create_date', 'NOW()', false);
-				$this->db->insert('user2present');
-			}
-		}
-		if (isset($users['edit']) && !empty($users['edit'])) {
-			foreach ($users['edit'] as $user) {
-				$this->updateUser($user['user_id'], $user);
-				$this->db->set('meeting_id', $meeting_id);
-				$this->db->set('group_id', 0);
-				$this->db->set('user_id', $user['user_id']);
-				$this->db->set('user_type_id', $this->default_user_type_id);
-				$this->db->set('create_date', 'NOW()', false);
-				$this->db->insert('user2present');
-			}
-		}
+		$update = ['status' => '4'];
+		$this->db->where('id', $project_id);
+		$this->db->update('project', $update);
+		return $project_id;
 	}
 }

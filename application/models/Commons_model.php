@@ -25,20 +25,76 @@ class Commons_model extends CI_Model
 			'complete' => 'เสร็จสิ้น',
 		);
 
+		$this->project_status = array(
+			'0' => 'ร่างโครงการ',
+			'1' => 'อยู่ระหว่างดำเนินการ',
+			'2' => 'ดำเนินการเสร็จสิ้น',
+			'3' => 'ยกเลิก / ระงับ',
+		);
+
+		$this->year = array(
+			'2562' => '2562',
+			'2563' => '2563',
+		);
+
+		$this->active_status = array(
+			'0' => 'ไม่ใช้งาน',
+			'1' => 'ใช้งาน'
+		);
 	}
 
-	public function getPrefixList($prename_id = null)
-	{
-		if ($prename_id != null) {
-			if (isset($this->prename[$prename_id])) {
-				return $this->prename[$prename_id];
+		public function getPrefixList($prename_id = null)
+		{
+			if ($prename_id != null) {
+				if (isset($this->prename[$prename_id])) {
+					return $this->prename[$prename_id];
+				} else {
+					return '';
+				}
 			} else {
-				return '';
+				return $this->prename;
 			}
-		} else {
-			return $this->prename;
 		}
-	}
+
+
+		public function getProjectStatus($status_id = null)
+		{
+			if ($status_id != null) {
+				if (isset($this->project_status[$status_id])) {
+					return $this->project_status[$status_id];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->project_status;
+			}
+		}
+
+		public function getYearList($year = null)
+		{
+			if ($year != null) {
+				if (isset($this->year[$year])) {
+					return $this->year[$year];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->year;
+			}
+		}
+
+		public function getActiveList($active = null)
+		{
+			if ($active != null) {
+				if (isset($this->active_status[$active])) {
+					return $this->active_status[$active];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->active_status;
+			}
+		}
 
 	public function getGenderList($gender_id = null)
 	{

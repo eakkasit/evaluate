@@ -6,12 +6,13 @@
 		<thead>
 		<tr role="row">
 			<th class="text-center start_no" width="8%">ลำดับ</th>
-			<th class="text-center" width="17%">แม่แบบเกณฑ์การประเมิน</th>
-			<th class="text-center" width="13%">วันที่สร้าง</th>
-			<th class="text-center" width="12%">รายละเอียด</th>
+			<th class="text-center" width="17%">ชื่อโครงการ / กิจกกรม</th>
+			<th class="text-center" width="6%">ปี</th>
+			<th class="text-center" width="12%">ระยะเวลาดำเนินการ</th>
+			<th class="text-center" width="19%">รายละเอียด</th>
 			<th class="text-center" width="6%">สถานะ</th>
-			<th class="text-center" width="24%">
-				<a href="<?php echo base_url("criteria_themes/new_criteria_theme"); ?>" title="เพิ่ม">
+			<th class="text-center" width="12%">
+				<a href="<?php echo base_url("activities/new_activity"); ?>" title="เพิ่ม">
 					<button type="button" class="btn btn-sm btn-success">
 						<i class="fa fa-plus"></i> เพิ่ม
 					</button>
@@ -33,41 +34,38 @@
 						?>
 					</td>
 					<td class="text-left">
-						<?php echo "{$prefix_list[$data->prename]} {$data->name}   {$data->surname}"; ?>
+						<?php echo $data->project_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->position_code; ?>
+						<?php echo $data->year; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->department; ?>
+						<?php echo date_thai($data->date_start,false,false) ." - ". date_thai($data->date_end,false,false) ; ?>
+					</td>
+					<td class="text-left">
+						<?php echo $data->detail; ?>
 					</td>
 					<td class="text-center">
-						<?php echo $data->email; ?>
-					</td>
-					<td class="text-center">
-						<?php echo phone_number($data->telephone); ?>
-					</td>
-					<td class="text-center">
-						<?php echo $status_list[$data->user_status]; ?>
+						<?php echo $status_list[$data->status]; ?>
 					</td>
 					<td class="text-center white">
 						<div>
-							<a href="<?php echo base_url("criteria_themes/view_criteria_theme/{$data->user_id}"); ?>"
+							<a href="<?php echo base_url("activities/view_activity/{$data->id}"); ?>"
 							   class="table-link" title="แสดง">
 								<button type="button" class="btn btn-xs btn-info">
 									<i class="fa fa-eye"></i> แสดง
 								</button></a>
 
-							<a href="<?php echo base_url("criteria_themes/edit_criteria_theme/{$data->user_id}"); ?>"
+							<a href="<?php echo base_url("activities/edit_activity/{$data->id}"); ?>"
 							   class="table-link" title="แก้ไข">
 								<button type="button" class="btn btn-xs btn-warning">
 									<i class="fa fa-edit"></i> แก้ไข
 								</button></a>
 
-							<?php if (in_array(strtolower($data->user_status), array('active'))) { ?>
+							<?php if (in_array(strtolower($data->status), array('2'))) { ?>
 								<a href="#"
 								   class="table-link"
-								   onclick="delete_criteria_theme(<?php echo $data->user_id; ?>);" title="ระงับ">
+								   onclick="delete_activity(<?php echo $data->id; ?>);" title="ระงับ">
 									<button type="button" class="btn btn-xs btn-danger">
 										<i class="fa fa-trash-o"></i> ระงับ
 									</button></a>
@@ -86,10 +84,10 @@
 	<?php $this->load->view("template/pagination"); ?>
 </div>
 <script type="text/javascript">
-    function delete_criteria_theme(user_id) {
+    function delete_activity(project_id) {
         swal({
                 title: "แจ้งเตือน",
-                text: "ต้องการระงับผู้ใช้งานนี้",
+                text: "ต้องการระงับโครงการ / กิจกรรม นี้",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonText: "ระงับ",
@@ -99,7 +97,7 @@
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    location.href = '<?php echo base_url("criteria_themes/delete_criteria_theme/"); ?>' + user_id;
+                    location.href = '<?php echo base_url("activities/delete_activity/"); ?>' + project_id;
                 }
             });
     }
