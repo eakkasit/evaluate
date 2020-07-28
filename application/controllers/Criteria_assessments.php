@@ -9,7 +9,7 @@ class Criteria_assessments extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		// $this->load->model(array('Commons_model', 'Logs_model', 'Configs_model', 'Users_model'));
+		$this->load->model(array('Commons_model', 'CriteriaProfiles_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -27,8 +27,9 @@ class Criteria_assessments extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element') && !empty($fields)) {
+		if ($this->input->post('form_search_element')['text'] != '' && !empty($fields)) {
 			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);
@@ -45,9 +46,22 @@ class Criteria_assessments extends CI_Controller
 
 	public function dashboard_criteria_assessments()
 	{
+		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
+
+		$config_pager = $this->config->item('pager');
+		$config_pager['base_url'] = base_url("criteria_assessments/dashboard_criteria_assessments");
+		$count_rows = $this->CriteriaProfiles_model->countCriteriaProfiles($cond);
+		$config_pager['total_rows'] = $count_rows;
+		$this->pagination->initialize($config_pager);
+		$page = 0;
+		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 
 		$data['content_data'] = array(
-
+			'search_url' => base_url("criteria_assessments/dashboard_criteria_assessments"),
+			'status_list' => $this->Commons_model->getActiveList(),
+			'datas' => $this->CriteriaProfiles_model->getCriteriaProfiles($cond, array(), $config_pager['per_page'], $page),
+			'pages' => $this->pagination->create_links(),
+			'count_rows' => $count_rows,
 		);
 
 		$data['content_view'] = 'pages/dashboard_criteria_assessment';

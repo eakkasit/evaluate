@@ -27,7 +27,7 @@ class Criteria_themes extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element') && !empty($fields)) {
+		if ($this->input->post('form_search_element')['text'] != '' && !empty($fields)) {
 			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
 			$cond_str = "( ";
 			foreach ($search_text as $text) {

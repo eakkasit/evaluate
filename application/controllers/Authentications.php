@@ -36,7 +36,7 @@ class Authentications extends CI_Controller
 		$user = (array)$this->db->select('*')->from('user')->where('user_id', $user_id)->get()->result()[0];
 		$this->session->set_userdata($user);
 		$this->Logs_model->insertLog('login');
-		redirect(base_url("criteria_themes/dashboard_criteria_themes"));
+		redirect(base_url("activities/dashboard_activity"));
 	}
 
 	public function logout()
