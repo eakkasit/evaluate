@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2020-07-29 00:15:44
+Date: 2020-07-30 01:14:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,6 +37,25 @@ CREATE TABLE `activities_project` (
 INSERT INTO `activities_project` VALUES ('1', '2563', '2020-05-27 10:29:31', '2020-04-01 00:00:00', '2020-08-31 00:00:00', 'กองทุนเพื่อ SME ที่กำลังต้องการจัดหา ปรับปรุง สิ่งปลูกสร้าง (ไม่รวมการซื้อที่ดินว่างเปล่า) เครื่องจักร อุปกรณ์ พาหนะ ซอฟต์แวร์ และสิ่งอำนวยความสะดวกในกิจการ หรือกำลังมองหาเงินทุน/เงินทุนหมุนเวียน เพื่อเป็นค่าใช้จ่ายในการพัฒนากิจการ', '2', 'โครงการจัดการกองทุนพัฒนา');
 INSERT INTO `activities_project` VALUES ('2', '2562', '2020-07-27 16:58:01', '2020-07-01 00:00:00', '2020-12-31 00:00:00', 'ทดสอบ', '0', 'ทดสอบโครงการ');
 INSERT INTO `activities_project` VALUES ('3', '2562', '2020-07-27 17:15:41', '2020-12-31 00:00:00', '2020-12-31 00:00:00', 'ทดสอบแก้ไขข้อมูล', '3', 'ทดสอบแก้ไขโครงการ');
+
+-- ----------------------------
+-- Table structure for evaluate_criteria
+-- ----------------------------
+DROP TABLE IF EXISTS `evaluate_criteria`;
+CREATE TABLE `evaluate_criteria` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT '0',
+  `criteria_name` varchar(255) DEFAULT '',
+  `create_date` datetime DEFAULT NULL,
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of evaluate_criteria
+-- ----------------------------
+INSERT INTO `evaluate_criteria` VALUES ('1', '0', 'หมวดที่ 1', '2020-07-30 01:05:21', '2020-07-30 01:05:51');
+INSERT INTO `evaluate_criteria` VALUES ('2', '0', 'หมวดที่ 2', '2020-07-30 01:06:02', '2020-07-30 01:06:15');
 
 -- ----------------------------
 -- Table structure for evaluate_criteria_profile
@@ -90,7 +109,7 @@ CREATE TABLE `evaluate_log` (
   `user_id` int(11) NOT NULL COMMENT 'รหัสผู้ใช้ระบบประชุม',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'วันที่สร้าง',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_log
@@ -115,6 +134,8 @@ INSERT INTO `evaluate_log` VALUES ('17', 'logout', '3', '2020-07-28 13:14:04');
 INSERT INTO `evaluate_log` VALUES ('18', 'login', '1', '2020-07-28 13:14:06');
 INSERT INTO `evaluate_log` VALUES ('19', 'login', '1', '2020-07-28 16:58:55');
 INSERT INTO `evaluate_log` VALUES ('20', 'login', '1', '2020-07-28 22:55:02');
+INSERT INTO `evaluate_log` VALUES ('21', 'login', '1', '2020-07-29 20:33:57');
+INSERT INTO `evaluate_log` VALUES ('22', 'login', '1', '2020-07-29 23:26:24');
 
 -- ----------------------------
 -- Table structure for evaluate_user
