@@ -2,8 +2,6 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("criteria_assessments/save");
 $prev = base_url("criteria_assessments/dashboard_criteria_assessments");
-$btn_img_txt = 'เพิ่มรูป';
-$btn_img_dsp = false;
 if (isset($user_data->user_id) && $user_data->user_id != '') {
 	$title_prefix = 'แก้ไข';
 	$action .= "/{$user_data->user_id}";
@@ -33,22 +31,13 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 				<div class="row">
 				<div class="col-md-5">
 					<?php
-					if (isset($agendas) && !empty($agendas)) {
-						foreach ($agendas as $value) {
+					if (isset($datas) && !empty($datas)) {
+						foreach ($datas as $value) {
 							?>
 							<div class="row">
-								<a href="<?php echo "{$edit}/{$value->agenda_id}"; ?>">
+								<a href="<?php echo "{$value->id}"; ?>">
 									<div class="col-md-12">
-										<div
-											class="panel panel-<?php echo (isset($agenda->agenda_id) && $value->agenda_id == $agenda->agenda_id) ? 'primary' : 'default'; ?>">
-											<div class="row">
-												<div class="col-md-offset-1 col-md-10">
-													<p class="h3">
-														วาระที่ <?php echo number_format($value->agenda_no, 0); ?></p>
-													<p class="text-muted">เรื่อง <?php echo $value->agenda_name; ?></p>
-												</div>
-											</div>
-										</div>
+										<p><?php echo $value->criteria_name; ?></p>
 									</div>
 								</a>
 							</div>
@@ -59,44 +48,27 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 				</div>
 				<div class="col-md-7" style="border-left: 1px solid #cccccc;">
 					<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
-						<input type="hidden" name="meeting_id" value="<?php if (isset($meeting_data->meeting_id)) {
-							echo $meeting_data->meeting_id;
-						} ?>"/>
-						<input type="hidden" name="agenda_id" value="<?php
-						 if (isset($agenda->agenda_id)) {
-							echo $agenda->agenda_id;
-						} ?>"/>
-						<input type="hidden" name="user_id" value="<?php
-						if (isset($user_id)) {
-							echo $user_id;
-						}
-						?>"/>
 
 						<div class="row">
 							<div class="col-md-12">
-								<p class="h2 text-primary">
-									วาระที่ <?php //echo number_format($agenda->agenda_no, 0); ?></p>
+								<p class="h2 text-primary">หมวดหมู่ / เกณฑ์การประเมิน</p>
+							</div>
+						</div>
+						<input type="hidden" name="criteria_id" id="criteria_id" value=""/>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">ชื่อหมวด / เกณฑ์การประเมิน</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="text" class="form-control" id="criteria_name" name="criteria_name" value=""/>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">วาระเรื่อง</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<input type="text" class="form-control" value="<?php
-								if (isset($agenda->agenda_name)) {
-									echo $agenda->agenda_name;
-								}
-								?>" readonly="readonly"/>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">เนื้อหา</label>
+								<label for="stext">ประเภท</label>
 							</div>
 						</div>
 						<div class="row">
@@ -110,82 +82,33 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							<label
 								class="col-md-12 text-danger"><?php echo form_error("agenda_detail"); ?></label>
 						</div>
-
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">บันทึกการประชุม <font class="text-danger">*</font></label>
-								<?php if (isset($configs['speach_to_text']) && in_array(strtolower($configs['speach_to_text']->config_status), array('active'))) { ?>
-									<button type="button" id='btn-transcribe'
-											class="btn btn-sm btn-primary btn-xs pull-right">
-										<i class="fa fa-microphone"></i>
-										บันทึก
-									</button>
-								<?php } ?>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-						<textarea name="record_detail" id="record_detail" class="form-control" placeholder="ระบุ"
-								  rows="3"><?php
-							if (isset($record->record_detail)) {
-								echo $record->record_detail;
-							}
-							?></textarea>
-							</div>
-							<label
-								class="col-md-12 text-danger info-mic"><?php echo form_error("record_detail"); ?></label>
+								<div class="tabbable">
+									<ul class="nav nav-tabs padding-12 " id="myTab4">
+										<li class="active">
+											<a data-toggle="tab" href="#variable" aria-expanded="true">ค่าตัวแปร</a>
+										</li>
 
-							<blockquote class="blockquote">
-								<div id="results">
-									<span class="final" id="final_span"></span>
-									<span class="interim" id="interim_span"></span>
-								</div>
-							</blockquote>
-						</div>
+										<li class="">
+											<a data-toggle="tab" href="#weight" aria-expanded="false">ค่าน้ำหนัก</a>
+										</li>
 
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">ผู้บันทึก</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<?php
-								if (isset($user_fullname)) {
-									echo $user_fullname;
-								}
-								?>
-							</div>
-						</div>
-						<div class="tabbable">
-							<ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
-								<li class="active">
-									<a data-toggle="tab" href="#home4" aria-expanded="true">Home</a>
-								</li>
+									</ul>
 
-								<li class="">
-									<a data-toggle="tab" href="#profile4" aria-expanded="false">Profile</a>
-								</li>
+									<div class="tab-content">
+										<div id="variable" class="tab-pane active">
+											<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+										</div>
 
-								<li class="">
-									<a data-toggle="tab" href="#dropdown14" aria-expanded="false">More</a>
-								</li>
-							</ul>
-
-							<div class="tab-content">
-								<div id="home4" class="tab-pane active">
-									<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
-								</div>
-
-								<div id="profile4" class="tab-pane">
-									<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
-								</div>
-
-								<div id="dropdown14" class="tab-pane">
-									<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+										<div id="weight" class="tab-pane">
+											<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
+
 
 						<div class="row">
 							<div class="col-md-12 text-center">

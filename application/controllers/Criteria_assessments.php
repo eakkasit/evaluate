@@ -9,7 +9,7 @@ class Criteria_assessments extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model', 'CriteriaProfiles_model'));
+		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -71,7 +71,7 @@ class Criteria_assessments extends CI_Controller
 	public function view_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
-
+			'datas' => $this->Criterias_model->getCriterias()
 		);
 		$data['content_view'] = 'pages/view_criteria_assessment';
 		$this->load->view($this->theme, $data);
@@ -80,6 +80,7 @@ class Criteria_assessments extends CI_Controller
 	public function new_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
+			'datas' => $this->Criterias_model->getCriterias(array(),array('id'=>'asc'))
 		);
 		$data['content_view'] = 'pages/form_criteria_assessment';
 		$this->load->view($this->theme, $data);
@@ -94,6 +95,58 @@ class Criteria_assessments extends CI_Controller
 		$this->load->view($this->theme, $data);
 	}
 
+	public function validate()
+	{
+		$this->form_validation->set_rules('criteria_name', 'ชื่อตัวแปรเกณฑ์การประเมิน', 'required|trim');
+		$this->form_validation->set_message('required', 'กรุณาระบุ {field}');
+
+		return $this->form_validation->run();
+	}
+
+	public function save($criteria_id = null)
+	{
+		$error_page = false;
+		$upload_msg = '';
+		$action = 'create';
+		if ($criteria_id != null && $criteria_id != '') {
+			$action = 'update';
+		}
+
+		if ($this->validate()) {
+			$data = array();
+			foreach ($_POST as $key => $value) {
+				$data[$key] = $this->input->post($key);
+			}
+
+			if ($action == 'create') {
+				$criteria_id = $this->Criterias_model->insertCriterias($data);
+				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
+				exit;
+			} else {
+				$this->Criterias_model->updateCriterias($criteria_id, $data);
+				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
+				exit;
+			}
+		} else {
+			$error_page = true;
+		}
+
+		if ($error_page) {
+			$data['content_data'] = array(
+				'data' => (object)array(
+					'id' => $criteria_id,
+					'variable_name' => $this->input->post('variable_name'),
+					'units' => $this->input->post('units'),
+					'type_show' => $this->input->post('type_show'),
+					'type_field' => $this->input->post('type_field'),
+					'variable_value' => $this->input->post('variable_value'),
+					'sql_text' => $this->input->post('sql_text'),
+				)
+			);
+			$data['content_view'] = 'pages/form_criteria_assessment';
+			$this->load->view($this->theme, $data);
+		}
+	}
 
 
 	public function delete_criteria_assessment($id = null)
