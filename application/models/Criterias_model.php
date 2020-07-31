@@ -82,4 +82,39 @@ class Criterias_model extends CI_Model
 		$this->db->delete('criteria', $update);
 		return $variable_id;
 	}
+
+
+	function getOneLevelData($profile_id,$id,$child){
+
+			$this->db->select('*');
+			$this->db->from('criteria');
+			$this->db->where('profile_id',$profile_id);
+			$this->db->where('parent_id',$id);
+			$query = $this->db->get();
+			$res = $query->result_array();
+			if($query->num_rows() >0){
+					foreach ($res as $key => $value) {
+						// $row = array();
+						// $row['id'] = $value['id'];
+						// $row['name'] = $value['name'];
+						$child[] = $value;
+					}
+
+			}
+			return $child;
+	}
+
+	function getItemChild($profile_id,$parent_id) {
+			$tree = array();
+			$tree = $this->getOneLevelData($profile_id,$parent_id,[]);
+			$child = [];
+			foreach ($tree as $key => $val) {
+					if($this->getItemChild($profile_id,$val['id'])){
+						$val['data'] = $this->getItemChild($profile_id,$val['id']);
+					}
+					 $child[] = $val;
+			}
+			return $child;
+	}
+
 }

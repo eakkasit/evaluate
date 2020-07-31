@@ -80,7 +80,8 @@ class Criteria_assessments extends CI_Controller
 	public function new_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
-			'datas' => $this->Criterias_model->getCriterias(array(),array('id'=>'asc'))
+			'profile_id' => $id,
+			'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc'))
 		);
 		$data['content_view'] = 'pages/form_criteria_assessment';
 		$this->load->view($this->theme, $data);
@@ -155,5 +156,18 @@ class Criteria_assessments extends CI_Controller
 		exit;
 	}
 
-
+	public function ajax_get_data($id='')
+	{
+		// $test_data = $this->Criterias_model->getItemChild($id,0);
+		// echo "<pre>";
+		// print_r($test_data);
+		// die();
+		$data['content_data'] = array(
+			'profile_id' => $id,
+			// 'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc'))
+			'datas' =>  $this->Criterias_model->getItemChild($id,0)
+		);
+		$data['content_view'] = 'ajax/ajax_criteria_left';
+		$this->load->view('ajax', $data);
+	}
 }

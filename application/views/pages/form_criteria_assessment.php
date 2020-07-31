@@ -30,21 +30,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
 				<div class="row">
 				<div class="col-md-5">
-					<?php
-					if (isset($datas) && !empty($datas)) {
-						foreach ($datas as $value) {
-							?>
-							<div class="row">
-								<a href="<?php echo "{$value->id}"; ?>">
-									<div class="col-md-12">
-										<p><?php echo $value->criteria_name; ?></p>
-									</div>
-								</a>
-							</div>
-							<?php
-						}
-					}
-					?>
+					<div class="" id="left_box"></div>
 				</div>
 				<div class="col-md-7" style="border-left: 1px solid #cccccc;">
 					<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
@@ -64,23 +50,8 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							<div class="col-md-12">
 								<input type="text" class="form-control" id="criteria_name" name="criteria_name" value=""/>
 							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">ประเภท</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-						<textarea class="form-control" rows="3" readonly="readonly"><?php
-							if (isset($agenda->agenda_detail)) {
-								echo $agenda->agenda_detail;
-							}
-							?></textarea>
-							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("agenda_detail"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("criteria_name"); ?></label>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
@@ -157,12 +128,56 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 	</div>
 </div>
 <script type="text/javascript">
-    function deletePicture() {
-        $('input[name=profile_picture_tmp]').val('');
-        $('#preview_picture').attr('src', '<?php echo $profile_picture_default; ?>');
-    }
+		function save_data(id){
+		var p_text = 'data-'+id;
+		var text_detail = 'detail_'+id;
+		var btn_save = 'btn-record-save-'+id;
+		var btn_edit = 'btn-record-edit-'+id;
+		var btn_cancle = 'btn-record-cancle-'+id;
 
+		swal({
+					title: "ยืนยันแก้ไขข้อมูล",
+					text: "ต้องการแก้ไขข้อมูลบันทึกการประชุมใช่หรือไม่",
+					type: "info",
+					showCancelButton: true,
+					confirmButtonText: "ตกลง",
+					cancelButtonText: "ยกเลิก",
+			},
+			function (isConfirm) {
+					if (isConfirm) {
+						$.ajax({
+								url: '<?php echo base_url('records/update'); ?>',
+								type: "POST",
+								data: {
+									record_id:id,
+									record_detail:$("."+text_detail).val()
+								},
+								success: function (data) {
+										$("."+text_detail).addClass('hidden');
+										$("."+text_detail).val(data);
+										$("."+p_text).html(data);
+										$("."+p_text).show();
+										$("."+btn_edit).show();
+										$("."+btn_save).addClass('hidden');
+										$("."+btn_cancle).addClass('hidden');
+								},
+
+						})
+					}
+			});
+		}
+
+		function getData(){
+			$.ajax({
+					url: '<?php echo base_url('criteria_assessments/ajax_get_data/1'); ?>',
+					type: "GET",
+					success: function (data) {
+						$('#left_box').html(data)
+					},
+			})
+		}
     jQuery(document).ready(function () {
+				getData();
         jQuery("#profile_picture").change(function () {
 
             if (this.files && this.files[0]) {

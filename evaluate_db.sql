@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2020-07-30 01:14:31
+Date: 2020-07-31 09:15:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,17 +45,19 @@ DROP TABLE IF EXISTS `evaluate_criteria`;
 CREATE TABLE `evaluate_criteria` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT '0',
+  `profile_id` int(11) DEFAULT NULL,
   `criteria_name` varchar(255) DEFAULT '',
   `create_date` datetime DEFAULT NULL,
   `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_criteria
 -- ----------------------------
-INSERT INTO `evaluate_criteria` VALUES ('1', '0', 'หมวดที่ 1', '2020-07-30 01:05:21', '2020-07-30 01:05:51');
-INSERT INTO `evaluate_criteria` VALUES ('2', '0', 'หมวดที่ 2', '2020-07-30 01:06:02', '2020-07-30 01:06:15');
+INSERT INTO `evaluate_criteria` VALUES ('1', '0', '1', 'หมวดที่ 1', '2020-07-30 01:05:21', '2020-07-31 07:07:35');
+INSERT INTO `evaluate_criteria` VALUES ('2', '0', '1', 'หมวดที่ 2', '2020-07-30 01:06:02', '2020-07-31 07:07:37');
+INSERT INTO `evaluate_criteria` VALUES ('3', '1', '1', 'การประเมินภาวะความเป็นผู้นำ', '2020-07-31 08:27:22', '2020-07-31 08:27:26');
 
 -- ----------------------------
 -- Table structure for evaluate_criteria_profile
@@ -109,7 +111,7 @@ CREATE TABLE `evaluate_log` (
   `user_id` int(11) NOT NULL COMMENT 'รหัสผู้ใช้ระบบประชุม',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'วันที่สร้าง',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_log
@@ -136,6 +138,8 @@ INSERT INTO `evaluate_log` VALUES ('19', 'login', '1', '2020-07-28 16:58:55');
 INSERT INTO `evaluate_log` VALUES ('20', 'login', '1', '2020-07-28 22:55:02');
 INSERT INTO `evaluate_log` VALUES ('21', 'login', '1', '2020-07-29 20:33:57');
 INSERT INTO `evaluate_log` VALUES ('22', 'login', '1', '2020-07-29 23:26:24');
+INSERT INTO `evaluate_log` VALUES ('23', 'login', '1', '2020-07-30 20:53:35');
+INSERT INTO `evaluate_log` VALUES ('24', 'login', '1', '2020-07-31 06:39:53');
 
 -- ----------------------------
 -- Table structure for evaluate_user
