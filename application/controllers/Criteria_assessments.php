@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Criteria_assessments extends CI_Controller
 {
 	private $theme = 'default';
+	private $ajax_page = ['ajax_get_data'];
 
 	public function __construct()
 	{
@@ -11,11 +12,13 @@ class Criteria_assessments extends CI_Controller
 		$this->load->library(array('session', 'pagination', 'form_validation'));
 		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
-
-		if ($this->session->userdata('user_id') == '') {
-			redirect(base_url("authentications"));
-			exit;
+		if(!in_array($this->uri->segment(2),$this->ajax_page)){
+			if ($this->session->userdata('user_id') == '') {
+				redirect(base_url("authentications"));
+				exit;
+			}
 		}
+
 	}
 
 	public function index()
@@ -118,7 +121,9 @@ class Criteria_assessments extends CI_Controller
 			foreach ($_POST as $key => $value) {
 				$data[$key] = $this->input->post($key);
 			}
-
+			// echo "<pre>";
+			// print_r($data);
+			// die();
 			if ($action == 'create') {
 				$criteria_id = $this->Criterias_model->insertCriterias($data);
 				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
@@ -165,7 +170,7 @@ class Criteria_assessments extends CI_Controller
 		$data['content_data'] = array(
 			'profile_id' => $id,
 			// 'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc'))
-			'datas' =>  $this->Criterias_model->getItemChild($id,0)
+			'datas' => (object) $this->Criterias_model->getItemChild($id,0)
 		);
 		$data['content_view'] = 'ajax/ajax_criteria_left';
 		$this->load->view('ajax', $data);

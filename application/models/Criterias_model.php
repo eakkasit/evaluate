@@ -60,6 +60,7 @@ class Criterias_model extends CI_Model
 	public function insertCriterias($data = array())
 	{
 		$this->db->set('criteria_name', $data['criteria_name']);
+		$this->db->set('profile_id', $data['profile_id']);
 		$this->db->set('parent_id', $data['parent_id']);
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('criteria');
@@ -70,6 +71,7 @@ class Criterias_model extends CI_Model
 	{
 		$this->db->set('criteria_name', $data['criteria_name']);
 		$this->db->set('parent_id', $data['parent_id']);
+		$this->db->set('profile_id', $data['profile_id']);
 		$this->db->where('id', $variable_id);
 		$this->db->update('criteria', $update);
 		return $variable_id;
@@ -112,7 +114,7 @@ class Criterias_model extends CI_Model
 					if($this->getItemChild($profile_id,$val['id'])){
 						$val['data'] = $this->getItemChild($profile_id,$val['id']);
 					}
-					 $child[] = $val;
+					 $child[] = (object) $val;
 			}
 			return $child;
 	}

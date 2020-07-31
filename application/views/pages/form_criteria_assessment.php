@@ -16,7 +16,12 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		</p>
 	</div>
 	<div class="col-md-6 text-right">
-		<a href="" class="table-link">
+		<a href="<?php echo $prev; ?>" class="table-link">
+			<button type="button" class="btn btn-xs btn-info">
+				<i class="fa fa-arrow-left"></i> ย้อนกลับ
+			</button>
+		</a>
+		<a href="#" class="table-link"  onclick="addMainData()">
 			<button type="button" class="btn btn-xs btn-success">
 				<i class="fa fa-plus"></i> เพิ่มหมวดหมู่ / เกณฑ์การประเมิน
 			</button>
@@ -27,14 +32,14 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 <div id="search-filter" class="widget-box">
 	<div class="widget-body">
 		<div class="widget-main">
-			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
 				<div class="row">
 				<div class="col-md-5">
 					<div class="" id="left_box"></div>
 				</div>
 				<div class="col-md-7" style="border-left: 1px solid #cccccc;">
-					<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
-
+					<form method="post" enctype="multipart/form-data" id="criteria_form" action="<?php echo $action; ?>" style="display:none">
+						<input type="hidden" name="profile_id" id="profile_id" value="<?php echo $profile_id; ?>">
+						<input type="hidden" name="parent_id" id="parent_id" value="0">
 						<div class="row">
 							<div class="col-md-12">
 								<p class="h2 text-primary">หมวดหมู่ / เกณฑ์การประเมิน</p>
@@ -83,7 +88,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 						<div class="row">
 							<div class="col-md-12 text-center">
-								<a href="<?php echo $prev; ?>" class="btn btn-sm btn-danger">
+								<a href="#" class="btn btn-sm btn-danger" onclick="reset()">
 									<i class="fa fa-times"></i>
 									ยกเลิก
 								</a>
@@ -94,78 +99,20 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								</button>
 							</div>
 						</div>
-
-						<hr/>
-
-						<?php if (isset($files) && !empty($files)) { ?>
-							<div class="row">
-								<div class="col-md-12">
-									<p class="h3"><i class="fa fa-paperclip"></i> เอกสารแนบ</p>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-offset-1 col-md-11">
-									<ul class="list-unstyled">
-										<?php foreach ($files as $file) { ?>
-											<li>
-												<p>
-													<a href="<?php echo base_url("assets/attaches/{$meeting_data->meeting_id}/{$file->agenda_filename}"); ?>"
-													   target="_blank"
-													   class="table-link label label-<?php echo class_file_type($file->agenda_filename); ?>"><?php echo $file->agenda_detail; ?></a>
-												</p>
-											</li>
-										<?php } ?>
-									</ul>
-								</div>
-							</div>
-						<?php } ?>
-					</form>
 				</div>
 			</div>
 			</form>
 		</div>
 	</div>
 </div>
+<style>
+	#left_box{
+		height: 400px;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+</style>
 <script type="text/javascript">
-		function save_data(id){
-		var p_text = 'data-'+id;
-		var text_detail = 'detail_'+id;
-		var btn_save = 'btn-record-save-'+id;
-		var btn_edit = 'btn-record-edit-'+id;
-		var btn_cancle = 'btn-record-cancle-'+id;
-
-		swal({
-					title: "ยืนยันแก้ไขข้อมูล",
-					text: "ต้องการแก้ไขข้อมูลบันทึกการประชุมใช่หรือไม่",
-					type: "info",
-					showCancelButton: true,
-					confirmButtonText: "ตกลง",
-					cancelButtonText: "ยกเลิก",
-			},
-			function (isConfirm) {
-					if (isConfirm) {
-						$.ajax({
-								url: '<?php echo base_url('records/update'); ?>',
-								type: "POST",
-								data: {
-									record_id:id,
-									record_detail:$("."+text_detail).val()
-								},
-								success: function (data) {
-										$("."+text_detail).addClass('hidden');
-										$("."+text_detail).val(data);
-										$("."+p_text).html(data);
-										$("."+p_text).show();
-										$("."+btn_edit).show();
-										$("."+btn_save).addClass('hidden');
-										$("."+btn_cancle).addClass('hidden');
-								},
-
-						})
-					}
-			});
-		}
 
 		function getData(){
 			$.ajax({
@@ -176,19 +123,50 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 					},
 			})
 		}
+
+
+
+		function addMainData() {
+			$('#criteria_form').show();
+			$('#parent_id').val(0);
+		}
+
+		function saveData() {
+			// alert('a');
+		}
+
+		function reset() {
+			$('#criteria_form').hide();
+			$('#parent_id').val(0);
+		}
+
+		function addData(id) {
+			$('#criteria_form').show();
+			$('#parent_id').val(id)
+			$('#criteria_name').val('')
+		}
+
+		function editData(id) {
+			// alert('edit data')
+		}
+
+		function deleteData() {
+			// alert('delete data')
+		}
     jQuery(document).ready(function () {
 				getData();
-        jQuery("#profile_picture").change(function () {
+				jQuery("#criteria_form").hide();
+        jQuery("#criteria_form").submit(function (e) {
+						$.ajax({
+									url: '<?php echo $action; ?>',
+									type: "POST",
+									data:  $(this).serialize(),
+									success: function (data) {
+										getData();
+									},
 
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    jQuery('#preview_picture').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
+							})
+						e.preventDefault()
         });
     });
 </script>
