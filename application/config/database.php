@@ -75,15 +75,34 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn' => '',
-	'hostname' => '178.128.84.97',
-	// 'hostname' => 'localhost',
+	'hostname' => 'localhost',
 	'username' => 'root',
-	// 'password' => 'root',
-	// 'port'	=> '8889',
 	'password' => '37dd5a0741',
 	'database' => 'evaluate_db',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => 'evaluate_',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+$db['db_activity'] = array(
+	'dsn' => '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '37dd5a0741',
+	'database' => 'evaluate_db',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => 'activities_',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
