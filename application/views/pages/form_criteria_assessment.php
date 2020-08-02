@@ -116,7 +116,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 		function getData(){
 			$.ajax({
-					url: '<?php echo base_url('criteria_assessments/ajax_get_data/1'); ?>',
+					url: '<?php echo base_url('criteria_assessments/ajax_get_data/'.$profile_id); ?>',
 					type: "GET",
 					success: function (data) {
 						$('#left_box').html(data)

@@ -57,6 +57,18 @@ class CriteriaProfiles_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
+	public function getCriteriaProfileLists()
+	{
+		$list = array();
+		$profile_list = $this->db->select('*')->from('criteria_profile')->order_by('id')->get()->result();
+		if(!empty($profile_list)){
+			foreach($profile_list as $val){
+				$list[$val->id] = $val->profile_name;
+			}
+		}
+		return $list;
+	}
+
 	public function insertCriteriaProfiles($data = array())
 	{
 		$this->db->set('profile_name', $data['profile_name']);

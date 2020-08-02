@@ -9,7 +9,7 @@ class Criteria_datas extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		// $this->load->model(array('Commons_model', 'Logs_model', 'Configs_model', 'Users_model'));
+		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model','CriteriaDatas_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -27,7 +27,7 @@ class Criteria_datas extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element') && !empty($fields)) {
+		if ($this->input->post('form_search_element')['text'] != '' && !empty($fields)) {
 			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
@@ -47,7 +47,8 @@ class Criteria_datas extends CI_Controller
 	{
 
 		$data['content_data'] = array(
-
+			'profiles' => $this->CriteriaProfiles_model->getCriteriaProfileLists(),
+			'datas' => $this->CriteriaDatas_model->getCriteriaDatas()
 		);
 
 		$data['content_view'] = 'pages/dashboard_criteria_data';
@@ -57,7 +58,9 @@ class Criteria_datas extends CI_Controller
 	public function view_criteria_data($id = null)
 	{
 		$data['content_data'] = array(
-
+			'profiles' => $this->CriteriaProfiles_model->getCriteriaProfileLists(),
+			'criteria_profiles'=>$this->CriteriaProfiles_model->getCriteriaProfiles(),
+			'data'=> $this->CriteriaDatas_model->getCriteriaDatas(array('id'=>$id))[0]
 		);
 		$data['content_view'] = 'pages/view_criteria_data';
 		$this->load->view($this->theme, $data);
@@ -66,6 +69,7 @@ class Criteria_datas extends CI_Controller
 	public function new_criteria_data($id = null)
 	{
 		$data['content_data'] = array(
+			'criteria_profiles'=>$this->CriteriaProfiles_model->getCriteriaProfiles()
 		);
 		$data['content_view'] = 'pages/form_criteria_data';
 		$this->load->view($this->theme, $data);
@@ -74,10 +78,60 @@ class Criteria_datas extends CI_Controller
 	public function edit_criteria_data($id = null)
 	{
 		$data['content_data'] = array(
-
+			'criteria_profiles'=>$this->CriteriaProfiles_model->getCriteriaProfiles(),
+			'data'=> $this->CriteriaDatas_model->getCriteriaDatas(array('id'=>$id))[0]
 		);
 		$data['content_view'] = 'pages/form_criteria_data';
 		$this->load->view($this->theme, $data);
+	}
+
+	public function validate()
+	{
+		$this->form_validation->set_rules('name', 'ชื่อการประเมิน', 'required|trim');
+		$this->form_validation->set_message('required', 'กรุณาระบุ {field}');
+
+		return $this->form_validation->run();
+	}
+
+	public function save($criteria_id = null)
+	{
+		$error_page = false;
+		$upload_msg = '';
+		$action = 'create';
+		if ($criteria_id != null && $criteria_id != '') {
+			$action = 'update';
+		}
+
+		if ($this->validate()) {
+			$data = array();
+			foreach ($_POST as $key => $value) {
+				$data[$key] = $this->input->post($key);
+			}
+			if ($action == 'create') {
+				$criteria_id = $this->CriteriaDatas_model->insertCriteriaDatas($data);
+				redirect(base_url("criteria_datas/dashboard_criteria_datas"));
+				exit;
+			} else {
+				$this->CriteriaDatas_model->updateCriteriaDatas($criteria_id, $data);
+				redirect(base_url("criteria_datas/dashboard_criteria_datas"));
+				exit;
+			}
+		} else {
+			$error_page = true;
+		}
+
+		if ($error_page) {
+			$data['content_data'] = array(
+				'data' => (object)array(
+					'id' => $criteria_id,
+					'name' => $this->input->post('name'),
+					'profile_id' => $this->input->post('profile_id'),
+					'detail' => $this->input->post('detail'),
+				)
+			);
+			$data['content_view'] = 'pages/form_criteria_data';
+			$this->load->view($this->theme, $data);
+		}
 	}
 
 

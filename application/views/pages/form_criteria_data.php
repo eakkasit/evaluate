@@ -2,16 +2,14 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("criteria_datas/save");
 $prev = base_url("criteria_datas/dashboard_criteria_datas");
-$btn_img_txt = 'เพิ่มรูป';
-$btn_img_dsp = false;
-if (isset($user_data->user_id) && $user_data->user_id != '') {
+if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
-	$action .= "/{$user_data->user_id}";
-	$prev = base_url("criteria_datas/view_criteria_data/{$user_data->user_id}");
+	$action .= "/{$data->id}";
+	$prev = base_url("criteria_datas/view_criteria_data/{$data->id}");
 }
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>รายชื่อผู้ประชุม
+	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>การประเมินองค์กรรายปี
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -24,16 +22,39 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">แม่แบบเกณฑ์การประเมิน</label>
+								<label for="stext">ชื่อการประเมิน</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" name="citizen_id" class="form-control"
-									   value="" placeholder="ระบุ">
+								<input type="text" name="name" class="form-control"  value="<?php if (isset($data->name)) { echo $data->name;	} ?>" placeholder="ระบุ">
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("name"); ?></label>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">เกณฑ์แม่แบบการประเมิน</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<select class="form-control" name="profile_id">
+									<?php
+									if(isset($criteria_profiles) && !empty($criteria_profiles)){
+										foreach ($criteria_profiles as $key => $criteria_profile) {
+											?>
+											<option value="<?php echo $criteria_profile->id; ?>" <?php if (isset($data->profile_id) && $data->profile_id == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $criteria_profile->profile_name; ?></option>
+											<?php
+										}
+									}
+									?>
+								</select>
+							</div>
+							<label
+								class="col-md-12 text-danger"><?php echo form_error("profile_id"); ?></label>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
@@ -42,31 +63,21 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<textarea type="text" name="citizen_id" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
+								<textarea type="text" name="detail" cols="4" rows="5" class="form-control" placeholder="ระบุ"><?php if (isset($data->detail)) { echo $data->detail;	} ?></textarea>
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("detail"); ?></label>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">สถานะการใช้งาน</label>
+								<label for="stext">บันทึกการประเมิน</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<?php foreach ($status_list as $key => $value) { ?>
-									<input type="radio" name="user_status"
-										   id="user_status_<?php echo $key; ?>"
-										   class=""
-										   value="<?php echo $key; ?>" <?php if (isset($user_data->user_status) && $user_data->user_status == $key) {
-										echo 'checked="checked"';
-									} ?>>&nbsp;<label
-										for="user_status_<?php echo $key; ?>"><?php echo $value; ?></label>&emsp;
-								<?php } ?>
+								<div id="criteria_data"></div>
 							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("user_status"); ?></label>
-						</div>
+
 					</div>
 				</div>
 				<div class="row">

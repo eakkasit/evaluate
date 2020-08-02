@@ -74,7 +74,8 @@ class Criteria_assessments extends CI_Controller
 	public function view_criteria_assessment($id = null)
 	{
 		$data['content_data'] = array(
-			'datas' => $this->Criterias_model->getCriterias()
+			'profile_id' => $id,
+			'datas' => (object) $this->Criterias_model->getItemChild($id,0)
 		);
 		$data['content_view'] = 'pages/view_criteria_assessment';
 		$this->load->view($this->theme, $data);
