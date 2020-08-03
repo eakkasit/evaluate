@@ -80,8 +80,8 @@ class CriteriaDatas_model extends CI_Model
 	public function deleteCriteriaDatas($profile_id = null)
 	{
 		// $update = ['status' => '4'];
-		// $this->db->where('id', $profile_id);
-		// $this->db->update('criteria_data', $update);
+		$this->db->where('id', $profile_id);
+		$this->db->delete('criteria_data', $update);
 		return $profile_id;
 	}
 }

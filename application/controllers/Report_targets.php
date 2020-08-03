@@ -66,6 +66,7 @@ class Reports_assessments extends CI_Controller
 	public function new_reports_assessment($id = null)
 	{
 		$data['content_data'] = array(
+			
 		);
 		$data['content_view'] = 'pages/form_reports_assessment';
 		$this->load->view($this->theme, $data);

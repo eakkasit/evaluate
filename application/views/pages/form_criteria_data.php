@@ -2,6 +2,7 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("criteria_datas/save");
 $prev = base_url("criteria_datas/dashboard_criteria_datas");
+$ajax_form_url = base_url("criteria_datas/ajax_get_data_form/");
 if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
 	$action .= "/{$data->id}";
@@ -18,7 +19,7 @@ if (isset($data->id) && $data->id != '') {
 			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
 				<div class="row">
 
-					<div class="col-md-8">
+					<div class="col-md-12">
 
 						<div class="row">
 							<div class="col-md-12">
@@ -26,7 +27,7 @@ if (isset($data->id) && $data->id != '') {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-8">
 								<input type="text" name="name" class="form-control"  value="<?php if (isset($data->name)) { echo $data->name;	} ?>" placeholder="ระบุ">
 							</div>
 							<label
@@ -38,8 +39,8 @@ if (isset($data->id) && $data->id != '') {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
-								<select class="form-control" name="profile_id">
+							<div class="col-md-8">
+								<select class="form-control" name="profile_id" id="profile_id">
 									<?php
 									if(isset($criteria_profiles) && !empty($criteria_profiles)){
 										foreach ($criteria_profiles as $key => $criteria_profile) {
@@ -62,7 +63,7 @@ if (isset($data->id) && $data->id != '') {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-8">
 								<textarea type="text" name="detail" cols="4" rows="5" class="form-control" placeholder="ระบุ"><?php if (isset($data->detail)) { echo $data->detail;	} ?></textarea>
 							</div>
 							<label
@@ -97,24 +98,28 @@ if (isset($data->id) && $data->id != '') {
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
-    function deletePicture() {
-        $('input[name=profile_picture_tmp]').val('');
-        $('#preview_picture').attr('src', '<?php echo $profile_picture_default; ?>');
-    }
 
     jQuery(document).ready(function () {
-        jQuery("#profile_picture").change(function () {
+        jQuery("#profile_id").change(function () {
+						$.ajax({
+									url: '<?php echo $ajax_form_url; ?>'+$(this).val(),
+									type: "GET",
+									success: function (data) {
+										$("#criteria_data").html(data)
+									},
 
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    jQuery('#preview_picture').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
+							})
         });
     });
 </script>
+<style>
+	.dd-item .row{
+		padding: 1px
+	}
+	.mini-box{
+		width: 40px !important;
+		margin: 0px 1px;
+	}
+</style>

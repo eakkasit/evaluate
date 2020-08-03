@@ -62,6 +62,7 @@ class Criterias_model extends CI_Model
 		$this->db->set('criteria_name', $data['criteria_name']);
 		$this->db->set('profile_id', $data['profile_id']);
 		$this->db->set('parent_id', $data['parent_id']);
+		$this->db->set('weight', $data['weight']);
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('criteria');
 		return $this->db->insert_id();
@@ -72,6 +73,7 @@ class Criterias_model extends CI_Model
 		$this->db->set('criteria_name', $data['criteria_name']);
 		$this->db->set('parent_id', $data['parent_id']);
 		$this->db->set('profile_id', $data['profile_id']);
+		$this->db->set('weight', $data['weight']);
 		$this->db->where('id', $variable_id);
 		$this->db->update('criteria', $update);
 		return $variable_id;
@@ -81,7 +83,7 @@ class Criterias_model extends CI_Model
 	{
 		// $update = ['status' => '4'];
 		$this->db->where('id', $variable_id);
-		$this->db->delete('criteria', $update);
+		$this->db->delete('criteria');
 		return $variable_id;
 	}
 

@@ -4,17 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Criteria_datas extends CI_Controller
 {
 	private $theme = 'default';
+	private $ajax_page = ['ajax_get_data'];
 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model','CriteriaDatas_model'));
+		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model','CriteriaDatas_model','Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
-
-		if ($this->session->userdata('user_id') == '') {
-			redirect(base_url("authentications"));
-			exit;
+		if(!in_array($this->uri->segment(2),$this->ajax_page)){
+			if ($this->session->userdata('user_id') == '') {
+				redirect(base_url("authentications"));
+				exit;
+			}
 		}
 	}
 
@@ -142,5 +144,15 @@ class Criteria_datas extends CI_Controller
 		exit;
 	}
 
+	public function ajax_get_data_form($id='')
+	{
+		$data['content_data'] = array(
+			'profile_id' => $id,
+			'datas' => (object) $this->Criterias_model->getItemChild($id,0),
+			'activities' => $this->Activities_model->getActivityLists(),
+		);
+		$data['content_view'] = 'ajax/ajax_criteria_data';
+		$this->load->view('ajax', $data);
+	}
 
 }

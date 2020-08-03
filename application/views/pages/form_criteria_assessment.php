@@ -67,7 +67,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 										</li>
 
 										<li class="">
-											<a data-toggle="tab" href="#weight" aria-expanded="false">ค่าน้ำหนัก</a>
+											<a data-toggle="tab" href="#weight" id="tab-weight" aria-expanded="false"><span class="red">*</span> ค่าน้ำหนัก</a>
 										</li>
 
 									</ul>
@@ -76,9 +76,16 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 										<div id="variable" class="tab-pane active">
 											<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
 										</div>
-
 										<div id="weight" class="tab-pane">
-											<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+											<div class="row">
+												<label class="col-md-4" for="weight">ค่าน้ำหนัก</label>
+												<div class="col-md-6">
+													<input type="text" name="weight" class="form-control" id="text-weight">
+												</div>
+												<div class="col-md-4"></div>
+												<label
+													class="col-md-6 text-danger"><?php echo form_error("weight"); ?></label>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -111,6 +118,9 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
+	.inactive{
+		display: none;
+	}
 </style>
 <script type="text/javascript">
 
@@ -129,6 +139,11 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		function addMainData() {
 			$('#criteria_form').show();
 			$('#parent_id').val(0);
+			$('#criteria_name').val('');
+			$('#criteria_id').val('');
+			if(!$('#tab-weight span.inactive')[0]){
+				$('#tab-weight span').addClass('inactive')
+			}
 		}
 
 		function saveData() {
@@ -144,28 +159,92 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			$('#criteria_form').show();
 			$('#parent_id').val(id)
 			$('#criteria_name').val('')
+			$('#criteria_id').val('');
+			$('#tab-weight span').removeClass('inactive');
 		}
 
 		function editData(id) {
 			// alert('edit data')
+			$('#criteria_form').show();
+
+			$.ajax({
+						url: '<?php echo base_url("criteria_assessments/ajax_get_criteria_data/"); ?>' + id,
+						type: "GET",
+						success: function (data) {
+							console.log('data',data);
+							var edit_data = JSON.parse(data);
+							console.log('edit data',edit_data);
+							$('#criteria_name').val(edit_data['criteria_name'])
+							$('#parent_id').val(edit_data['parent_id'])
+							$('#criteria_id').val(edit_data['id'])
+							$('#text-weight').val(edit_data['weight'])
+							if($('#parent_id').val() == 0){
+								if(!$('#tab-weight span.inactive')[0]){
+									$('#tab-weight span').addClass('inactive')
+								}
+							}else{
+								$('#tab-weight span').removeClass('inactive');
+							}
+						},
+
+				})
 		}
 
-		function deleteData() {
-			// alert('delete data')
+		function deleteData(id) {
+			swal({
+							title: "แจ้งเตือน",
+							text: "ต้องการลบ หมวดหมู่ / เกณฑ์การประเมินนี้",
+							type: "warning",
+							showCancelButton: true,
+							confirmButtonText: "ลบ",
+							cancelButtonText: "ยกเลิก",
+							closeOnConfirm: false,
+							closeOnCancel: true
+					},
+					function (isConfirm) {
+							if (isConfirm) {
+									$.ajax({
+												url: '<?php echo base_url("criteria_assessments/delete_criteria_assessment/"); ?>' + id,
+												type: "GET",
+												success: function (data) {
+													getData();
+													swal.close();
+												},
+
+										})
+							}
+					});
 		}
     jQuery(document).ready(function () {
 				getData();
 				jQuery("#criteria_form").hide();
+				jQuery("#criteria_name").blur(function(){
+					if($(this).val() == ''){
+						$(this).closest('.row').find('.text-danger').html('กรุณาระบุ ชื่อตัวแปรเกณฑ์การประเมิน')
+					}else{
+						$(this).closest('.row').find('.text-danger').html('')
+					}
+				})
         jQuery("#criteria_form").submit(function (e) {
-						$.ajax({
-									url: '<?php echo $action; ?>',
-									type: "POST",
-									data:  $(this).serialize(),
-									success: function (data) {
-										getData();
-									},
+						var invalid_form = false
+						if($('#criteria_name').val() == ''){
+							$('#criteria_name').closest('.row').find('.text-danger').html('กรุณาระบุ ชื่อตัวแปรเกณฑ์การประเมิน')
+						}else if ($('#parent_id').val() !='0' && $('#text-weight').val() == '') {
+							$('#text-weight').closest('.row').find('.text-danger').html('กรุณาระบุ ค่าน้ำหนัก')
+						}else{
+							$.ajax({
+										url: '<?php echo $action; ?>',
+										type: "POST",
+										data:  $(this).serialize(),
+										success: function (data) {
+											getData();
+											jQuery("#criteria_form").hide();
+											$('#criteria_name').closest('.row').find('.text-danger').html('')
+											$('#text-weight').closest('.row').find('.text-danger').html('')
+										},
+								})
+						}
 
-							})
 						e.preventDefault()
         });
     });

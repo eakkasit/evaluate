@@ -63,6 +63,18 @@ class Activities_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
+	public function getActivityLists()
+	{
+		$list = array();
+		$profile_list = $this->db->select('*')->from('project')->order_by('id')->get()->result();
+		if(!empty($profile_list)){
+			foreach($profile_list as $val){
+				$list[$val->id] = $val->project_name;
+			}
+		}
+		return $list;
+	}
+
 	public function insertActivities($data = array())
 	{
 		$this->db->set('project_name', $data['project_name']);

@@ -122,9 +122,11 @@ class Criteria_assessments extends CI_Controller
 			foreach ($_POST as $key => $value) {
 				$data[$key] = $this->input->post($key);
 			}
-			// echo "<pre>";
-			// print_r($data);
-			// die();
+			
+			if($data['criteria_id'] != '' && $data['criteria_id'] != '0'){
+					$action = 'update';
+					$criteria_id = $data['criteria_id'];
+			}
 			if ($action == 'create') {
 				$criteria_id = $this->Criterias_model->insertCriterias($data);
 				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
@@ -158,22 +160,26 @@ class Criteria_assessments extends CI_Controller
 
 	public function delete_criteria_assessment($id = null)
 	{
-		redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
-		exit;
+		$this->Criterias_model->deleteCriterias($id);
+		return '';
+
+		// redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
+		// exit;
 	}
 
 	public function ajax_get_data($id='')
 	{
-		// $test_data = $this->Criterias_model->getItemChild($id,0);
-		// echo "<pre>";
-		// print_r($test_data);
-		// die();
 		$data['content_data'] = array(
 			'profile_id' => $id,
-			// 'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc'))
 			'datas' => (object) $this->Criterias_model->getItemChild($id,0)
 		);
 		$data['content_view'] = 'ajax/ajax_criteria_left';
 		$this->load->view('ajax', $data);
+	}
+
+	public function ajax_get_criteria_data($id='')
+	{
+		$data =  $this->Criterias_model->getCriterias(array('id'=>$id),array('id'=>'asc'))[0];
+		echo json_encode($data);
 	}
 }
