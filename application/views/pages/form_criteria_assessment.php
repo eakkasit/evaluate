@@ -23,7 +23,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		</a>
 		<a href="#" class="table-link"  onclick="addMainData()">
 			<button type="button" class="btn btn-xs btn-success">
-				<i class="fa fa-plus"></i> เพิ่มหมวดหมู่ / เกณฑ์การประเมิน
+				<i class="fa fa-plus"></i>หมวดหมู่ / เกณฑ์การประเมิน
 			</button>
 		</a>
 	</div>
@@ -74,7 +74,65 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 									<div class="tab-content">
 										<div id="variable" class="tab-pane active">
-											<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+											<div class="row">
+												<label class="col-md-4">สูตรคำนวณ</label>
+												<div class="col-md-6">
+													<textarea class="form-control" name="" id="" ></textarea>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+											<table id="variable-table" class="table table-striped table-bordered table-hover">
+											<thead>
+												<tr>
+													<th class="center">ลำดับที่</th>
+													<th>ชื่อตัวแปร</th>
+													<th>ตัวแปร</th>
+													<th>ค่าตัวแปร</th>
+													<th>ตัวแปรก่อนหน้า</th>
+													<th>
+														<button type="button" class="btn btn-sm btn-success">
+															<i class="fa fa-plus"></i> เพิ่ม
+														</button>
+													</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<tr>
+													<td class="center">1</td>
+													<td><a href="#">v1</a></td>
+													<td>1.1 ทดสอบตัวแปร</td>
+													<td>1</td>
+													<td></td>
+													<td>
+														<a href="#"
+														   class="table-link"
+														   onclick="delete_criteria_data('');" title="ลบ">
+															<button type="button" class="btn btn-xs btn-danger">
+																<i class="fa fa-trash-o"></i> ลบ
+															</button>
+														</a>
+													</td>
+
+												</tr>
+												<tr>
+													<td class="center">2</td>
+													<td><a href="#">v2</a></td>
+													<td>1.2 ทดสอบตัวแปร2</td>
+													<td>1</td>
+													<td>v1</td>
+													<td>
+														<a href="#"
+														 class="table-link"
+														 onclick="delete_criteria_data('');" title="ลบ">
+														<button type="button" class="btn btn-xs btn-danger">
+															<i class="fa fa-trash-o"></i> ลบ
+														</button>
+													</a>
+												</td>
+												</tr>
+											</tbody>
+										</table>
 										</div>
 										<div id="weight" class="tab-pane">
 											<div class="row">
