@@ -66,9 +66,6 @@ class Evaluate_five_years extends CI_Controller
 	public function new_evaluate_five_year($id = null)
 	{
 		$data['content_data'] = array(
-			'status_list'=>({
-				''
-				})
 		);
 		$data['content_view'] = 'pages/form_evaluate_five_year';
 		$this->load->view($this->theme, $data);

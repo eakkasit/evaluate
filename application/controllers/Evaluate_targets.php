@@ -66,9 +66,6 @@ class Evaluate_targets extends CI_Controller
 	public function new_evaluate_target($id = null)
 	{
 		$data['content_data'] = array(
-			'status_list'=>({
-				''
-				})
 		);
 		$data['content_view'] = 'pages/form_evaluate_target';
 		$this->load->view($this->theme, $data);
