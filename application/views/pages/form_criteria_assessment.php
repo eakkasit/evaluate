@@ -90,47 +90,14 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 													<th>ค่าตัวแปร</th>
 													<th>ตัวแปรก่อนหน้า</th>
 													<th>
-														<button type="button" class="btn btn-sm btn-success">
+														<button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#add_variable_modal">
 															<i class="fa fa-plus"></i> เพิ่ม
 														</button>
 													</th>
 												</tr>
 											</thead>
-
 											<tbody>
-												<tr>
-													<td class="center">1</td>
-													<td><a href="#">v1</a></td>
-													<td>1.1 ทดสอบตัวแปร</td>
-													<td>1</td>
-													<td></td>
-													<td>
-														<a href="#"
-														   class="table-link"
-														   onclick="delete_criteria_data('');" title="ลบ">
-															<button type="button" class="btn btn-xs btn-danger">
-																<i class="fa fa-trash-o"></i> ลบ
-															</button>
-														</a>
-													</td>
-
-												</tr>
-												<tr>
-													<td class="center">2</td>
-													<td><a href="#">v2</a></td>
-													<td>1.2 ทดสอบตัวแปร2</td>
-													<td>1</td>
-													<td>v1</td>
-													<td>
-														<a href="#"
-														 class="table-link"
-														 onclick="delete_criteria_data('');" title="ลบ">
-														<button type="button" class="btn btn-xs btn-danger">
-															<i class="fa fa-trash-o"></i> ลบ
-														</button>
-													</a>
-												</td>
-												</tr>
+												
 											</tbody>
 										</table>
 										</div>
@@ -149,7 +116,6 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								</div>
 							</div>
 						</div>
-
 
 						<div class="row">
 							<div class="col-md-12 text-center">
@@ -170,6 +136,60 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		</div>
 	</div>
 </div>
+
+<div id="add_variable_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">เพิ่มตัวแปร</h4>
+			</div>
+			<div class="modal-body">
+				<form
+
+					method="post" id="form_add_variable">
+					<div class="row">
+						<div class="col-md-12">
+							<label for="stext">ชื่อตัวแปร</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<input type="text" class="form-control" name="variable_name" id="variable_name" value="">
+							<input type="hidden" name="modal_criteria_id" id="modal_criteria_id" value="">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<label for="stext">ตัวแปร</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<select class="form-control" name="variable_id">
+								<?php foreach ($variable_lists as $variable_id => $variable) { ?>
+									<option value="<?php echo $variable_id ?>"><?php echo $variable; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-xs btn-danger" data-dismiss="modal">
+					<i class="fa fa-times"></i>
+					ยกเลิก
+				</button>
+				<button type="button" class="btn btn-xs btn-success" onclick="submitVariable()">
+					<i class="fa fa-save"></i>
+					บันทึก
+				</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
 <style>
 	#left_box{
 		height: 400px;
@@ -181,6 +201,10 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 	}
 </style>
 <script type="text/javascript">
+
+		function submitVariable() {
+			$('#form_add_variable').submit();
+		}
 
 		function getData(){
 			$.ajax({
@@ -194,11 +218,13 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 
 
+
 		function addMainData() {
 			$('#criteria_form').show();
 			$('#parent_id').val(0);
 			$('#criteria_name').val('');
 			$('#criteria_id').val('');
+			$('#modal_criteria_id').val('');
 			if(!$('#tab-weight span.inactive')[0]){
 				$('#tab-weight span').addClass('inactive')
 			}
@@ -218,6 +244,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			$('#parent_id').val(id)
 			$('#criteria_name').val('')
 			$('#criteria_id').val('');
+			$('#modal_criteria_id').val('');
 			$('#tab-weight span').removeClass('inactive');
 		}
 
@@ -235,6 +262,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							$('#criteria_name').val(edit_data['criteria_name'])
 							$('#parent_id').val(edit_data['parent_id'])
 							$('#criteria_id').val(edit_data['id'])
+							$('#modal_criteria_id').val(edit_data['id']);
 							$('#text-weight').val(edit_data['weight'])
 							if($('#parent_id').val() == 0){
 								if(!$('#tab-weight span.inactive')[0]){
@@ -273,6 +301,28 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							}
 					});
 		}
+
+		function addRowVariable(data) {
+			var row_data = JSON.parse(data);
+			console.log('row_data',row_data);
+			var html = ''
+			html += '<tr>'
+			html += '<td class="center">1</td>'
+			html += '<td><a href="#">v1</a></td>'
+			html += '<td>1.1 ทดสอบตัวแปร</td>'
+			html += '<td>1</td>'
+			html += '<td></td>'
+			html += '<td>'
+			html += 	'<a href="#" class="table-link" onclick="delete_criteria_data(\'\');" title="ลบ">'
+			html += 		'<button type="button" class="btn btn-xs btn-danger">'
+			html += 			'<i class="fa fa-trash-o"></i> ลบ'
+			html += 		'</button>'
+			html += 	'</a>'
+			html += '</td>'
+			html += '</tr>'
+			$('#variable-table tbody').append(html);
+
+		}
     jQuery(document).ready(function () {
 				getData();
 				jQuery("#criteria_form").hide();
@@ -305,5 +355,24 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 						e.preventDefault()
         });
+				jQuery("#form_add_variable").submit(function(e){
+						// var invalid_form = false
+						if($('#variable_name').val() == ''){
+							$('#variable_name').closest('.row').find('.text-danger').html('กรุณาระบุ ชื่อตัวแปร')
+						}else{
+							$.ajax({
+								url: '<?php echo base_url("criteria_assessments/ajax_save_variable"); ?>',
+								type: "POST",
+								data:  $(this).serialize(),
+								success: function (data) {
+									console.log('data',data);
+									addRowVariable(data)
+									$('#add_variable_modal').modal('hide')
+								},
+							})
+						}
+
+						e.preventDefault()
+				})
     });
 </script>

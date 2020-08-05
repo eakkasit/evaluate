@@ -121,4 +121,14 @@ class Criterias_model extends CI_Model
 			return $child;
 	}
 
+
+	public function insertCriteriaNVariables($data = array())
+	{
+		$this->db->set('criteria_id', $data['modal_criteria_id']);
+		$this->db->set('variable_id', $data['variable_id']);
+		$this->db->set('variable_name', $data['variable_name']);
+		$this->db->insert('criteria_n_variable');
+		return $this->db->insert_id();
+	}
+
 }

@@ -57,6 +57,18 @@ class CriteriaVariables_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
+	public function getCriteriaVariableLists()
+	{
+		$list = array();
+		$profile_list = $this->db->select('*')->from('criteria_variable')->order_by('id')->get()->result();
+		if(!empty($profile_list)){
+			foreach($profile_list as $val){
+				$list[$val->id] = $val->variable_name;
+			}
+		}
+		return $list;
+	}
+
 	public function insertCriteriaVariables($data = array())
 	{
 		$this->db->set('variable_name', $data['variable_name']);

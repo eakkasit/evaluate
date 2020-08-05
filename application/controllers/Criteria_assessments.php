@@ -10,7 +10,7 @@ class Criteria_assessments extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model'));
+		$this->load->model(array('Commons_model', 'CriteriaProfiles_model','Criterias_model','CriteriaVariables_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 		if(!in_array($this->uri->segment(2),$this->ajax_page)){
 			if ($this->session->userdata('user_id') == '') {
@@ -85,7 +85,8 @@ class Criteria_assessments extends CI_Controller
 	{
 		$data['content_data'] = array(
 			'profile_id' => $id,
-			'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc'))
+			'datas' => $this->Criterias_model->getCriterias(array('profile_id'=>$id),array('id'=>'asc')),
+			'variable_lists' => $this->CriteriaVariables_model->getCriteriaVariableLists()
 		);
 		$data['content_view'] = 'pages/form_criteria_assessment';
 		$this->load->view($this->theme, $data);
@@ -122,7 +123,7 @@ class Criteria_assessments extends CI_Controller
 			foreach ($_POST as $key => $value) {
 				$data[$key] = $this->input->post($key);
 			}
-			
+
 			if($data['criteria_id'] != '' && $data['criteria_id'] != '0'){
 					$action = 'update';
 					$criteria_id = $data['criteria_id'];
@@ -180,6 +181,16 @@ class Criteria_assessments extends CI_Controller
 	public function ajax_get_criteria_data($id='')
 	{
 		$data =  $this->Criterias_model->getCriterias(array('id'=>$id),array('id'=>'asc'))[0];
+		echo json_encode($data);
+	}
+
+	public function ajax_save_variable()
+	{
+		$data = array();
+		foreach ($_POST as $key => $value) {
+			$data[$key] = $this->input->post($key);
+		}
+		$this->Criterias_model->insertCriteriaNVariables($data);
 		echo json_encode($data);
 	}
 }
