@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2020-07-31 09:15:37
+Date: 2020-08-08 01:58:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,17 +47,98 @@ CREATE TABLE `evaluate_criteria` (
   `parent_id` int(11) DEFAULT '0',
   `profile_id` int(11) DEFAULT NULL,
   `criteria_name` varchar(255) DEFAULT '',
+  `fomular` text COMMENT 'สูตรคำนวณ',
+  `weight` float DEFAULT '0' COMMENT 'ค่าน้ำหนัก',
+  `create_date` datetime DEFAULT NULL,
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of evaluate_criteria
+-- ----------------------------
+INSERT INTO `evaluate_criteria` VALUES ('1', '0', '1', 'หมวดที่ 1', null, null, '2020-07-30 01:05:21', '2020-07-31 07:07:35');
+INSERT INTO `evaluate_criteria` VALUES ('2', '0', '1', 'หมวดที่ 2', null, null, '2020-07-30 01:06:02', '2020-07-31 07:07:37');
+INSERT INTO `evaluate_criteria` VALUES ('3', '1', '1', 'การประเมินภาวะความเป็นผู้นำ', 'v1', '1', '2020-07-31 08:27:22', '2020-08-08 01:05:54');
+INSERT INTO `evaluate_criteria` VALUES ('27', '0', '1', 'หมวดที่ 3', null, null, '2020-08-03 23:16:47', '2020-08-03 23:16:47');
+INSERT INTO `evaluate_criteria` VALUES ('28', '2', '1', 'การบริหารบุคคล', null, '0', '2020-08-03 23:17:18', '2020-08-04 01:04:46');
+INSERT INTO `evaluate_criteria` VALUES ('29', '27', '1', 'การเข้าอบรม', null, '0', '2020-08-03 23:17:40', '2020-08-04 01:04:51');
+INSERT INTO `evaluate_criteria` VALUES ('32', '0', '1', 'หมวดที่ 4', null, null, '2020-08-03 23:25:54', '2020-08-03 23:26:08');
+INSERT INTO `evaluate_criteria` VALUES ('33', '32', '1', 'การมีส่วนร่วม', null, '1', '2020-08-03 23:26:30', '2020-08-04 01:04:55');
+INSERT INTO `evaluate_criteria` VALUES ('34', '0', '1', 'หมวดที่ 5', null, '0', '2020-08-04 00:25:13', '2020-08-04 00:25:13');
+INSERT INTO `evaluate_criteria` VALUES ('35', '34', '1', 'สรุป', null, '1', '2020-08-04 00:48:13', '2020-08-04 00:52:19');
+INSERT INTO `evaluate_criteria` VALUES ('47', '1', '1', 'การประเมินภาวะความเป็นผู้นำ2', null, '1', '2020-08-08 00:17:07', '2020-08-08 00:17:07');
+
+-- ----------------------------
+-- Table structure for evaluate_criteria_data
+-- ----------------------------
+DROP TABLE IF EXISTS `evaluate_criteria_data`;
+CREATE TABLE `evaluate_criteria_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT '' COMMENT 'ชื่อการประเมิน',
+  `profile_id` int(11) DEFAULT NULL COMMENT 'โปรไฟล์การประเมิน',
+  `detail` text COMMENT 'รายละเอียด',
   `create_date` datetime DEFAULT NULL,
   `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of evaluate_criteria
+-- Records of evaluate_criteria_data
 -- ----------------------------
-INSERT INTO `evaluate_criteria` VALUES ('1', '0', '1', 'หมวดที่ 1', '2020-07-30 01:05:21', '2020-07-31 07:07:35');
-INSERT INTO `evaluate_criteria` VALUES ('2', '0', '1', 'หมวดที่ 2', '2020-07-30 01:06:02', '2020-07-31 07:07:37');
-INSERT INTO `evaluate_criteria` VALUES ('3', '1', '1', 'การประเมินภาวะความเป็นผู้นำ', '2020-07-31 08:27:22', '2020-07-31 08:27:26');
+INSERT INTO `evaluate_criteria_data` VALUES ('3', 'ทดสอบ', '1', 'ดฟหดหกสดาวกหด', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+
+-- ----------------------------
+-- Table structure for evaluate_criteria_data_point
+-- ----------------------------
+DROP TABLE IF EXISTS `evaluate_criteria_data_point`;
+CREATE TABLE `evaluate_criteria_data_point` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `criteria_data_id` int(11) DEFAULT NULL,
+  `criteria_id` int(11) DEFAULT NULL,
+  `criteria_parent_id` int(11) DEFAULT NULL,
+  `criteria_name` varchar(255) DEFAULT NULL COMMENT 'ชื่อหมวด เกณฑ์การประเมิน',
+  `project_id` int(11) DEFAULT NULL COMMENT 'id โครงการ กิจกรรม',
+  `result` double DEFAULT NULL COMMENT 'คะแนน',
+  `percent` double DEFAULT NULL COMMENT 'ค่าเปอร์เซนต์',
+  `weight` double DEFAULT NULL COMMENT 'ค่าน้ำหนัก',
+  `total` double DEFAULT NULL COMMENT 'คะแนนรวมรายหมวด',
+  `create_date` datetime DEFAULT NULL,
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of evaluate_criteria_data_point
+-- ----------------------------
+INSERT INTO `evaluate_criteria_data_point` VALUES ('12', '3', '1', '0', 'หมวดที่ 1', '0', '0', '0', '0', '5', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('13', '3', '3', '1', 'การประเมินภาวะความเป็นผู้นำ', '1', '1', '2', '1', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('14', '3', '47', '1', 'การประเมินภาวะความเป็นผู้นำ2', '1', '3', '4', '1', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('15', '3', '2', '0', 'หมวดที่ 2', '0', '0', '0', '0', '8', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('16', '3', '28', '2', 'การบริหารบุคคล', '1', '6', '7', '0', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('17', '3', '27', '0', 'หมวดที่ 3', '0', '0', '0', '0', '11', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('18', '3', '29', '27', 'การเข้าอบรม', '1', '9', '10', '0', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('19', '3', '32', '0', 'หมวดที่ 4', '0', '0', '0', '0', '14', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('20', '3', '33', '32', 'การมีส่วนร่วม', '1', '12', '13', '1', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('21', '3', '34', '0', 'หมวดที่ 5', '0', '0', '0', '0', '17', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+INSERT INTO `evaluate_criteria_data_point` VALUES ('22', '3', '35', '34', 'สรุป', '1', '15', '16', '1', '0', '2020-08-08 01:34:30', '2020-08-08 01:34:30');
+
+-- ----------------------------
+-- Table structure for evaluate_criteria_n_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `evaluate_criteria_n_variable`;
+CREATE TABLE `evaluate_criteria_n_variable` (
+  `criteria_id` int(11) NOT NULL,
+  `variable_id` int(11) NOT NULL,
+  `variable_name` varchar(255) DEFAULT NULL,
+  `variable_prepend` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`criteria_id`,`variable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of evaluate_criteria_n_variable
+-- ----------------------------
+INSERT INTO `evaluate_criteria_n_variable` VALUES ('3', '1', 'v1', '');
 
 -- ----------------------------
 -- Table structure for evaluate_criteria_profile
@@ -72,12 +153,13 @@ CREATE TABLE `evaluate_criteria_profile` (
   `create_date` datetime DEFAULT NULL,
   `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_criteria_profile
 -- ----------------------------
 INSERT INTO `evaluate_criteria_profile` VALUES ('1', 'การประเมินแบบ Edpex', '2563', 'การประเมินแบบ Edpex 123123', '1', '2020-07-27 21:52:33', '2020-07-27 22:02:22');
+INSERT INTO `evaluate_criteria_profile` VALUES ('2', 'KPI', '2562', '', '1', '2020-08-02 22:54:26', '2020-08-02 22:54:26');
 
 -- ----------------------------
 -- Table structure for evaluate_criteria_variable
@@ -94,12 +176,33 @@ CREATE TABLE `evaluate_criteria_variable` (
   `create_date` datetime DEFAULT NULL,
   `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_criteria_variable
 -- ----------------------------
 INSERT INTO `evaluate_criteria_variable` VALUES ('1', '1.1 ทดสอบตัวแปร', '1', '1', '2', '1', 'dsadasd', '2020-07-28 02:08:43', '2020-07-28 02:10:24');
+INSERT INTO `evaluate_criteria_variable` VALUES ('2', '1.2 ตัวแปรที่สอง', '1', '1', '1', '1', '', '2020-08-07 22:40:16', '2020-08-07 22:40:16');
+INSERT INTO `evaluate_criteria_variable` VALUES ('3', '1.3 ตัวแปรทีสาม', '1', '2', '1', '1', '', '2020-08-07 22:40:37', '2020-08-07 22:40:37');
+
+-- ----------------------------
+-- Table structure for evaluate_criteria_weight
+-- ----------------------------
+DROP TABLE IF EXISTS `evaluate_criteria_weight`;
+CREATE TABLE `evaluate_criteria_weight` (
+  `id` int(11) NOT NULL,
+  `criteria_id` int(11) DEFAULT NULL COMMENT 'id เกณฑ์การประมิน',
+  `level` int(11) DEFAULT NULL COMMENT 'ระดับเกณฑ์',
+  `
+points` float DEFAULT NULL COMMENT 'คะแนแน',
+  `create_date` datetime DEFAULT NULL,
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of evaluate_criteria_weight
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for evaluate_log
@@ -111,7 +214,7 @@ CREATE TABLE `evaluate_log` (
   `user_id` int(11) NOT NULL COMMENT 'รหัสผู้ใช้ระบบประชุม',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'วันที่สร้าง',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of evaluate_log
@@ -140,6 +243,16 @@ INSERT INTO `evaluate_log` VALUES ('21', 'login', '1', '2020-07-29 20:33:57');
 INSERT INTO `evaluate_log` VALUES ('22', 'login', '1', '2020-07-29 23:26:24');
 INSERT INTO `evaluate_log` VALUES ('23', 'login', '1', '2020-07-30 20:53:35');
 INSERT INTO `evaluate_log` VALUES ('24', 'login', '1', '2020-07-31 06:39:53');
+INSERT INTO `evaluate_log` VALUES ('25', 'login', '1', '2020-08-01 00:41:56');
+INSERT INTO `evaluate_log` VALUES ('26', 'logout', '1', '2020-08-01 01:14:03');
+INSERT INTO `evaluate_log` VALUES ('27', 'login', '1', '2020-08-01 01:14:19');
+INSERT INTO `evaluate_log` VALUES ('28', 'login', '1', '2020-08-02 01:42:35');
+INSERT INTO `evaluate_log` VALUES ('29', 'login', '1', '2020-08-02 22:52:39');
+INSERT INTO `evaluate_log` VALUES ('30', 'login', '1', '2020-08-03 20:46:13');
+INSERT INTO `evaluate_log` VALUES ('31', 'login', '1', '2020-08-04 23:54:53');
+INSERT INTO `evaluate_log` VALUES ('32', 'login', '1', '2020-08-05 08:21:23');
+INSERT INTO `evaluate_log` VALUES ('33', 'login', '1', '2020-08-05 22:06:24');
+INSERT INTO `evaluate_log` VALUES ('34', 'login', '1', '2020-08-07 21:05:13');
 
 -- ----------------------------
 -- Table structure for evaluate_user
