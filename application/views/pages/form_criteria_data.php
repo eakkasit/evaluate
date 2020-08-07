@@ -40,7 +40,7 @@ if (isset($data->id) && $data->id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-8">
-								<select class="form-control" name="profile_id" id="profile_id">
+								<select class="form-control" name="profile_id" id="profile_id" <?php echo isset($data->id)?'disabled':''; ?>>
 									<?php
 									if(isset($criteria_profiles) && !empty($criteria_profiles)){
 										foreach ($criteria_profiles as $key => $criteria_profile) {
@@ -101,16 +101,20 @@ if (isset($data->id) && $data->id != '') {
 
 <script type="text/javascript">
 
-    jQuery(document).ready(function () {
-        jQuery("#profile_id").change(function () {
-						$.ajax({
-									url: '<?php echo $ajax_form_url; ?>'+$(this).val(),
-									type: "GET",
-									success: function (data) {
-										$("#criteria_data").html(data)
-									},
+		function getFormData(id) {
+			$.ajax({
+						url: '<?php echo $ajax_form_url; ?>'+id,
+						type: "GET",
+						success: function (data) {
+							$("#criteria_data").html(data)
+						},
 
-							})
+				})
+		}
+    jQuery(document).ready(function () {
+				getFormData($('#profile_id').val())
+        jQuery("#profile_id").change(function () {
+					getFormData($(this).val())
         });
     });
 </script>

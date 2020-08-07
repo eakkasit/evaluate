@@ -10,7 +10,14 @@
           <div class="row">
             <label class="col-md-2">หมวด</label>
             <div class="col-md-4">
-              <input type="text" name="criteria_name[<?php echo $key; ?>]" title="หมวดเกณฑ์การประเมิน" alt="หมวดเกณฑ์การประเมิน" class="form-control"  value="<?php echo $value->criteria_name; ?>">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][criteria_id]" value="<?php echo $value->id; ?>">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][criteria_parent_id]" value="<?php echo $value->parent_id; ?>">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][project_id]" value="">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][result]" value="">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][percent]" value="">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][weight]" value="">
+              <input type="hidden" name="criteria_data[<?php echo $key; ?>][project_id]" value="">
+              <input type="text" name="criteria_data[<?php echo $key; ?>][criteria_name]" title="หมวดเกณฑ์การประเมิน" alt="หมวดเกณฑ์การประเมิน" class="form-control"  value="<?php echo $value->criteria_name; ?>">
             </div>
           </div>
           <?php if (isset($value->data) && !empty($value->data)) {
@@ -21,10 +28,13 @@
               <div class="row">
                 <label class="col-md-2">เกณฑ์การประเมิน</label>
                 <div class="col-md-3">
-                  <input type="text" class="form-control" name="criteria_name[<?php echo $key; ?>][<?php echo $key_child; ?>]" title="เกณฑ์การประเมิน" alt="เกณฑ์การประเมิน" value="<?php echo $child->criteria_name; ?>" >
+                  <input type="hidden" name="criteria_data[<?php echo $key.$key_child; ?>][criteria_id]" value="<?php echo $child->id; ?>">
+                  <input type="hidden" name="criteria_data[<?php echo $key.$key_child; ?>][criteria_parent_id]" value="<?php echo $child->parent_id; ?>">
+                  <input type="hidden" name="criteria_data[<?php echo $key.$key_child; ?>][total]" value="">
+                  <input type="text" class="form-control" name="criteria_data[<?php echo $key.$key_child; ?>][criteria_name]" title="เกณฑ์การประเมิน" alt="เกณฑ์การประเมิน" value="<?php echo $child->criteria_name; ?>" >
                 </div>
                 <div class="col-md-3">
-                  <select class="form-control" title="โครงการ / กิจจกรรม" name="project_id[<?php echo $key; ?>][<?php echo $key_child; ?>][]" >
+                  <select class="form-control" title="โครงการ / กิจจกรรม" name="criteria_data[<?php echo $key.$key_child; ?>][project_id]" >
                     <?php
                     foreach ($activities as $activity_id => $activity) { ?>
                       <option value="<?php echo $activity_id; ?>"><?php echo $activity ;?></option>
@@ -33,9 +43,9 @@
                 </div>
                 <div class="form-group col-md-2">
                   <div class="input-group ">
-                    <input type="text" class="form-control mini-box" title="ผลลัพธ์" alt="ผลลัพธ์" name="result[<?php echo $key; ?>][<?php echo $key_child; ?>][]" value="" >
-                    <input type="text" class="form-control mini-box" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="percent[<?php echo $key; ?>][<?php echo $key_child; ?>][]" value="" >
-                    <input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="weight[<?php echo $key; ?>][<?php echo $key_child; ?>][]" value="<?php echo $child->weight ?>" readonly>
+                    <input type="text" class="form-control mini-box" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data[<?php echo $key.$key_child; ?>][result]" value="" >
+                    <input type="text" class="form-control mini-box" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data[<?php echo $key.$key_child; ?>][percent]" value="" >
+                    <input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="criteria_data[<?php echo $key.$key_child; ?>][weight]" value="<?php echo $child->weight ?>" readonly>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -64,7 +74,7 @@
                 คะแนนเฉลี่ยรวมรายหมวด
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control" name="" value="">
+                <input type="text" class="form-control" name="criteria_data[<?php echo $key;?>][total]" value="">
               </div>
             </div>
             <?php

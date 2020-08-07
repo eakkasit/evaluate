@@ -110,9 +110,34 @@ class Criteria_datas extends CI_Controller
 				$data[$key] = $this->input->post($key);
 			}
 			if ($action == 'create') {
-				$criteria_id = $this->CriteriaDatas_model->insertCriteriaDatas($data);
-				redirect(base_url("criteria_datas/dashboard_criteria_datas"));
-				exit;
+				try {
+					$this->db->trans_start();
+					$criteria_id = $this->CriteriaDatas_model->insertCriteriaDatas($data);
+					if(isset($data['criteria_data'])){
+						foreach ($data['criteria_data'] as $key => $value) {
+							$data_temp = array();
+							foreach ($value as $key_temp => $value_temp) {
+								$data_temp[$key_temp] = $value_temp;
+							}
+							$data_temp['criteria_data_id'] = $criteria_id;
+							$this->CriteriaDatas_model->insertCriteriaDataPoints($data_temp);
+						}
+					}
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+					    $this->db->trans_rollback();
+							$error_page = true;
+					}
+					else {
+					    $this->db->trans_commit();
+							redirect(base_url("criteria_datas/dashboard_criteria_datas"));
+							exit;
+					}
+
+				}catch (Exception $e) {
+					$error_page = true;
+					// exit();
+				}
 			} else {
 				$this->CriteriaDatas_model->updateCriteriaDatas($criteria_id, $data);
 				redirect(base_url("criteria_datas/dashboard_criteria_datas"));

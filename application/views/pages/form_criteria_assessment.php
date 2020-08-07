@@ -77,29 +77,35 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 											<div class="row">
 												<label class="col-md-4">สูตรคำนวณ</label>
 												<div class="col-md-6">
-													<textarea class="form-control" name="" id="" ></textarea>
+													<textarea class="form-control" name="fomular" id="fomular" ></textarea>
+													<label class="col-md-12 text-danger"><?php echo form_error("criteria_name"); ?></label>
 												</div>
 											</div>
 											<div class="clearfix"></div>
-											<table id="variable-table" class="table table-striped table-bordered table-hover">
-											<thead>
-												<tr>
-													<th class="center">ลำดับที่</th>
-													<th>ชื่อตัวแปร</th>
-													<th>ตัวแปร</th>
-													<th>ค่าตัวแปร</th>
-													<th>ตัวแปรก่อนหน้า</th>
-													<th>
-														<button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#add_variable_modal">
-															<i class="fa fa-plus"></i> เพิ่ม
-														</button>
-													</th>
-												</tr>
-											</thead>
-											<tbody>
-												
-											</tbody>
-										</table>
+											<div class="row">
+												<div class="col-md-12">
+													<table id="variable-table" class="table table-striped table-bordered table-hover">
+														<thead>
+															<tr>
+																<th width="10%" class="center">ที่</th>
+																<th width="25%">ชื่อตัวแปร</th>
+																<th width="30%">ตัวแปร</th>
+																<!-- <th>ค่าตัวแปร</th> -->
+																<th width="25%">ตัวแปรก่อนหน้า</th>
+																<th width="10%">
+																	<button type="button" class="btn btn-sm btn-success"  data-toggle="modal" data-target="#add_variable_modal">
+																		<i class="fa fa-plus"></i> เพิ่ม
+																	</button>
+																</th>
+															</tr>
+														</thead>
+														<tbody>
+
+														</tbody>
+												</table>
+												</div>
+											</div>
+
 										</div>
 										<div id="weight" class="tab-pane">
 											<div class="row">
@@ -146,7 +152,6 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			</div>
 			<div class="modal-body">
 				<form
-
 					method="post" id="form_add_variable">
 					<div class="row">
 						<div class="col-md-12">
@@ -216,14 +221,12 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			})
 		}
 
-
-
-
 		function addMainData() {
 			$('#criteria_form').show();
 			$('#parent_id').val(0);
 			$('#criteria_name').val('');
 			$('#criteria_id').val('');
+			$('#fomular').val('');
 			$('#modal_criteria_id').val('');
 			if(!$('#tab-weight span.inactive')[0]){
 				$('#tab-weight span').addClass('inactive')
@@ -244,6 +247,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 			$('#parent_id').val(id)
 			$('#criteria_name').val('')
 			$('#criteria_id').val('');
+			$('#fomular').val('');
 			$('#modal_criteria_id').val('');
 			$('#tab-weight span').removeClass('inactive');
 		}
@@ -251,6 +255,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		function editData(id) {
 			// alert('edit data')
 			$('#criteria_form').show();
+			load_variable_list(id);
 
 			$.ajax({
 						url: '<?php echo base_url("criteria_assessments/ajax_get_criteria_data/"); ?>' + id,
@@ -263,6 +268,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							$('#parent_id').val(edit_data['parent_id'])
 							$('#criteria_id').val(edit_data['id'])
 							$('#modal_criteria_id').val(edit_data['id']);
+							$('#fomular').val(edit_data['fomular']);
 							$('#text-weight').val(edit_data['weight'])
 							if($('#parent_id').val() == 0){
 								if(!$('#tab-weight span.inactive')[0]){
@@ -302,26 +308,23 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 					});
 		}
 
-		function addRowVariable(data) {
-			var row_data = JSON.parse(data);
-			console.log('row_data',row_data);
-			var html = ''
-			html += '<tr>'
-			html += '<td class="center">1</td>'
-			html += '<td><a href="#">v1</a></td>'
-			html += '<td>1.1 ทดสอบตัวแปร</td>'
-			html += '<td>1</td>'
-			html += '<td></td>'
-			html += '<td>'
-			html += 	'<a href="#" class="table-link" onclick="delete_criteria_data(\'\');" title="ลบ">'
-			html += 		'<button type="button" class="btn btn-xs btn-danger">'
-			html += 			'<i class="fa fa-trash-o"></i> ลบ'
-			html += 		'</button>'
-			html += 	'</a>'
-			html += '</td>'
-			html += '</tr>'
-			$('#variable-table tbody').append(html);
+		function delete_variable(id) {
+			$('#variable-table tbody tr:eq('+id+')').remove()
+		}
 
+		function load_variable_list(id) {
+				$('#variable-table tbody').html('');
+				$.ajax({
+					url: '<?php echo base_url("criteria_assessments/ajax_get_variable"); ?>/'+id,
+					type: "GET",
+					// data:  $(this).serialize()+"&row="+$('#variable-table tbody tr').length,
+					success: function (data) {
+						console.log('data',data);
+						$('#variable-table tbody').append(data);
+						// addRowVariable(data)
+						$('#add_variable_modal').modal('hide')
+					},
+				})
 		}
     jQuery(document).ready(function () {
 				getData();
@@ -345,11 +348,31 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 										type: "POST",
 										data:  $(this).serialize(),
 										success: function (data) {
-											getData();
-											jQuery("#criteria_form").hide();
-											$('#criteria_name').closest('.row').find('.text-danger').html('')
-											$('#text-weight').closest('.row').find('.text-danger').html('')
+											if(data == "true"){
+												getData();
+												jQuery("#criteria_form").hide();
+												$('#criteria_name').closest('.row').find('.text-danger').html('')
+												$('#text-weight').closest('.row').find('.text-danger').html('')
+											}else{
+												swal({
+				                    title: "ไม่สามารถบันทึกข้อมูลได้",
+				                    text: "กรุณาตรวจสอบตัวแปร และข้อมูลต่างๆให้ครบถ้วนและไม่ซ้ำกัน",
+				                    type: "error",
+				                    showCancelButton: false,
+				                    confirmButtonText: "ตกลง",
+				                })
+											}
+
 										},
+										error:function (e) {
+											swal({
+													title: "ไม่สามารถบันทึกข้อมูลได้",
+													text: "กรุณาตรวจสอบตัวแปร และข้อมูลต่างๆให้ครบถ้วนและไม่ซ้ำกัน",
+													type: "error",
+													showCancelButton: false,
+													confirmButtonText: "ตกลง",
+											})
+										}
 								})
 						}
 
@@ -363,10 +386,10 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 							$.ajax({
 								url: '<?php echo base_url("criteria_assessments/ajax_save_variable"); ?>',
 								type: "POST",
-								data:  $(this).serialize(),
+								data:  $(this).serialize()+"&row="+$('#variable-table tbody tr').length,
 								success: function (data) {
-									console.log('data',data);
-									addRowVariable(data)
+									$('#variable-table tbody').append(data);
+									// addRowVariable(data)
 									$('#add_variable_modal').modal('hide')
 								},
 							})

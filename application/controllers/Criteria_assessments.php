@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Criteria_assessments extends CI_Controller
 {
 	private $theme = 'default';
-	private $ajax_page = ['ajax_get_data'];
+	private $ajax_page = ['ajax_get_data','ajax_get_variable'];
 
 	public function __construct()
 	{
@@ -123,17 +123,77 @@ class Criteria_assessments extends CI_Controller
 			foreach ($_POST as $key => $value) {
 				$data[$key] = $this->input->post($key);
 			}
-
 			if($data['criteria_id'] != '' && $data['criteria_id'] != '0'){
 					$action = 'update';
 					$criteria_id = $data['criteria_id'];
 			}
 			if ($action == 'create') {
-				$criteria_id = $this->Criterias_model->insertCriterias($data);
+				try {
+					$this->db->trans_start();
+					$criteria_id = $this->Criterias_model->insertCriterias($data);
+					$this->Criterias_model->deleteCriteriaNVariables($criteria_id);
+					if(isset($data['variable_data'])){
+						foreach ($data['variable_data'] as $key => $value) {
+							$data_temp = array();
+							foreach ($value as $key_temp => $value_temp) {
+								if($key_temp == 'criteria_id'){
+									$data_temp[$key_temp] = $criteria_id;
+								}else{
+									$data_temp[$key_temp] = $value_temp;
+								}
+
+							}
+							$this->Criterias_model->insertCriteriaNVariables($data_temp);
+						}
+					}
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+							$this->db->trans_rollback();
+							echo "false";
+							exit();
+					}
+					else {
+							$this->db->trans_commit();
+							echo "true";
+							exit();
+					}
+				} catch (Exception $e) {
+					echo "false";
+					exit();
+				}
 				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
 				exit;
 			} else {
-				$this->Criterias_model->updateCriterias($criteria_id, $data);
+				try {
+					$this->db->trans_start();
+					$this->Criterias_model->updateCriterias($criteria_id, $data);
+					$this->Criterias_model->deleteCriteriaNVariables($criteria_id);
+					if(isset($data['variable_data'])){
+						foreach ($data['variable_data'] as $key => $value) {
+							$data_temp = array();
+							foreach ($value as $key_temp => $value_temp) {
+								$data_temp[$key_temp] = $value_temp;
+							}
+							$this->Criterias_model->insertCriteriaNVariables($data_temp);
+						}
+					}
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+					    $this->db->trans_rollback();
+							echo "false";
+							exit();
+					}
+					else {
+					    $this->db->trans_commit();
+							echo "true";
+							exit();
+					}
+				} catch (Exception $e) {
+					echo "false";
+					exit();
+				}
+
+
 				redirect(base_url("criteria_assessments/dashboard_criteria_assessments"));
 				exit;
 			}
@@ -190,7 +250,27 @@ class Criteria_assessments extends CI_Controller
 		foreach ($_POST as $key => $value) {
 			$data[$key] = $this->input->post($key);
 		}
-		$this->Criterias_model->insertCriteriaNVariables($data);
-		echo json_encode($data);
+		// $this->Criterias_model->insertCriteriaNVariables($data);
+		// echo "<pre>";
+		// print_r($data);
+		$data['content_data'] = array(
+			// 'profile_id' => $id,
+			'data' => (object) $data,
+			'variable_lists' => $this->CriteriaVariables_model->getCriteriaVariableLists()
+			// 'activities' => $this->Activities_model->getActivityLists(),
+		);
+		$data['content_view'] = 'ajax/ajax_add_variable';
+		$this->load->view('ajax', $data);
+		// echo json_encode($data);
+	}
+
+	public function ajax_get_variable($criteria_id){
+		$data = array();
+		$data['content_data'] = array(
+			'datas' => (object) $this->Criterias_model->getCriteriaNVariables(array('criteria_id'=>$criteria_id)),
+			'variable_lists' => $this->CriteriaVariables_model->getCriteriaVariableLists()
+		);
+		$data['content_view'] = 'ajax/ajax_view_variable';
+		$this->load->view('ajax', $data);
 	}
 }

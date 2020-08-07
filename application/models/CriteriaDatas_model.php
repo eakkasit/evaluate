@@ -84,4 +84,36 @@ class CriteriaDatas_model extends CI_Model
 		$this->db->delete('criteria_data', $update);
 		return $profile_id;
 	}
+
+	public function insertCriteriaDataPoints($data = array())
+	{
+		$this->db->set('criteria_data_id', $data['criteria_data_id']);
+		$this->db->set('criteria_id', $data['criteria_id']);
+		$this->db->set('criteria_parent_id', $data['criteria_parent_id']);
+		$this->db->set('criteria_name', $data['criteria_name']);
+		$this->db->set('project_id', $data['project_id']);
+		$this->db->set('result', $data['result']);
+		$this->db->set('percent', $data['percent']);
+		$this->db->set('weight', $data['weight']);
+		$this->db->set('total', $data['total']);
+		$this->db->set('create_date', 'NOW()', false);
+		$this->db->insert('criteria_data_point');
+		return $this->db->insert_id();
+	}
+
+	public function updateCriteriaDataPoints($id = null, $data = array())
+	{
+		$this->db->set('criteria_data_id', $data['criteria_data_id']);
+		$this->db->set('criteria_id', $data['criteria_id']);
+		$this->db->set('criteria_parent_id', $data['criteria_parent_id']);
+		$this->db->set('criteria_name', $data['criteria_name']);
+		$this->db->set('project_id', $data['project_id']);
+		$this->db->set('result', $data['result']);
+		$this->db->set('percent', $data['percent']);
+		$this->db->set('weight', $data['weight']);
+		$this->db->set('total', $data['total']);
+		$this->db->where('id', $id);
+		$this->db->update('criteria_data_point');
+		return $id;
+	}
 }
