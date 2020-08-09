@@ -26,7 +26,7 @@
 							<button type="button" class="btn btn-xs btn-danger">
 								<i class="fa fa-trash-o"></i> ลบ
 							</button></a>
-					<?php// } ?>
+					<?php // } ?>
 				</div>
 			</div>
 

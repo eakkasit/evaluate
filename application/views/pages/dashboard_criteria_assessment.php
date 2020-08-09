@@ -54,7 +54,7 @@
 								<a href="<?php echo base_url("criteria_assessments/new_criteria_assessment/{$data->id}"); ?>"
 								   class="table-link" title="เพิ่มเกณฑ์การประเมิน">
 									<button type="button" class="btn btn-xs btn-success">
-										<i class="fa fa-add"></i> เพิ่มเกณฑ์การประเมิน
+										<i class="fa fa-add"></i> เกณฑ์การประเมิน
 									</button></a>
 
 								<?php //if (in_array(strtolower($data->status), array('1'))) { ?>

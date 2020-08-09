@@ -55,7 +55,16 @@
 							<label for="stext">ระยะเวลาดำเนินการ :</label>
 						</div>
 						<div class="col-md-5">
-							<label for="stext"><?php echo date_thai($data->date_start,false,false) ." - ". date_thai($data->date_end,false,false); ?></label>
+							<label for="stext">
+								<?php
+								if($data->date_start && $data->date_end){
+									echo date_thai($data->date_start,false,false) ." - ". date_thai($data->date_end,false,false);
+								}else{
+									echo "-";
+								}
+
+								?>
+							</label>
 						</div>
 					</div>
 					<div class="row">

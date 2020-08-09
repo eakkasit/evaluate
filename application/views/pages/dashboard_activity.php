@@ -40,7 +40,13 @@
 						<?php echo $data->year; ?>
 					</td>
 					<td class="text-left">
-						<?php echo date_thai($data->date_start,false,false) ." - ". date_thai($data->date_end,false,false) ; ?>
+						<?php
+						if($data->date_start && $data->date_end){
+							echo date_thai($data->date_start,false,false) ." - ". date_thai($data->date_end,false,false) ;
+						}else{
+							echo "-";
+						}
+						?>
 					</td>
 					<td class="text-left">
 						<?php echo $data->detail; ?>
