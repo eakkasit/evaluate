@@ -7,7 +7,7 @@
 			</tr>
 		</thead>
 		<tbody>
-                        	<?
+                        	<?php
 				// $strSQL = "SELECT * FROM kpi_data WHERE kpi_id!='' AND kpi_name LIKE '%".$_GET['keyword']."%' ORDER BY kpi_id DESC ";
 				// $objQuery  = $kpi->get_results($strSQL);
 				// if(count($objQuery)>0){
@@ -32,7 +32,7 @@
                                 <?php echo $units_list[$value->unit_id]?>
                                 </td>
 			</tr>
-                            <?
+                            <?php
 				// }else{
 			?>
                             <!-- <tr >
