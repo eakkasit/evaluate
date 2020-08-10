@@ -41,7 +41,7 @@
         </tr>
 
         </table>
-        <?
+        <?php
 			}else{
 		?>
         <table class="table">
@@ -72,7 +72,7 @@
         </tr>
 
         </table>
-        <?
+        <?php
 			}
 		?>
         <br>
