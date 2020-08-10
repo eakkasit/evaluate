@@ -25,10 +25,10 @@
 				<td onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'">
                                 <?php echo $key+1 ?>
                                 </td>
-				<td  >
+				<td  onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'" >
                                <?php echo $value->kpi_name?>
                                 </td>
-				<td style="text-align:center"  >
+				<td style="text-align:center"  onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'"  >
                                 <?php echo $units_list[$value->unit_id]?>
                                 </td>
 			</tr>
