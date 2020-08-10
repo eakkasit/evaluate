@@ -106,20 +106,30 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'icon' => 'fa fa-users',
 			'base_url' => '',
 			'menu' => array(
-				'criteria_main' => array(
-					'name' => 'แม่แบบเกณฑ์การประเมิน',
-					'icon' => 'fa fa-users',
-					'base_url' => 'criteria_themes',
-				),
-				'criteria_variable' => array(
+				// 'criteria_variable' => array(
+				// 	'name' => 'ตัวแปรเกณฑ์การประเมิน',
+				// 	'icon' => 'fa fa-users',
+				// 	'base_url' => 'criteria_variables',
+				// ),
+				'variable' => array(
 					'name' => 'ตัวแปรเกณฑ์การประเมิน',
 					'icon' => 'fa fa-users',
-					'base_url' => 'criteria_variables',
+					'base_url' => 'variable',
 				),
-				'criteria_detail' => array(
+				'kpi' => array(
 					'name' => 'เกณฑ์การประเมิน',
 					'icon' => 'fa fa-users',
-					'base_url' => 'criteria_assessments',
+					'base_url' => 'kpi',
+				),
+				// 'criteria_main' => array(
+				// 	'name' => 'แม่แบบเกณฑ์การประเมิน',
+				// 	'icon' => 'fa fa-users',
+				// 	'base_url' => 'criteria_themes',
+				// ),
+				'structure' => array(
+					'name' => 'แม่แบบเกณฑ์การประเมิน',
+					'icon' => 'fa fa-users',
+					'base_url' => 'structure',
 				),
 				'criteria_record' => array(
 					'name' => 'บันทึกการประเมินองค์กรรายปี',

@@ -54,8 +54,26 @@ class Commons_model extends CI_Model
 		);
 
 		$this->units = array(
-			'1' => 'คน',
-			'2' => 'วัน',
+			'1' => 'ร้อยละ',
+			'2' => 'ระดับ',
+			'3' => 'วัน',
+			'4' => 'คน',
+			'5' => 'ราย',
+			'6' => 'ล้านบาท',
+			'7' => 'บาท/ลิตร',
+			'8' => 'ล้านลิตร',
+			'9' => 'กิโลกรัม',
+			'10' => 'บาท',
+			'11' => 'ลิตร',
+			'12' => 'เดือน'
+		);
+
+		$this->level = array(
+			'1' => 'องค์กร',
+			'2' => 'ฝ่าย',
+			'3' => 'กอง',
+			'4' => 'แผนก',
+			'5' => 'บุคคล',
 		);
 	}
 
@@ -148,6 +166,19 @@ class Commons_model extends CI_Model
 				}
 			} else {
 				return $this->units;
+			}
+		}
+
+		public function getLevelList($level = null)
+		{
+			if ($level != null) {
+				if (isset($this->level[$level])) {
+					return $this->level[$level];
+				} else {
+					return '';
+				}
+			} else {
+				return $this->level;
 			}
 		}
 
