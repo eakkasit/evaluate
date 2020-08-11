@@ -183,39 +183,19 @@ class Structure extends CI_Controller
 		foreach ($_POST as $key => $value) {
 			$data[$key] = $this->input->post($key);
 		}
-		echo $this->KpiTree_model->loopTreeSelect('1','1','1','','');
+		// echo $this->KpiTree_model->loopTreeSelect('1','1','1','','');
 		$this->KpiTree_model->insertKpiTree($data);
-
-		// echo "<pre>";
-		// print_r($data);
-		// $data['content_data'] = array(
-		// 	// 'profile_id' => $id,
-		// 	'data' => (object) $data,
-		// 	'variable_lists' => $this->CriteriaVariables_model->getCriteriaVariableLists()
-		// 	// 'activities' => $this->Activities_model->getActivityLists(),
-		// );
-		// $data['content_view'] = 'ajax/ajax_add_variable';
-		// $this->load->view('ajax', $data);
 	}
 
-	public function test($value='')
+	public function ajax_tree_list($id='')
 	{
-		echo $this->KpiTree_model->getTree('1',0,'');
+		echo $this->KpiTree_model->getTree($id,0,'');
 	}
 
 	public function ajax_search_kpi($search_text='')
 	{
 		$data = array();
 		$data = $this->Kpi_model->getKpi(array('kpi_name LIKE '=>'%'.$_GET['keyword'].'%','kpi_id !='=>''));
-		// keyword=" + str +"
-		// &structure_id=
-		// &tree_id="+ document.getElementById("tree_parent").value+"
-		// &tree_number="+ document.getElementById("tree_number").value+"
-		// &tree_weight="+ document.getElementById("tree_weight").value+"
-		// &tree_target="+ document.getElementById("tree_target").value, true)
-		// echo "<pre>";
-		// print_r($data);
-		// die();
 		$data['content_data'] = array(
 			// 'profile_id' => $id,
 			'data' => (object) $data,
@@ -247,5 +227,64 @@ class Structure extends CI_Controller
 
 		$this->KpiTree_model->insertKpiTree($data);
 		redirect(base_url("structure/new_structure_tree/".$_GET['structure_id']));
+	}
+
+	public function ajax_kpi_tree($id='')
+	{
+		echo $this->KpiTree_model->getTreeList($id,0,'');
+	}
+
+	public function ajax_tree_detail($structure_id,$tree_id="")
+	{
+		$tree_data_tmp = array();
+		$tree_data = array();
+		$kpi_data = array();
+		$condition = array();
+		$tree_parent_name = '';
+		$parent_list = array();
+		$tree_name = array();
+		if($tree_id != ""){
+			$condition = array('tree_id'=>$tree_id);
+		}else{
+			$condition = array('structure_id'=>$structure_id,'tree_parent'=>0);
+		}
+		$tree_data_tmp = $this->KpiTree_model->getKpiTree($condition,array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC'));
+		if(!empty($tree_data_tmp)){
+			$tree_data = (object) $tree_data_tmp[0];
+			if($tree_data->tree_parent == '0'){
+				$tree_parent_name = 'หมวดหมู่หลัก';
+			}else{
+				$tree_parent_name = $this->KpiTree_model->getKpiTree(array('tree_id'=>$tree_id))[0]->tree_name;
+			}
+
+			if($tree_data->kpi_id != '0'){
+				$kpi_data = $this->Kpi_model->getKpi(array('kpi_id' => $tree_data->kpi_id))[0];
+			}
+
+		}
+
+		$parent_list = $this->KpiTree_model->getKpiTree(array('tree_parent'=>$tree_id),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC'));
+		if(!empty($parent_list)){
+			foreach ($parent_list as $key => $value) {
+				if($value->tree_type=='1'){
+					$tree_name[$value->tree_id] = $value->tree_name;
+				}else{
+					$tree_name[$value->tree_id] = $this->Kpi_model->getKpi(array('kpi_id' => $value->kpi_id))[0]->kpi_name;
+				}
+			}
+		}
+
+		$data['content_data'] = array(
+			'data' => $tree_data,
+			'parent_list' => $parent_list,
+			'units_list' => $this->Commons_model->getUnitsList(),
+			'structure_id' => $structure_id,
+			'tree_id' => $tree_id,
+			'tree_parent_name' => $tree_parent_name,
+			'kpi_data' => (object) $kpi_data,
+			'tree_name' => $tree_name
+		);
+		$data['content_view'] = 'ajax/ajax_kpi_detail';
+		$this->load->view('ajax', $data);
 	}
 }

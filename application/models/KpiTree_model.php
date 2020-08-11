@@ -133,22 +133,24 @@ class KpiTree_model extends CI_Model
 		$this->db->where('tree_parent',$tree_id);
 		$this->db->from('tree');
 		$data = $this->db->get()->result();
-			// if(count($get)>0){
+			if(count($data)>0){
 				foreach( $data as $op ){
 					if($op->tree_type=='1'){
 						$name = $op->tree_name;
 					}else{
 						$name = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$op->kpi_id'")->row()->kpi_name;
-
-						// $kpi->get_var("SELECT kpi_name FROM kpi_data WHERE kpi_id='$op->kpi_id' ");
-
 					}
-					$html .= '<option value="'.$op->tree_id.'" >'.$level.$name.'</option>';
+					$disable = "";
+					if(($op->tree_type!='1')){
+						$disable = 'disabled';
+					}
+					$html .= '<option value="'.$op->tree_id.'" '.$disable.'>'.$level.$name.'</option>';
 					$html .= $this->loopTreeSelect($op->tree_id,$structure_id,$lock,$level,'');
 
 				}
-		return $html;
-			// }
+
+			}
+			return $html;
 	}
 
 
@@ -163,7 +165,7 @@ class KpiTree_model extends CI_Model
 			if($op->tree_type=='1'){
 				$name = $op->tree_name;
 			}else{
-				$name = 'ss';//$kpi->get_var("SELECT kpi_name FROM kpi_data WHERE kpi_id='$op->kpi_id' ");
+				$name = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$op->kpi_id'")->row()->kpi_name;
 
 			}
 		  $html .= '<option value="'.$op->tree_id.'" >'.$name.'</option>';
@@ -171,7 +173,88 @@ class KpiTree_model extends CI_Model
 
 		}
 
-			return $html;
+		return $html;
+	}
+
+	public function loopTreeListSub($tree_id,$structure_id,$html){
+		$this->db->select('*');
+		$this->db->where('structure_id',$structure_id);
+		$this->db->where('tree_parent',$tree_id);
+		$this->db->from('tree');
+		$data = $this->db->get()->result();
+			if(count($data)>0){
+				$html .= '<ol class="dd-list">';
+				foreach( $data as $key => $value ){
+					if($value->tree_type=='1'){
+						$name = $value->tree_name;
+					}else{
+						$name = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$value->kpi_id'")->row()->kpi_name;
+
+					}
+					$html .= '<li class="dd-item" data-id="'.($key+1).'">';
+					$html .= '	<div class="dd-handle">';
+					$html .= $value->tree_number.$name;
+					$html .= '		<div class="pull-right action-buttons">';
+					$html .= '			<a class="light-blue" href="#" onclick="showData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+					$html .= '				<i class="ace-icon fa fa-eye bigger-130"></i>';
+					$html .= '			</a>';
+					$html .= '			<a class="blue" href="#" onclick="editData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+					$html .= '				<i class="ace-icon fa fa-pencil bigger-130"></i>';
+					$html .= '			</a>';
+					$html .= '			<a class="red" href="#" onclick="deleteData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+					$html .= '				<i class="ace-icon fa fa-trash-o bigger-130"></i>';
+					$html .= '			</a>';
+					$html .= '		</div>';
+					$html .= '	</div>';
+					$html .= '</li>';
+					$html .= $this->loopTreeListSub($value->tree_id,$structure_id,'');
+
+				}
+				$html .= '</ol>';
+		}
+		return $html;
+			// }
+	}
+
+
+	public function getTreeList($structure_id,$tree_id,$html)
+	{
+		$this->db->select('*');
+		$this->db->where('structure_id',$structure_id);
+		$this->db->where('tree_parent',$tree_id);
+		$this->db->from('tree');
+		$data = $this->db->get()->result();
+
+		$html .= '<div class="dd" id="nestable"><ol class="dd-list">';
+		foreach( $data as $key => $value ){
+			if($value->tree_type=='1'){
+				$name = $value->tree_name;
+			}else{
+				$name = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$value->kpi_id'")->row()->kpi_name;
+
+			}
+			$html .= '<li class="dd-item" data-id="'.($key+1).'">';
+			$html .= '	<div class="dd-handle">';
+			$html .= $value->tree_number.$name;
+			$html .= '		<div class="pull-right action-buttons">';
+			$html .= '			<a class="light-blue" href="#" onclick="showData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+			$html .= '				<i class="ace-icon fa fa-eye bigger-130"></i>';
+			$html .= '			</a>';
+			$html .= '			<a class="blue" href="#" onclick="editData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+			$html .= '				<i class="ace-icon fa fa-pencil bigger-130"></i>';
+			$html .= '			</a>';
+			$html .= '			<a class="red" href="#" onclick="deleteData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
+			$html .= '				<i class="ace-icon fa fa-trash-o bigger-130"></i>';
+			$html .= '			</a>';
+			$html .= '		</div>';
+			$html .= '	</div>';
+			$html .= '</li>';
+			$html .= $this->loopTreeListSub($value->tree_id,$structure_id,'');
+
+		}
+		$html .= '</ol></div>';
+
+		return $html;
 	}
 
 
