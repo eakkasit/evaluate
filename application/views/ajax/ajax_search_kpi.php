@@ -21,16 +21,19 @@
 
 				// if($kpicheck==''){
 			?>
-			<tr class="tr-link">
-				<td onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'">
-                                <?php echo $key+1 ?>
+			<tr class="tr-link" onclick="selectKpi('<?php echo $value->kpi_id ?>','<?php echo $value->kpi_name?>')">
+				<!-- <td onclick="document.location = '<?php //echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'">
+                                <?php //echo $key+1 ?>
                                 </td>
-				<td  onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'" >
-                               <?php echo $value->kpi_name?>
+				<td  onclick="document.location = '<?php //echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'" >
+                               <?php //echo $value->kpi_name?>
                                 </td>
-				<td style="text-align:center"  onclick="document.location = '<?php echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'"  >
-                                <?php echo $units_list[$value->unit_id]?>
-                                </td>
+				<td style="text-align:center"  onclick="document.location = '<?php //echo base_url('structure/ajax_save_kpi/'); ?>?tree_id=<?php echo $tree_id;?>&structure_id=<?php echo $structure_id?>&kpi_id=<?php echo $value->kpi_id ?>&tree_number=<?php echo $tree_number?>&tree_weight=<?php echo $tree_weight?>&tree_target=<?php echo $tree_target?>&unit_id=<?php echo $value->unit_id?>'"  >
+                                <?php //echo $units_list[$value->unit_id]?>
+                                </td> -->
+																<td><?php echo $key+1 ?> </td>
+																<td><?php echo $value->kpi_name?></td>
+																<td style="text-align:center"><?php echo $units_list[$value->unit_id]?></td>
 			</tr>
                             <?php
 				// }else{

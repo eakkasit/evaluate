@@ -41,7 +41,7 @@ if(isset($data) && !empty($data)){
                         <td align="center"><?php echo $faicon?></td>
                         <td><?php echo $value->tree_number?></td>
                         <td><?php echo isset($tree_name[$value->tree_id])?$tree_name[$value->tree_id]:''?></td>
-                        <td  align="center"><?php echo $units_list[$value->unit_id]?></td>
+                        <td  align="center"><?php echo isset($units_list[$value->unit_id])?$units_list[$value->unit_id]:'';?></td>
                         <td  align="center">
                         <!-- <a href="">
                         <li class="fa fa-trash"></li>

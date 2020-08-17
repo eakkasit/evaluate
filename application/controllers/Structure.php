@@ -183,8 +183,16 @@ class Structure extends CI_Controller
 		foreach ($_POST as $key => $value) {
 			$data[$key] = $this->input->post($key);
 		}
+		// echo "<pre>";
+		// print_r($data);
 		// echo $this->KpiTree_model->loopTreeSelect('1','1','1','','');
-		$this->KpiTree_model->insertKpiTree($data);
+		if($data['tree_id']!=''){
+			$this->KpiTree_model->updateKpiTree($data['tree_id'],$data);
+		}else{
+			$this->KpiTree_model->insertKpiTree($data);
+		}
+		// die();
+		// $this->KpiTree_model->insertKpiTree($data);
 	}
 
 	public function ajax_tree_list($id='')
@@ -286,5 +294,27 @@ class Structure extends CI_Controller
 		);
 		$data['content_view'] = 'ajax/ajax_kpi_detail';
 		$this->load->view('ajax', $data);
+	}
+
+	public function ajax_get_tree_data($id='')
+	{
+		$data = array();
+		$data = $this->KpiTree_model->getKpiTree(array('tree_id'=>$id))[0];
+		if($data){
+			if($data->kpi_id != 0){
+				$data->kpi_name = $this->Kpi_model->getKpi(array('kpi_id'=>$data->kpi_id))[0]->kpi_name;
+			}
+		}
+		echo json_encode($data);
+	}
+
+	public function deleteKpiTree($id='')
+	{
+		$this->KpiTree_model->deleteKpiTree($id);
+	}
+
+	public function testWeight($id='',$kpi='')
+	{
+		$this->KpiTree_model->treeweightsum($id,$kpi);
 	}
 }

@@ -87,18 +87,33 @@ class KpiTree_model extends CI_Model
 		}
 
 		$this->db->set('tree_number',$data['tree_number']);
-		$this->db->set('tree_name',$data['tree_name']);
-		$this->db->set('unit_id',$data['unit_id']);
+
+		if(isset($data['tree_name'])){
+			$this->db->set('tree_name',$data['tree_name']);
+		}
+
 		$this->db->set('tree_type',$data['tree_type']);
-		$this->db->set('tree_weight',$data['tree_weight']);
-		$this->db->set('tree_target',$data['tree_target']);
+
+		if(isset($data['unit_id'])){
+			$this->db->set('tree_type',$data['tree_type']);
+		}
+
+		if(isset($data['tree_weight'])){
+			$this->db->set('tree_weight',$data['tree_weight']);
+		}
+
+		if(isset($data['tree_target'])){
+			$this->db->set('tree_target',$data['tree_target']);
+		}
 
 		if(isset($data['short_name'])){
 			$this->db->set('short_name',$data['short_name']);
 		}
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('tree');
-		return $this->db->insert_id();
+		$id = $this->db->insert_id();
+		$this->treeweightsum($id);
+		return $id;
 	}
 
 	public function updateKpiTree($data_id = null, $data = array())
@@ -107,21 +122,44 @@ class KpiTree_model extends CI_Model
 		$this->db->set('kpi_id',$data['kpi_id']);
 		$this->db->set('structure_id',$data['structure_id']);
 		$this->db->set('tree_number',$data['tree_number']);
-		$this->db->set('tree_name',$data['tree_name']);
-		$this->db->set('unit_id',$data['unit_id']);
 		$this->db->set('tree_type',$data['tree_type']);
-		$this->db->set('tree_weight',$data['tree_weight']);
-		$this->db->set('tree_target',$data['tree_target']);
-		$this->db->set('short_name',$data['short_name']);
+		if(isset($data['tree_name'])){
+			$this->db->set('tree_name',$data['tree_name']);
+		}
+		if(isset($data['unit_id'])){
+			$this->db->set('unit_id',$data['unit_id']);
+		}
+		if(isset($data['unit_id'])){
+			$this->db->set('tree_type',$data['tree_type']);
+		}
+
+		if(isset($data['tree_weight'])){
+			$this->db->set('tree_weight',$data['tree_weight']);
+		}
+
+		if(isset($data['tree_target'])){
+			$this->db->set('tree_target',$data['tree_target']);
+		}
+
+		if(isset($data['short_name'])){
+			$this->db->set('short_name',$data['short_name']);
+		}
 		$this->db->where('tree_id', $data_id);
 		$this->db->update('tree');
+		$this->treeweightsum($data_id);
 		return $data_id;
 	}
 
 	public function deleteKpiTree($data_id = null)
 	{
+
+		$checkparent = $this->db->query("SELECT tree_parent FROM kpi_tree WHERE tree_id='$data_id' ")->row()->tree_parent;
+		if($checkparent != '0'){
+			$this->treeweightsumDel($data_id);
+		}
 		$this->db->where('tree_id', $data_id);
 		$this->db->delete('tree');
+
 		return $data_id;
 	}
 
@@ -193,7 +231,7 @@ class KpiTree_model extends CI_Model
 					}
 					$html .= '<li class="dd-item" data-id="'.($key+1).'">';
 					$html .= '	<div class="dd-handle">';
-					$html .= $value->tree_number.$name;
+					$html .= $value->tree_number.' '.$name;
 					$html .= '		<div class="pull-right action-buttons">';
 					$html .= '			<a class="light-blue" href="#" onclick="showData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
 					$html .= '				<i class="ace-icon fa fa-eye bigger-130"></i>';
@@ -235,7 +273,7 @@ class KpiTree_model extends CI_Model
 			}
 			$html .= '<li class="dd-item" data-id="'.($key+1).'">';
 			$html .= '	<div class="dd-handle">';
-			$html .= $value->tree_number.$name;
+			$html .= $value->tree_number.' '.$name;
 			$html .= '		<div class="pull-right action-buttons">';
 			$html .= '			<a class="light-blue" href="#" onclick="showData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
 			$html .= '				<i class="ace-icon fa fa-eye bigger-130"></i>';
@@ -257,5 +295,41 @@ class KpiTree_model extends CI_Model
 		return $html;
 	}
 
+	public function treeweightsum($tree_id){
+		$tree_parent = $this->db->query("SELECT tree_parent FROM kpi_tree WHERE tree_id='$tree_id' ")->row()->tree_parent;
+    $tree_parent_weight = 0;
+		$chk_tree = $this->db->query("SELECT * FROM kpi_tree WHERE tree_parent='$tree_parent' ")->result();
+
+		if(count($chk_tree)>0){
+			foreach( $chk_tree as $key => $chk ){
+				$tree_parent_weight = $tree_parent_weight+$chk->tree_weight;
+			}
+		}
+		$this->db->set('tree_weight',$tree_parent_weight);
+		$this->db->where('tree_id', $tree_parent);
+		$this->db->update('tree');
+
+		if($tree_parent!='0'){
+			$this->treeweightsum($tree_parent);
+		}
+	}
+
+	function treeweightsumDel($tree_id){
+		$tree_parent = $this->db->query("SELECT tree_parent FROM kpi_tree WHERE tree_id='$tree_id' ")->row()->tree_parent;
+    $tree_parent_weight = 0;
+		$chk_tree = $this->db->query("SELECT * FROM kpi_tree WHERE tree_parent='$tree_id' ")->result();
+		if(count($chk_tree)>0){
+			foreach( $chk_tree as $key => $chk ){
+				$tree_parent_weight = $tree_parent_weight+$chk->tree_weight;
+			}
+		}
+		$this->db->set('tree_weight',$tree_parent_weight);
+		$this->db->where('tree_id', $tree_id);
+		$this->db->update('tree');
+
+		if($tree_parent!='0'){
+			$this->treeweightsumDel($tree_parent);
+		}
+	}
 
 }
