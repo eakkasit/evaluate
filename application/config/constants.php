@@ -131,10 +131,10 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-users',
 					'base_url' => 'structure',
 				),
-				'criteria_record' => array(
+				'criteria' => array(
 					'name' => 'บันทึกการประเมินองค์กรรายปี',
 					'icon' => 'fa fa-users',
-					'base_url' => 'criteria_datas',
+					'base_url' => 'criteria',
 				),
 			),
 		),

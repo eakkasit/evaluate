@@ -159,6 +159,20 @@ class Kpi extends CI_Controller
 				exit;
 			} else {
 				$this->Kpi_model->updateKpi($kpi_id, $data);
+				$this->Formula_model->deleteKpiFormula($kpi_id);
+				if(isset($data['formula_value'])){
+					foreach( $data['formula_value'] as $key => $formula_value){
+						$depend = $data['formula_depend'][$key];
+						// $data_temp = array();
+						$data_temp = array(
+							'formula_value' => $formula_value,
+							'var_id' => $key,
+							'kpi_id' => $kpi_id,
+							'depend' => $depend
+						);
+						$this->Formula_model->insertFormula($data_temp);
+					}
+				}
 				redirect(base_url("kpi/dashboard_kpi"));
 				exit;
 			}
