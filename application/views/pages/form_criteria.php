@@ -1,12 +1,12 @@
 <?php
 $title_prefix = 'เพิ่ม';
-$action = base_url("criteria_datas/save");
-$prev = base_url("criteria_datas/dashboard_criteria_datas");
-$ajax_form_url = base_url("criteria_datas/ajax_get_data_form/");
+$action = base_url("criteria/dashboard_criteria");
+$prev = base_url("criteria/dashboard_criteria");
+$ajax_form_url = base_url("criteria/ajax_get_data_form/");
 if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
 	$action .= "/{$data->id}";
-	$prev = base_url("criteria_datas/view_criteria_data/{$data->id}");
+	$prev = base_url("criteria/view_criteria_data/{$data->id}");
 }
 ?>
 <p class="h4 header text-success">
@@ -34,7 +34,27 @@ if (isset($data->id) && $data->id != '') {
 			</form>
 	</div>
 </div>
+<!-- Modal -->
+	 <div id="myModal" class="modal fade" role="dialog">
+		 <div class="modal-dialog">
 
+			 <!-- Modal content-->
+			 <div class="modal-content">
+				 <div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal">&times;</button>
+					 <h4 class="modal-title">ตัวแปร</h4>
+				 </div>
+				 <div class="modal-body">
+					 <div id="variable_data"></div>
+				 </div>
+				 <div class="modal-footer">
+					 <input type="button" value="Save" onclick="addRow('dataTable')" class="btn btn-info "  id="addpro" style="display:none"  data-dismiss="modal"/>
+					 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				 </div>
+			 </div>
+
+		 </div>
+	 </div>
 <script type="text/javascript">
 
 		function getData(){
@@ -46,8 +66,33 @@ if (isset($data->id) && $data->id != '') {
 					},
 			})
 		}
+
+		function show_variable(kpi_id,kpi_standard_type) {
+			$.ajax({
+				url: '<?php echo base_url('criteria/ajax_var_data/'); ?>' + kpi_id + '/' + kpi_standard_type ,
+				type: "GET",
+				success: function (data) {
+					$('#variable_data').html(data)
+					$('#myModal').modal('show');
+				},
+			})
+		}
     jQuery(document).ready(function () {
 				getData();
+				setTimeout(function(){
+					console.log('1');
+					$("input[class*='percent_total_']").each(function(i,e){
+						var total_id = $(this).attr('data-percent')
+						console.log(total_id);
+						var sum_data = 0;
+						var $percent = '.percent_'+total_id
+						$($percent).each(function(e){
+							sum_data += parseInt($(this).val());
+						})
+						$(this).val((sum_data/$($percent).length).toFixed(2))
+					})
+				} , 1000);
+
     });
 </script>
 <style>

@@ -10,11 +10,7 @@
 			<th class="text-center" width="6%">ปี</th>
 			<th class="text-center" width="12%">รายละเอียด</th>
 			<th class="text-center" width="24%">
-				<a href="<?php echo base_url("evaluate_targets/new_evaluate_target"); ?>" title="เพิ่ม">
-					<button type="button" class="btn btn-sm btn-success">
-						<i class="fa fa-plus"></i> เพิ่ม
-					</button>
-				</a>
+			
 			</th>
 		</tr>
 		</thead>

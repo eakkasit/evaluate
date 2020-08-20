@@ -33,8 +33,11 @@ class Commons_model extends CI_Model
 		);
 
 		$this->year = array(
+			'2560' => '2560',
+			'2561' => '2561',
 			'2562' => '2562',
 			'2563' => '2563',
+			'2564' => '2564',
 		);
 
 		$this->active_status = array(

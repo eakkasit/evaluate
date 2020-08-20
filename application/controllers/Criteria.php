@@ -9,7 +9,7 @@ class Criteria extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model'));
+		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','Formula_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -166,4 +166,14 @@ class Criteria extends CI_Controller
 		echo $this->KpiTree_model->getTreeFormList($id,0,'');
 	}
 
+	public function ajax_var_data($kpi_id,$kpi_standard_type){
+		$data = array();
+		$data['content_data'] = array(
+			'fomular' => (object) $this->Formula_model->getFomularVariable($kpi_id),
+			'kpi_standard_type' => $kpi_standard_type,
+			'units_list'=> $this->Commons_model->getUnitsList(),
+		);
+		$data['content_view'] = 'ajax/ajax_var_data';
+		$this->load->view('ajax', $data);
+	}
 }

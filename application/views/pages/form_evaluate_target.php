@@ -1,17 +1,17 @@
 <?php
 $title_prefix = 'เพิ่ม';
-$action = base_url("criteria_themes/save");
-$prev = base_url("criteria_themes/dashboard_criteria_themes");
+$action = base_url("evaluate_targets/save");
+$prev = base_url("evaluate_targets/dashboard_evaluate_targets");
 $btn_img_txt = 'เพิ่มรูป';
 $btn_img_dsp = false;
-if (isset($user_data->user_id) && $user_data->user_id != '') {
+if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
-	$action .= "/{$user_data->user_id}";
-	$prev = base_url("criteria_themes/view_criteria_theme/{$user_data->user_id}");
+	$action .= "/{$data->id}";
+	$prev = base_url("evaluate_targets/view_evaluate_target/{$data->id}");
 }
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>รายชื่อผู้ประชุม
+	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>เป้าหมายโครงการ
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -24,16 +24,46 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">แม่แบบเกณฑ์การประเมิน</label>
+								<label for="stext">ชื่อ</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" name="citizen_id" class="form-control"
-									   value="" placeholder="ระบุ">
+								<input type="text" name="name" class="form-control"
+									   value="<?php echo isset($data->name)?$data->name:''; ?>" placeholder="ระบุ">
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("name"); ?></label>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">ปี</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<select class="form-control" name="year_start">
+									<?php foreach ($year_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->year_start) && $data->year_start == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<label class="col-md-1"> - </label>
+							<div class="col-md-4">
+								<select class="form-control" name="year_end">
+									<?php foreach ($year_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->year_end) && $data->year_end == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<label class="col-md-12 text-danger"><?php echo form_error("year_start"); ?></label>
+							<label class="col-md-12 text-danger"><?php echo form_error("year_end"); ?></label>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
@@ -42,30 +72,10 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<textarea type="text" name="citizen_id" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
+								<textarea type="text" name="detail" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
 							</div>
 							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">สถานะการใช้งาน</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<?php foreach ($status_list as $key => $value) { ?>
-									<input type="radio" name="user_status"
-										   id="user_status_<?php echo $key; ?>"
-										   class=""
-										   value="<?php echo $key; ?>" <?php if (isset($user_data->user_status) && $user_data->user_status == $key) {
-										echo 'checked="checked"';
-									} ?>>&nbsp;<label
-										for="user_status_<?php echo $key; ?>"><?php echo $value; ?></label>&emsp;
-								<?php } ?>
-							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("user_status"); ?></label>
+								class="col-md-12 text-danger"><?php echo form_error("detail"); ?></label>
 						</div>
 					</div>
 				</div>
@@ -87,23 +97,8 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 	</div>
 </div>
 <script type="text/javascript">
-    function deletePicture() {
-        $('input[name=profile_picture_tmp]').val('');
-        $('#preview_picture').attr('src', '<?php echo $profile_picture_default; ?>');
-    }
 
     jQuery(document).ready(function () {
-        jQuery("#profile_picture").change(function () {
 
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    jQuery('#preview_picture').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
     });
 </script>

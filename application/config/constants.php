@@ -168,7 +168,7 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 				'reports' => array(
 					'name' => 'รายงานการประเมินองค์กรรายปี',
 					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'reports_assessments',
+					'base_url' => 'report_assessments',
 				),
 				'report_target' => array(
 					'name' => 'รายงานเป้าหมายโครงการ',
@@ -191,23 +191,23 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'name' => 'ตั้งค่าระบบ',
 			'icon' => 'fa fa-cog',
 			'base_url' => '',
-			'menu' => array(
-				'configs' => array(
-					'name' => 'การตั้งค่า',
-					'icon' => 'fa fa-cog',
-					'base_url' => 'configs',
-				),
-				'agenda_types' => array(
-					'name' => 'ประเภทวาระการประชุม',
-					'icon' => 'fa fa-cog',
-					'base_url' => 'agenda_types',
-				),
-				'agenda_defaults' => array(
-					'name' => 'ค่าเริ่มต้นวาระการประชุม',
-					'icon' => 'fa fa-cog',
-					'base_url' => 'agenda_defaults',
-				),
-			),
+			// 'menu' => array(
+			// 	'configs' => array(
+			// 		'name' => 'การตั้งค่า',
+			// 		'icon' => 'fa fa-cog',
+			// 		'base_url' => 'configs',
+			// 	),
+			// 	'agenda_types' => array(
+			// 		'name' => 'ประเภทวาระการประชุม',
+			// 		'icon' => 'fa fa-cog',
+			// 		'base_url' => 'agenda_types',
+			// 	),
+			// 	'agenda_defaults' => array(
+			// 		'name' => 'ค่าเริ่มต้นวาระการประชุม',
+			// 		'icon' => 'fa fa-cog',
+			// 		'base_url' => 'agenda_defaults',
+			// 	),
+			// ),
 		),
 	)
 ));

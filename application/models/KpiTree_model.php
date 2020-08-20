@@ -220,6 +220,7 @@ class KpiTree_model extends CI_Model
 		$this->db->where('structure_id',$structure_id);
 		$this->db->where('tree_parent',$tree_id);
 		$this->db->from('tree');
+		$this->db->order_by('tree_number','ASC');
 		$data = $this->db->get()->result();
 			if(count($data)>0){
 				$html .= '<ol class="dd-list">';
@@ -262,6 +263,7 @@ class KpiTree_model extends CI_Model
 		$this->db->where('structure_id',$structure_id);
 		$this->db->where('tree_parent',$tree_id);
 		$this->db->from('tree');
+		$this->db->order_by('tree_number','ASC');
 		$data = $this->db->get()->result();
 
 		$html .= '<div class="dd" id="nestable"><ol class="dd-list">';
@@ -361,69 +363,99 @@ class KpiTree_model extends CI_Model
 						$html .= '	</div>';
 						$html .= '</div>';
 					}else{
-						$name = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$value->kpi_id'")->row()->kpi_name;
+						$kpi = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$value->kpi_id'")->row();
+						$number = rand(1,5);
+						$percent = $number*10;
 						$html .= '<div class="row">';
-						$html .= '	<label class="col-md-2">หมวด</label>';
-						$html .= '	<div class="col-md-4">';
+						$html .= '	<label class="col-md-2">เกณฑ์การประเมิน</label>';
+						$html .= '	<div class="col-md-3">';
 						$html .= '		<input type="hidden" name="criteria_data['.$key.'][criteria_id]" value="">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][criteria_parent_id]" value="'.$value->tree_parent.'">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][project_id]" value="">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][result]" value="">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][percent]" value="">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][weight]" value="">';
-						$html .= '		<input type="hidden" name="criteria_data['.$key.'][project_id]" value="">';
-						$html .= '		<input type="text" name="criteria_data['.$key.'][criteria_name]" title="หมวดเกณฑ์การประเมิน" alt="หมวดเกณฑ์การประเมิน" class="form-control"  value="'.$value->tree_number.' '.$name.'">';
+						$html .= '		<input type="hidden" name="criteria_data['.$key.'][criteria_parent_id]" value="">';
+						$html .= '		<input type="hidden" name="criteria_data['.$key.'][total]" value="">';
+						$html .= '		<input type="text" class="form-control" name="criteria_data['.$key.'][criteria_name]" title="เกณฑ์การประเมิน" alt="เกณฑ์การประเมิน" value="'.$value->tree_number.' '.$kpi->kpi_name.'" >';
+						$html .= '		</div>';
+						$html .= '	<div class="col-md-3">';
+						// $html .= '		<select class="form-control" title="โครงการ / กิจจกรรม" name="criteria_data['.$key.'][project_id]" >';
+						// $html .= '		</select>';
+						$html .= '<a href="#" onClick="show_variable(\''.$value->kpi_id.'\',\''.$kpi->kpi_standard_type.'\')" class="btn btn-success">บันทึกค่าตัวแปร</a>';
+						$html .= '	</div>';
+						$html .= '	<div class="form-group col-md-2">';
+						$html .= '		<div class="input-group ">';
+						$html .= '			<input type="text" class="form-control mini-box" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data['.$key.'][result]" value="'.$number.'" >';
+						$html .= '			<input type="text" class="form-control mini-box percent_'.$value->tree_parent.'" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data['.$key.'][percent]" value="'.$percent.'" >';
+						$html .= '			<input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="criteria_data['.$key.'][weight]" value="1" >';
+						$html .= '		</div>';
+						$html .= '	</div>';
+						$html .= '	<div class="col-md-2">';
+						$html .= '		<div class="pull-right action-buttons">';
+						$html .= '			<a class="orange" href="#" title="เอกสารแนบ"  onclick="addtData(\'\')">';
+						$html .= '				<i class="ace-icon fa fa-paperclip bigger-130"></i>';
+						$html .= '			</a>';
+						// $html .= '			<a class="green" href="#" title="เพิ่มโครงการ" onclick="insert_row(\'\')">';
+						// $html .= '				<i class="ace-icon fa fa-plus bigger-130"></i>';
+						// $html .= '			</a>';
+						$html .= '		</div>';
 						$html .= '	</div>';
 						$html .= '</div>';
 
-						$this->db->select('*');
-						$this->db->where('kpi_id',$value->kpi_id);
-						$this->db->from('formula');
-						$this->db->join('variable','formula.var_id = variable.var_id','inner');
-						$fomular = $this->db->get()->result();
-						if(count($data)>0){
-							$html .= '<ol class="dd-list">';
-							foreach ($fomular as $key_fomular => $value_fomular) {
-								$html .= '<li class="dd-item">';
-								$html .= '<div class="row">';
-								$html .= '	<label class="col-md-2">เกณฑ์การประเมิน</label>';
-								$html .= '	<div class="col-md-3">';
-								$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][criteria_id]" value="<?php echo $child->id; ?>">';
-								$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][criteria_parent_id]" value="<?php echo $child->parent_id; ?>">';
-								$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][total]" value="">';
-								$html .= '		<input type="text" class="form-control" name="criteria_data['.$key_fomular.'][criteria_name]" title="เกณฑ์การประเมิน" alt="เกณฑ์การประเมิน" value=" '.$value_fomular->var_name.'" >';
-								$html .= '		</div>';
-								$html .= '	<div class="col-md-3">';
-								$html .= '		<select class="form-control" title="โครงการ / กิจจกรรม" name="criteria_data['.$key_fomular.'][project_id]" >';
-								$html .= '		</select>';
-								$html .= '	</div>';
-								$html .= '	<div class="form-group col-md-2">';
-								$html .= '		<div class="input-group ">';
-								$html .= '			<input type="text" class="form-control mini-box" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data['.$key_fomular.'][result]" value="" >';
-								$html .= '			<input type="text" class="form-control mini-box" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data['.$key_fomular.'][percent]" value="" >';
-								$html .= '			<input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="criteria_data['.$key_fomular.'][weight]" value="" readonly>';
-								$html .= '		</div>';
-								$html .= '	</div>';
-								$html .= '	<div class="col-md-2">';
-								$html .= '		<div class="pull-right action-buttons">';
-								$html .= '			<a class="orange" href="#" title="เอกสารแนบ"  onclick="addtData(\'\')">';
-								$html .= '				<i class="ace-icon fa fa-paperclip bigger-130"></i>';
-								$html .= '			</a>';
-								$html .= '			<a class="green" href="#" title="เพิ่มโครงการ" onclick="insert_row(\'\')">';
-								$html .= '				<i class="ace-icon fa fa-plus bigger-130"></i>';
-								$html .= '			</a>';
-								$html .= '		</div>';
-								$html .= '	</div>';
-								$html .= '</div>';
-								$html .= '</li>';
-							}
-								$html .= '</ol>';
-
-						}
+						// $this->db->select('*');
+						// $this->db->where('kpi_id',$value->kpi_id);
+						// $this->db->from('formula');
+						// $this->db->join('variable','formula.var_id = variable.var_id','inner');
+						// $fomular = $this->db->get()->result();
+						// if(count($data)>0){
+						// 	$html .= '<ol class="dd-list">';
+						// 	foreach ($fomular as $key_fomular => $value_fomular) {
+						// 		$html .= '<li class="dd-item">';
+						// 		$html .= '<div class="row">';
+						// 		$html .= '	<label class="col-md-2">เกณฑ์การประเมิน</label>';
+						// 		$html .= '	<div class="col-md-3">';
+						// 		$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][criteria_id]" value="">';
+						// 		$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][criteria_parent_id]" value="">';
+						// 		$html .= '		<input type="hidden" name="criteria_data['.$key_fomular.'][total]" value="">';
+						// 		$html .= '		<input type="text" class="form-control" name="criteria_data['.$key_fomular.'][criteria_name]" title="เกณฑ์การประเมิน" alt="เกณฑ์การประเมิน" value=" '.$value_fomular->var_name.'" >';
+						// 		$html .= '		</div>';
+						// 		$html .= '	<div class="col-md-3">';
+						// 		$html .= '		<select class="form-control" title="โครงการ / กิจจกรรม" name="criteria_data['.$key_fomular.'][project_id]" >';
+						// 		$html .= '		</select>';
+						// 		$html .= '	</div>';
+						// 		$html .= '	<div class="form-group col-md-2">';
+						// 		$html .= '		<div class="input-group ">';
+						// 		$html .= '			<input type="text" class="form-control mini-box" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data['.$key_fomular.'][result]" value="" >';
+						// 		$html .= '			<input type="text" class="form-control mini-box" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data['.$key_fomular.'][percent]" value="" >';
+						// 		$html .= '			<input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="criteria_data['.$key_fomular.'][weight]" value="" readonly>';
+						// 		$html .= '		</div>';
+						// 		$html .= '	</div>';
+						// 		$html .= '	<div class="col-md-2">';
+						// 		$html .= '		<div class="pull-right action-buttons">';
+						// 		$html .= '			<a class="orange" href="#" title="เอกสารแนบ"  onclick="addtData(\'\')">';
+						// 		$html .= '				<i class="ace-icon fa fa-paperclip bigger-130"></i>';
+						// 		$html .= '			</a>';
+						// 		$html .= '			<a class="green" href="#" title="เพิ่มโครงการ" onclick="insert_row(\'\')">';
+						// 		$html .= '				<i class="ace-icon fa fa-plus bigger-130"></i>';
+						// 		$html .= '			</a>';
+						// 		$html .= '		</div>';
+						// 		$html .= '	</div>';
+						// 		$html .= '</div>';
+						// 		$html .= '</li>';
+						// 	}
+						// 		$html .= '</ol>';
+						//
+						// }
 
 					}
 					$html .= '</li>';
 					$html .= $this->loopTreeFormListSub($value->tree_id,$structure_id,'');
+					if($value->tree_type=='1'){
+						$html .= '<li class="dd-item">';
+						$html .= '<div class="row">';
+						$html .= '	<label class="col-md-4 text-right">คะแนนเฉลี่ยรายหมวด</label>';
+						$html .= '	<div class="col-md-4">';
+						$html .= '		<input type="text" name="criteria_data['.$key.'][criteria_point]" data-percent="'.$value->tree_id.'" title="คะแนนเฉลี่ยรายหมวด" alt="คะแนนเฉลี่ยรายหมวด" class="form-control percent_total_'.$value->tree_id.'"  value="">';
+						$html .= '	</div>';
+						$html .= '</div>';
+						$html .= '</li>';
+					}
 
 				}
 				$html .= '</ol>';
@@ -465,6 +497,14 @@ class KpiTree_model extends CI_Model
 			$html .= '</div>';
 			$html .= '</li>';
 			$html .= $this->loopTreeFormListSub($value->tree_id,$structure_id,'');
+			// $html .= '<li class="dd-item">';
+			// $html .= '<div class="row">';
+			// $html .= '	<label class="col-md-4 text-right">คะแนนเฉลี่ยรายหมวด</label>';
+			// $html .= '	<div class="col-md-4">';
+			// $html .= '		<input type="text" name="criteria_data['.$key.'][criteria_point]" title="คะแนนเฉลี่ยรายหมวด" alt="คะแนนเฉลี่ยรายหมวด" class="form-control"  value="">';
+			// $html .= '	</div>';
+			// $html .= '</div>';
+			// $html .= '</li>';
 
 		}
 		$html .= '</ol></div>';

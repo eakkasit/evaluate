@@ -150,8 +150,8 @@ if (isset($data->kpi_id) && $data->kpi_id != '') {
                                 <div class="col-md-9">
                                    <select name="kpi_standard_type" id="kpi_standard_type" class="form-control"  onChange="getUnitType(this.value,2)">
                                    <option value="">รูปแบบ</option>
-                                    <option value="1" <?php if(isset($data->kpi_standard_type) && $data->kpi_standard_type=='1'){ echo 'selected'; } ?>>รูปแบบที่ 1</option>
-                                    <option value="2" <?php if(isset($data->kpi_standard_type) && $data->kpi_standard_type=='2'){ echo 'selected'; } ?>>รูปแบบที่ 2</option>
+                                    <option value="1" <?php if(isset($data->kpi_standard_type) && $data->kpi_standard_type=='1'){ echo 'selected'; } ?>>รูปแบบที่ 1 (แบบขั้น)</option>
+                                    <option value="2" <?php if(isset($data->kpi_standard_type) && $data->kpi_standard_type=='2'){ echo 'selected'; } ?>>รูปแบบที่ 2 (แบบร้อยละ)</option>
                                    </select>
                                 <br>
                                 </div>

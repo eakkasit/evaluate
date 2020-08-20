@@ -110,4 +110,15 @@ class Formula_model extends CI_Model
 		$this->db->delete('formula');
 		return $data_id;
 	}
+
+
+	public function getFomularVariable($kpi_id='')
+	{
+		$this->db->select('*');
+		$this->db->where('kpi_id',$kpi_id);
+		$this->db->from('formula');
+		$this->db->join('variable','formula.var_id = variable.var_id','inner');
+		$fomular = $this->db->get()->result();
+		return $fomular;
+	}
 }
