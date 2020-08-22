@@ -13,7 +13,7 @@ if(isset($data) && !empty($data)){
                     </div>
                     <div class="col-md-4">
                     	<label  class="col-md-6 control-label text-right" >หน่วยนับ</label>
-                    	<div class="col-md-6"><?php echo $units_list[$data->unit_id]?><br></div>
+                    	<div class="col-md-6"><?php echo isset($units_list[$data->unit_id])?$units_list[$data->unit_id]:'' ?><br></div>
                     </div>
                   <div class="col-md-12">
                     	<br>
