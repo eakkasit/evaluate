@@ -157,7 +157,7 @@ if(isset($data) && !empty($data)){
                             ?>
                     </div>
                 </div>
-                 <div class="col-md-12 ">
+                 <!-- <div class="col-md-12 ">
                    <ul class="nav nav-tabs">
                       <li class="active"><a data-toggle="tab" href="#home" aria-expanded="false">ผู้กำกับดูแลตัวชี้วัด</a></li>
                       <li ><a data-toggle="tab" href="#home" aria-expanded="false">ผู้จัดทำข้อมูล</a></li>
@@ -172,7 +172,7 @@ if(isset($data) && !empty($data)){
                         </div>
                       </div>
                     </div>
-                   </div>
+                   </div> -->
                   <?php
 						}
           }
