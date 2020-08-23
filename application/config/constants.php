@@ -94,7 +94,7 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'icon' => 'fa fa-book',
 			'base_url' => '',
 			'menu' => array(
-				'activity' => array(
+				'activities' => array(
 					'name' => 'บันทึกโครงการ / กิจกรรม',
 					'icon' => 'fa  fa-book',
 					'base_url' => 'activities',
@@ -143,17 +143,17 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'icon' => 'fa fa-calendar',
 			'base_url' => '',
 			'menu' => array(
-				'datas' => array(
+				'evaluate_targets' => array(
 					'name' => 'บันทึกเป้าหมายโครงการ',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_targets',
 				),
-				'agendas' => array(
+				'evaluate_datas' => array(
 					'name' => 'บันทึกรายงานประเมินผล',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_datas',
 				),
-				'attends' => array(
+				'evaluate_five_years' => array(
 					'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_five_years',
@@ -185,18 +185,24 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_five_years',
 				),
+				'report_criteria' => array(
+					'name' => 'รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด',
+					'icon' => 'fa fa-file-text-o',
+					'base_url' => 'report_criteria',
+				)
 			),
 		),
 		array(
 			'name' => 'ตั้งค่าระบบ',
 			'icon' => 'fa fa-cog',
 			'base_url' => '',
-			// 'menu' => array(
-			// 	'configs' => array(
-			// 		'name' => 'การตั้งค่า',
-			// 		'icon' => 'fa fa-cog',
-			// 		'base_url' => 'configs',
-			// 	),
+			'menu' => array(
+				'units' => array(
+					'name' => 'หน่วยวัดเกณฑ์การประเมิน',
+					'icon' => 'fa fa-cog',
+					'base_url' => 'units',
+				),
+			)
 			// 	'agenda_types' => array(
 			// 		'name' => 'ประเภทวาระการประชุม',
 			// 		'icon' => 'fa fa-cog',

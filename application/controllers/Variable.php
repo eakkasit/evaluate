@@ -45,7 +45,7 @@ class Variable extends CI_Controller
 
 	public function dashboard_variable()
 	{
-		$cond = $this->search_form(array('variable_name'));
+		$cond = $this->search_form(array('var_name'));
 
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("variable/dashboard_variable");

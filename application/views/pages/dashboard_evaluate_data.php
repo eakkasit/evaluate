@@ -5,18 +5,18 @@
 		   class="table table-bordered table-hover dataTable no-footer">
 		<thead>
 		<tr role="row">
-			<th class="text-center start_no" width="8%">ลำดับ</th>
-			<th class="text-center" width="17%">แม่แบบเกณฑ์การประเมิน</th>
-			<th class="text-center" width="13%">วันที่สร้าง</th>
-			<th class="text-center" width="12%">รายละเอียด</th>
-			<th class="text-center" width="6%">สถานะ</th>
-			<th class="text-center" width="24%">
-				<a href="<?php echo base_url("criteria_assessments/new_criteria_assessment"); ?>" title="เพิ่ม">
+			<th class="text-center start_no" width="5%">ลำดับ</th>
+			<th class="text-center" width="30%">ชื่อโครงการ</th>
+			<th class="text-center" width="10%">ปีงบประมาณ</th>
+			<th class="text-center" width="15%">ผู้รับผิดชอบ</th>
+			<th class="text-center" width="20%">รายละเอียด</th>
+			<!-- <th class="text-center" width="24%">
+				<a href="<?php //echo base_url("criteria_assessments/new_criteria_assessment"); ?>" title="เพิ่ม">
 					<button type="button" class="btn btn-sm btn-success">
 						<i class="fa fa-plus"></i> เพิ่ม
 					</button>
 				</a>
-			</th>
+			</th> -->
 		</tr>
 		</thead>
 		<tbody>
@@ -33,46 +33,16 @@
 						?>
 					</td>
 					<td class="text-left">
-						<?php echo "{$prefix_list[$data->prename]} {$data->name}   {$data->surname}"; ?>
+						<?php echo $data->project_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->position_code; ?>
+						<?php echo $data->year; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->department; ?>
+						<?php //echo $data->department; ?>
 					</td>
-					<td class="text-center">
-						<?php echo $data->email; ?>
-					</td>
-					<td class="text-center">
-						<?php echo phone_number($data->telephone); ?>
-					</td>
-					<td class="text-center">
-						<?php echo $status_list[$data->user_status]; ?>
-					</td>
-					<td class="text-center white">
-						<div>
-							<a href="<?php echo base_url("criteria_assessments/view_criteria_assessment/{$data->user_id}"); ?>"
-							   class="table-link" title="แสดง">
-								<button type="button" class="btn btn-xs btn-info">
-									<i class="fa fa-eye"></i> แสดง
-								</button></a>
-
-							<a href="<?php echo base_url("criteria_assessments/edit_criteria_assessment/{$data->user_id}"); ?>"
-							   class="table-link" title="แก้ไข">
-								<button type="button" class="btn btn-xs btn-warning">
-									<i class="fa fa-edit"></i> แก้ไข
-								</button></a>
-
-							<?php if (in_array(strtolower($data->user_status), array('active'))) { ?>
-								<a href="#"
-								   class="table-link"
-								   onclick="delete_criteria_assessment(<?php echo $data->user_id; ?>);" title="ระงับ">
-									<button type="button" class="btn btn-xs btn-danger">
-										<i class="fa fa-trash-o"></i> ระงับ
-									</button></a>
-							<?php } ?>
-						</div>
+					<td class="text-left">
+						<?php echo $data->detail; ?>
 					</td>
 				</tr>
 				<?php

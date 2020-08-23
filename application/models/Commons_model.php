@@ -51,7 +51,7 @@ class Commons_model extends CI_Model
 		);
 
 		$this->field_type = array(
-			'1' => 'บันทึก',
+			'1' => 'ป้อนค่า',
 			'2' => 'อัตโนมัติ',
 			'3' => 'ค่าคงที่',
 		);
@@ -78,6 +78,8 @@ class Commons_model extends CI_Model
 			'4' => 'แผนก',
 			'5' => 'บุคคล',
 		);
+
+		$this->db = $this->load->database('db_kpi', TRUE);
 	}
 
 		public function getPrefixList($prename_id = null)
@@ -161,15 +163,14 @@ class Commons_model extends CI_Model
 
 		public function getUnitsList($units = null)
 		{
-			if ($units != null) {
-				if (isset($this->units[$units])) {
-					return $this->units[$units];
-				} else {
-					return '';
+			$units = array();
+			$units_list = $this->db->select('*')->from('unit')->order_by('unit_id')->get()->result();
+			if(!empty($units_list)){
+				foreach($units_list as $val){
+					$units[$val->unit_id] = $val->unit_name;
 				}
-			} else {
-				return $this->units;
 			}
+			return $units;
 		}
 
 		public function getLevelList($level = null)

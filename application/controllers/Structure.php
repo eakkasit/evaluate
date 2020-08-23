@@ -45,7 +45,7 @@ class Structure extends CI_Controller
 
 	public function dashboard_structure()
 	{
-		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
+		$cond = $this->search_form(array('structure_name', 'profile_year'));
 
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("structure/dashboard_structure");
