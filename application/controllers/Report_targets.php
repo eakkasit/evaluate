@@ -9,7 +9,7 @@ class Report_targets extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		// $this->load->model(array('Commons_model', 'Logs_model', 'Configs_model', 'Users_model'));
+		$this->load->model(array('Commons_model', 'TargetProfiles_model','Targets_model','Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -46,11 +46,22 @@ class Report_targets extends CI_Controller
 	public function dashboard_report_targets()
 	{
 
+		$data_temp = array();
+		$con = array();
+		$year_show = 1;
+		$year_start = date('Y')+543;
+		$year_end = date('Y')+543+5;
+		$con = array("year BETWEEN '$year_start' and '$year_end'");
 		$data['content_data'] = array(
-
+			'project_list' => $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC')),
+			'year_list' => $this->Commons_model->getYearList(),
+			'year_show' => $year_show,
+			'data' => $data_temp,
+			'year_start' => $year_start,
+			'year_end' => $year_end,
 		);
 
-		// $data['content_view'] = 'pages/dashboard_report_target';
+		$data['content_view'] = 'pages/dashboard_report_target';
 		$this->load->view($this->theme, $data);
 	}
 

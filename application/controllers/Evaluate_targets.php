@@ -146,7 +146,7 @@ class Evaluate_targets extends CI_Controller
 				redirect(base_url("evaluate_targets/dashboard_evaluate_targets"));
 				exit;
 			} else {
-				$this->CriteriaProfiles_model->updateTargetProfiles($profile_id, $data);
+				$this->TargetProfiles_model->updateTargetProfiles($profile_id, $data);
 				redirect(base_url("evaluate_targets/dashboard_evaluate_targets"));
 				exit;
 			}

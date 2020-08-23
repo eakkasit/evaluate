@@ -23,77 +23,72 @@
 	<table role="grid" id="table-example"
 		   class="table table-bordered table-hover dataTable no-footer">
 		<thead>
-			<tr role="row">
-				<th class="text-center start_no" width="8%">ลำดับ</th>
-				<th class="text-center" width="17%">ชื่อโครงการ</th>
-				<th class="text-center" width="6%">ปีงบประมาณ</th>
-				<?php
-					if($year_show){
-						for($i = 0;$year_start+$i<=$year_end;$i++){
-							?>
-							<th class="text-center" width="35px">เป้าหมายปี <?php echo $year_start+$i; ?></th>
-							<th class="text-center" width="35px" >ผลการประเมิน</th>
-							<th class="text-center" width="35px" >ร้อยละความสำเร็จ</th>
-							<?php
-						}
-					}
+		<tr role="row">
+			<th class="text-center start_no" width="5%">ลำดับ</th>
+			<th class="text-center" width="30%">ชื่อโครงการ</th>
+			<th class="text-center" width="10%">ปีงบประมาณ</th>
+			<th class="text-center" width="15%">ผู้รับผิดชอบ</th>
+			<th class="text-center" width="20%">ผลการดำเนินงาน</th>
+			<!-- <th class="text-center" width="24%">
+				<a href="<?php //echo base_url("criteria_assessments/new_criteria_assessment"); ?>" title="เพิ่ม">
+					<button type="button" class="btn btn-sm btn-success">
+						<i class="fa fa-plus"></i> เพิ่ม
+					</button>
+				</a>
+			</th> -->
+		</tr>
+		</thead>
+		<tbody>
+		<?php
+		$no = 1;
+		if (isset($_GET['per_page'])) $no += intval($_GET['per_page']);
+		if (isset($datas) && !empty($datas)) {
+			foreach ($datas as $key => $data) {
 				?>
-			</tr>
-			</thead>
-			<tbody>
-			<?php
-			if (isset($project_list) && !empty($project_list)) {
-				foreach ($project_list as $key => $project) {
-					?>
-					<tr class="odd" role="row">
-						<td class="text-center">
-							<?php
-							echo $key+1;
-							?>
-						</td>
-						<td class="text-left">
-							<?php echo $project->project_name ?>
-						</td>
-						<td class="text-left">
-							<?php echo $project->year ; ?>
-						</td>
+				<tr class="odd" role="row">
+					<td class="text-center">
 						<?php
-							if($year_show){
-								for($i = 0;$year_start+$i<=$year_end;$i++){
-									?>
-									<td class="text-center" >1.0</td>
-									<td class="text-center" >0.5</td>
-									<td class="text-center" >50</td>
-									<?php
-								}
-							}
+						echo number_format($no + $key, 0);
 						?>
-					</tr>
-					<?php
-				}
+					</td>
+					<td class="text-left">
+						<?php echo $data->project_name; ?>
+					</td>
+					<td class="text-left">
+						<?php echo $data->year; ?>
+					</td>
+					<td class="text-left">
+						<?php //echo $data->department; ?>
+					</td>
+					<td class="text-left">
+						<?php //echo $data->detail; ?>
+					</td>
+				</tr>
+				<?php
 			}
-			?>
-			</tbody>
+		}
+		?>
+		</tbody>
 	</table>
 </div>
 <div class="pagination pull-right">
 	<?php $this->load->view("template/pagination"); ?>
 </div>
 <script type="text/javascript">
-    function delete_evaluate_target(id) {
+    function delete_criteria_assessment(user_id) {
         swal({
                 title: "แจ้งเตือน",
-                text: "ต้องเป้าหมายโครงการ",
+                text: "ต้องการระงับผู้ใช้งานนี้",
                 type: "warning",
                 showCancelButton: true,
-                confirmButtonText: "ลบ",
+                confirmButtonText: "ระงับ",
                 cancelButtonText: "ยกเลิก",
                 closeOnConfirm: false,
                 closeOnCancel: true
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    location.href = '<?php echo base_url("evaluate_targets/delete_evaluate_targets/"); ?>' + id;
+                    location.href = '<?php echo base_url("criteria_assessments/delete_criteria_assessment/"); ?>' + user_id;
                 }
             });
     }
