@@ -133,4 +133,27 @@ class Kpi_model extends CI_Model
 		$this->db->delete('data');
 		return $data_id;
 	}
+
+	public function saveKpiVardata($var_id='',$var_data,$kpi_id)
+	{
+		$datecreate = date("Y-m-d H:i:s");
+		$this->db->query("INSERT INTO kpi_var_data SET
+		var_id='$var_id' ,
+		var_data='$var_data' ,
+		kpi_id='$kpi_id' ,
+		date_var='' ,
+		structure_id='19' ,
+		org_id='1' ,
+		user_id='1' ,
+		time_count='1' ,
+		user_owner='1' ,
+		datecreate='$datecreate'
+		");
+	}
+
+	public function getFormula($var_id='',$kpi_id)
+	{
+		$value_fomular = $this->db->query("SELECT formula_value FROM kpi_formula WHERE var_id='$var_id' AND kpi_id='$kpi_id' ")->row()->formula_value;
+		return $value_fomular;
+	}
 }

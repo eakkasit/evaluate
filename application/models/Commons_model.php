@@ -46,8 +46,13 @@ class Commons_model extends CI_Model
 		);
 
 		$this->show_type = array(
-			'1' => 'Boolean',
-			'2' => 'Number',
+			'1' => 'Number',
+			'2' => 'Float',
+			'3' => 'Text',
+			'4' => 'Radio',
+			'5' => 'Select',
+			'6' => 'Calenda',
+			'7' => 'Boolean',
 		);
 
 		$this->field_type = array(

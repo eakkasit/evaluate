@@ -35,6 +35,7 @@ if (isset($data->id) && $data->id != '') {
 	</div>
 </div>
 <!-- Modal -->
+<form  method="post" action="" name="formvariable" id="formvariable">
 	 <div id="myModal" class="modal fade" role="dialog">
 		 <div class="modal-dialog">
 
@@ -50,19 +51,23 @@ if (isset($data->id) && $data->id != '') {
 				 <div class="modal-footer">
 					 <input type="button" value="Save" onclick="addRow('dataTable')" class="btn btn-info "  id="addpro" style="display:none"  data-dismiss="modal"/>
 					 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					 <button type="submit" name="savechange" value="savechange" class="btn btn-success" id="savechange" >บันทึก</button>
 				 </div>
 			 </div>
 
 		 </div>
 	 </div>
+ </form>
 <script type="text/javascript">
-
+	var dependvar = {};
+	var dependcond = {};
 		function getData(){
 			$.ajax({
 					url: '<?php echo base_url('criteria/ajax_kpi_tree/'.$structure_id); ?>',
 					type: "GET",
 					success: function (data) {
 						$('#kpi_list').html(data)
+						depend_process();
 					},
 			})
 		}
@@ -73,17 +78,85 @@ if (isset($data->id) && $data->id != '') {
 				type: "GET",
 				success: function (data) {
 					$('#variable_data').html(data)
+					depend_process()
 					$('#myModal').modal('show');
 				},
 			})
 		}
+
+    function saveform(form){
+        // Get first form element
+        var $form = $('form')[0];
+
+        // Check if valid using HTML5 checkValidity() builtin function
+        if ($form.checkValidity()) {
+            console.log('valid');
+            $form.submit();
+        } else {
+            console.log('not valid');
+        }
+        return false;
+    }
+
+    function setval(str,obj,val) {
+        if(obj.checked) {
+            $("input[name='" + str + "']").val(val);
+        }else{
+            $("input[name='" + str + "']").val(0);
+        }
+    }
+
+    function depend(input,dp) {
+        //alert(dependvar['v2']);
+        //alert(input.type);
+        if(input.type == 'checkbox'){
+            if(input.checked) {
+                dependvar[dp] = 1;
+            }else{
+                dependvar[dp] = 0;
+            }
+        }else{
+            if(input.value) {
+                dependvar[dp] = 1;
+            }else{
+                dependvar[dp] = 0;
+            }
+        }
+
+        depend_process();
+    }
+
+    function depend_process(){
+        var txtdp='';
+        for(var dp in dependcond){
+					console.log('txtdp',dp);
+            txtdp = dependcond[dp];
+            if(txtdp==''){
+                txtdp = '1';
+            }
+            //alert("textdp="+txtdp);
+            for(var dpv in dependvar){
+                txtdp = txtdp.replace(dpv,dependvar[dpv]);
+                //alert(dpv+"="+dependvar[dpv]);
+            }
+            //alert("textdp-out="+txtdp);
+						console.log('txtdp',txtdp);
+            var dp_out = eval(txtdp);
+            if(dp_out){
+                $('.depend_'+dp).prop( "disabled", false );
+            }else{
+                $('.depend_'+dp).prop( "disabled", true );
+            }
+        }
+    }
+
     jQuery(document).ready(function () {
 				getData();
+
 				setTimeout(function(){
-					console.log('1');
 					$("input[class*='percent_total_']").each(function(i,e){
 						var total_id = $(this).attr('data-percent')
-						console.log(total_id);
+
 						var sum_data = 0;
 						var $percent = '.percent_'+total_id
 						$($percent).each(function(e){
@@ -92,6 +165,30 @@ if (isset($data->id) && $data->id != '') {
 						$(this).val((sum_data/$($percent).length).toFixed(2))
 					})
 				} , 1000);
+
+				jQuery("#formvariable").submit(function(e){
+					var err_text = ''
+						$.ajax({
+							url: '<?php echo base_url("criteria/ajax_save_variable_data"); ?>',
+							type: "POST",
+							data:  $(this).serialize(),
+							success: function (data) {
+								console.log(data);
+								// $('#variable-table tbody').append(data);
+								// // addRowVariable(data)
+								// $('#addKpi').modal('hide')
+								// aaaaa();
+								// window.location.reload();
+								// console.log('data',data)
+							},
+							error:function (error) {
+								console.log('err',error)
+							}
+						})
+
+
+					e.preventDefault();
+				})
 
     });
 </script>
