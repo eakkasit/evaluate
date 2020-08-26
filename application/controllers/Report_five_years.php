@@ -54,8 +54,17 @@ class Report_five_years extends CI_Controller
 		$this->pagination->initialize($config_pager);
 		$page = 0;
 		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
+
+		$data_temp = array();
+		$project_list = $this->Activities_model->getActivities($cond, array('year'=>'DESC'));
+		if(count($project_list) > 0){
+			foreach ($project_list as $key => $value) {
+				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id[0]->weight;
+			}
+		}
 		$data['content_data'] = array(
-			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC')),
+			'project_list'=>$project_list,
+			'data'=>$data_temp,
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
 		);

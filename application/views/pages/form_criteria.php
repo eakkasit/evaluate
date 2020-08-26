@@ -72,9 +72,9 @@ if (isset($data->id) && $data->id != '') {
 			})
 		}
 
-		function show_variable(kpi_id,kpi_standard_type) {
+		function show_variable(kpi_id,tree_id,kpi_standard_type) {
 			$.ajax({
-				url: '<?php echo base_url('criteria/ajax_var_data/'); ?>' + kpi_id + '/' + kpi_standard_type ,
+				url: '<?php echo base_url('criteria/ajax_var_data/'); ?>' + kpi_id + '/' + tree_id +'/'+kpi_standard_type ,
 				type: "GET",
 				success: function (data) {
 					$('#variable_data').html(data)
@@ -129,7 +129,7 @@ if (isset($data->id) && $data->id != '') {
     function depend_process(){
         var txtdp='';
         for(var dp in dependcond){
-					console.log('txtdp',dp);
+					// console.log('txtdp',dp);
             txtdp = dependcond[dp];
             if(txtdp==''){
                 txtdp = '1';
@@ -140,7 +140,7 @@ if (isset($data->id) && $data->id != '') {
                 //alert(dpv+"="+dependvar[dpv]);
             }
             //alert("textdp-out="+txtdp);
-						console.log('txtdp',txtdp);
+						// console.log('txtdp',txtdp);
             var dp_out = eval(txtdp);
             if(dp_out){
                 $('.depend_'+dp).prop( "disabled", false );
@@ -173,7 +173,7 @@ if (isset($data->id) && $data->id != '') {
 							type: "POST",
 							data:  $(this).serialize(),
 							success: function (data) {
-								console.log(data);
+								// console.log(data);
 								// $('#variable-table tbody').append(data);
 								// // addRowVariable(data)
 								// $('#addKpi').modal('hide')

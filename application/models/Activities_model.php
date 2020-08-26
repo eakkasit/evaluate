@@ -109,4 +109,13 @@ class Activities_model extends CI_Model
 		$this->db->update('project', $update);
 		return $project_id;
 	}
+
+	public function getTargetTask($project_id='')
+	{
+		$this->db->select('SUM(weight) AS weight');
+		$this->db->where('project_id',$project_id);
+		$this->db->where('parent_task_id','0');
+		$this->db->from('task');
+		return $this->db->get()->result();
+	}
 }

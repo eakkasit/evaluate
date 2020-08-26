@@ -51,8 +51,8 @@
 		<?php
 		$no = 1;
 		// if (isset($_GET['per_page'])) $no += intval($_GET['per_page']);
-		if (isset($datas) && !empty($datas)) {
-			foreach ($datas as $key => $data) {
+		if (isset($project_list) && !empty($project_list)) {
+			foreach ($project_list as $key => $project) {
 				?>
 				<tr class="odd" role="row">
 					<td class="text-center">
@@ -61,20 +61,24 @@
 						?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->project_name; ?>
+						<?php echo $project->project_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->year; ?>
+						<?php echo $project->year; ?>
 					</td>
 					<?php
 						for ($i=0; $i < 5; $i++) {
 							?>
-							<th class="text-center"></th>
+							<th class="text-center">
+								<?php echo isset($data[$project->id][$project->year+$i])?number_format($data[$project->id][$project->year+$i]):''; ?>
+							</th>
 							<?php
 						}
 						for ($i=0; $i < 5; $i++) {
 							?>
-							<th class="text-center"></th>
+							<th class="text-center">
+								<?php //echo isset($data[$project->id][$project->year+$i])?number_format($data[$project->id][$project->year+$i]):''; ?>
+							</th>
 							<?php
 						}
 					?>

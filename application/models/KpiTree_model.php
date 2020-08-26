@@ -377,7 +377,7 @@ class KpiTree_model extends CI_Model
 						$html .= '	<div class="col-md-3">';
 						// $html .= '		<select class="form-control" title="โครงการ / กิจจกรรม" name="criteria_data['.$key.'][project_id]" >';
 						// $html .= '		</select>';
-						$html .= '<a href="#" onClick="show_variable(\''.$value->kpi_id.'\',\''.$kpi->kpi_standard_type.'\')" class="btn btn-success">บันทึกค่าตัวแปร</a>';
+						$html .= '<a href="#" onClick="show_variable(\''.$value->kpi_id.'\',\''.$value->tree_id.'\',\''.$kpi->kpi_standard_type.'\')" class="btn btn-success">บันทึกค่าตัวแปร</a>';
 						$html .= '	</div>';
 						$html .= '	<div class="form-group col-md-2">';
 						$html .= '		<div class="input-group ">';

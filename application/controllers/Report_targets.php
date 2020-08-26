@@ -52,8 +52,17 @@ class Report_targets extends CI_Controller
 		$year_start = date('Y')+543;
 		$year_end = date('Y')+543+5;
 		$con = array("year BETWEEN '$year_start' and '$year_end'");
+		$project_list = $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC'));
+		if(count($project_list) > 0){
+			foreach ($project_list as $key => $value) {
+				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id)[0]->weight;
+			}
+		}
+		// echo "<pre>";
+		// print_r($data_temp);
+		// die();
 		$data['content_data'] = array(
-			'project_list' => $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC')),
+			'project_list' => $project_list,
 			'year_list' => $this->Commons_model->getYearList(),
 			'year_show' => $year_show,
 			'data' => $data_temp,
