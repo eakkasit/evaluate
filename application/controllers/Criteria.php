@@ -184,33 +184,34 @@ class Criteria extends CI_Controller
 		foreach ($_POST as $key => $value) {
 			$data[$key] = $this->input->post($key);
 		}
-
+		// echo "<pre>";
+		// print_r($data);
+		// die();
 		if(isset($data['VAR'])){
 			$datecreate = date("Y-m-d H:i:s");
 			foreach( $data['VAR'] as $kpi_id => $var_array ){
 				if(count($var_array)>0){
+					$this->Kpi_model->deleteVarData($data['structure_id'],$kpi_id);
+					$this->Kpi_model->deleteFormulaData($data['structure_id'],$kpi_id);
             foreach( $var_array as $var_id => $var_data ){
-
-                // $this->Kpi_model->query("INSERT INTO kpi_var_data SET
-								// var_id='$var_id' ,
-								// var_data='$var_data' ,
-								// kpi_id='$kpi_id' ,
-								// date_var='' ,
-								// structure_id='19' ,
-								// org_id='1' ,
-								// user_id='1' ,
-								// time_count='1' ,
-								// user_owner='1' ,
-								// datecreate='$datecreate'
-								// ");
-								$this->Kpi_model->saveKpiVardata($var_id,$var_data,$kpi_id);
-                $arr_formula[] = $this->Kpi_model->getFormula($var_id,$kpi_id);
+								$var_data_save = array();
+								$var_data_save['var_id'] = $var_id ;
+								$var_data_save['var_data'] = $var_data ;
+								$var_data_save['kpi_id'] = $kpi_id ;
+								$var_data_save['date_var'] = '' ;
+								$var_data_save['structure_id'] = $data['structure_id'] ;
+								$var_data_save['org_id'] = '' ;
+								$var_data_save['user_id'] = '' ;
+								$var_data_save['time_count'] = '1' ;
+								$var_data_save['user_owner'] = '1' ;
+								$this->Kpi_model->saveKpiVardata($var_data_save);
+                $arr_formula[] = $this->Formula_model->getFormula(array('var_id'=>$var_id,'kpi_id'=>$kpi_id))[0]->formula_value;
                 $arr_replace[] = $var_data;
             }
         }
 
 				// $kfa = $this->Kpi_model->query("SELECT * FROM kpi_data WHERE kpi_id='$kpi_id' ")->row();
-				$kfa = $this->Kpi_model->getKpi(array('id'=>$kpi_id))[0];
+				$kfa = $this->Kpi_model->getKpi(array('kpi_id'=>$kpi_id))[0];
             if($kfa->kpi_formula!=''){
                 $formula_data = str_replace($arr_formula,$arr_replace,$kfa->kpi_formula);
                 @eval("\$formula_value = ".$formula_data.";");
@@ -220,7 +221,7 @@ class Criteria extends CI_Controller
             }
 				//
         //     //fix 1 - 5
-            $tree_weight = $this->KpiTree_model->getKpiTree(array('tree_id'=>))[0]->tree_weight;
+            $tree_weight = $this->KpiTree_model->getKpiTree(array('tree_id'=>$data['tree_id']))[0]->tree_weight;
             if($kfa->kpi_standard_label1==''){
                 $kfa->kpi_standard_label1 = 1;
             }
@@ -376,28 +377,42 @@ class Criteria extends CI_Controller
             }
 				//
 				//
-        //    $this->Kpi_model->query("INSERT INTO kpi_formula_data SET
-        //                                 formula_data_id='1',
-				// 						kpi_id='$kpi_id' ,
-				// 						structure_id='19' ,
-				// 						org_id='1' ,
-				// 						user_id='1' ,
-				// 						formula_data='$formula_data' ,
-				// 						formula_value='$formula_value' ,
-				// 						formula_score='$formula_score' ,
-				// 						time_count='1' ,
-				// 						grade_map='$grade_map' ,
-				// 						user_owner='1' ,
-				// 						datecreate='$datecreate',
-				// 						score_real='$score_real'
-				// 						");
+					$fomular_save = array();
+					$fomular_save['formula_data_id'] = '1';
+					$fomular_save['kpi_id'] = $kpi_id;
+					$fomular_save['structure_id'] = $data['structure_id'];
+					$fomular_save['org_id'] = '';
+					$fomular_save['user_id'] = '';
+					$fomular_save['formula_data'] = $formula_data;
+					$fomular_save['formula_value'] = $formula_value;
+					$fomular_save['formula_score'] = $formula_score;
+					$fomular_save['time_count'] = '1';
+					$fomular_save['grade_map'] = $grade_map;
+					$fomular_save['user_owner'] = '';
+					$fomular_save['score_real'] = $score_real;
+					$this->Kpi_model->saveKpiFomulardata($fomular_save);
+           // $this->Kpi_model->query("INSERT INTO kpi_formula_data SET
+           //                              formula_data_id='1',
+						// 				kpi_id='$kpi_id' ,
+						// 				structure_id='19' ,
+						// 				org_id='1' ,
+						// 				user_id='1' ,
+						// 				formula_data='$formula_data' ,
+						// 				formula_value='$formula_value' ,
+						// 				formula_score='$formula_score' ,
+						// 				time_count='1' ,
+						// 				grade_map='$grade_map' ,
+						// 				user_owner='1' ,
+						// 				datecreate='$datecreate',
+						// 				score_real='$score_real'
+				 		// 				");
             unset($arr_formula);
             unset($arr_replace);
 			}
 
 		}
-		echo "<pre>";
-		print_r($data);
-		die();
+		// echo "<pre>";
+		// print_r($data);
+		// die();
 	}
 }

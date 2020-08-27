@@ -29,7 +29,7 @@ if($data->var_type_id=='1'){ //Number
       $input_data .= '<div class="col-md-12 ">';
       $input_data .= '<div class="col-md-9"><div class="col-md-8">'.$data->var_name.'</div>';
       $input_data .= '<div class="col-md-3"> <input onchange="depend(this,\''.$data->formula_value.'\')" type="number" name="VAR['.$data->kpi_id.']['.$data->var_id.']" value="'.$var_value.'"  class="form-control depend_'.$data->formula_value.'" required '.$readonly.'> </div>';
-      $input_data .= '<div class="col-md-1"></div></div>';
+      $input_data .= '<div class="col-md-1"></div></div></div></div>';
       $dp_value = $var_value;
   }
   if($data->var_type_id=='2'){ //Float
