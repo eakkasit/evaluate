@@ -59,7 +59,7 @@ class Report_five_years extends CI_Controller
 		$project_list = $this->Activities_model->getActivities($cond, array('year'=>'DESC'));
 		if(count($project_list) > 0){
 			foreach ($project_list as $key => $value) {
-				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id[0]->weight;
+				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id)[0]->weight;
 			}
 		}
 		$data['content_data'] = array(

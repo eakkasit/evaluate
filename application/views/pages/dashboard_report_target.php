@@ -61,13 +61,13 @@
 							if($year_show){
 								for($i = 0;$year_start+$i<=$year_end;$i++){
 									?>
-									<td class="text-center" ><?php echo isset($data_temp[$project->id][$year_start])?number_format($data_temp[$project->id][$year_start],2):'' ?></td>
+									<td class="text-center" ><?php echo isset($data[$project->id][$year_start+$i])?number_format($data[$project->id][$year_start],2):'' ?></td>
 									<td class="text-center" ><?php echo isset($project->result)?number_format($project->result,2):''; ?></td>
 									<td class="text-center" >
 										<?php
-											if(isset($data_temp[$project->id][$year_start]) && isset($project->result)){
-												if($data_temp[$project->id][$year_start] != 0){
-													$percent =  ($project->result/$data_temp[$project->id][$year_start]) * 100;
+											if(isset($data[$project->id][$year_start]) && isset($project->result)){
+												if($data[$project->id][$year_start] != 0){
+													$percent =  ($project->result/$data[$project->id][$year_start]) * 100;
 												}else{
 													$percent = 0;
 												}

@@ -134,26 +134,62 @@ class Kpi_model extends CI_Model
 		return $data_id;
 	}
 
-	public function saveKpiVardata($var_id='',$var_data,$kpi_id)
+	public function saveKpiVardata($data)
 	{
 		$datecreate = date("Y-m-d H:i:s");
-		$this->db->query("INSERT INTO kpi_var_data SET
-		var_id='$var_id' ,
-		var_data='$var_data' ,
-		kpi_id='$kpi_id' ,
-		date_var='' ,
-		structure_id='19' ,
-		org_id='1' ,
-		user_id='1' ,
-		time_count='1' ,
-		user_owner='1' ,
-		datecreate='$datecreate'
-		");
+		$this->db->set('var_id',$data['var_id']);
+		$this->db->set('var_data',$data['var_data']);
+		$this->db->set('kpi_id',$data['kpi_id']);
+		$this->db->set('date_var',$data['date_var']);
+		$this->db->set('structure_id',$data['structure_id']);
+		$this->db->set('org_id',$data['org_id']);
+		$this->db->set('user_id',$data['user_id']);
+		$this->db->set('time_count',$data['time_count']);
+		$this->db->set('user_owner',$data['user_owner']);
+		$this->db->set('datecreate',$datecreate);
+		$this->db->set('create_date', 'NOW()', false);
+		$this->db->insert('var_data');
+		return $this->db->insert_id();
+
 	}
 
-	public function getFormula($var_id='',$kpi_id)
+	public function saveKpiFomulardata($data)
 	{
-		$value_fomular = $this->db->query("SELECT formula_value FROM kpi_formula WHERE var_id='$var_id' AND kpi_id='$kpi_id' ")->row()->formula_value;
-		return $value_fomular;
+		$datecreate = date("Y-m-d H:i:s");
+		$this->db->set('formula_data_id',$data['formula_data_id']);
+		$this->db->set('kpi_id',$data['kpi_id']);
+		$this->db->set('structure_id',$data['structure_id']);
+		$this->db->set('org_id',$data['org_id']);
+		$this->db->set('user_id',$data['user_id']);
+		$this->db->set('formula_data',$data['formula_data']);
+		$this->db->set('formula_value',$data['formula_value']);
+		$this->db->set('formula_score',$data['formula_score']);
+		$this->db->set('grade_map',$data['grade_map']);
+		$this->db->set('user_owner',$data['user_owner']);
+		$this->db->set('datecreate',$datecreate);
+		$this->db->set('score_real',$data['score_real']);
+		$this->db->set('create_date', 'NOW()', false);
+		$this->db->insert('formula_data');
+		return $this->db->insert_id();
 	}
+
+	public function deleteVarData($structure_id,$kpi_id)
+	{
+		$this->db->where('structure_id', $structure_id);
+		$this->db->where('kpi_id', $kpi_id);
+		$this->db->delete('var_data');
+	}
+
+	public function deleteFormulaData($structure_id,$kpi_id)
+	{
+		$this->db->where('structure_id', $structure_id);
+		$this->db->where('kpi_id', $kpi_id);
+		$this->db->delete('formula_data');
+	}
+
+	// public function getFormula($var_id='',$kpi_id)
+	// {
+	// 	$value_fomular = $this->db->query("SELECT formula_value FROM kpi_formula WHERE var_id='$var_id' AND kpi_id='$kpi_id' ")->row()->formula_value;
+	// 	return $value_fomular;
+	// }
 }

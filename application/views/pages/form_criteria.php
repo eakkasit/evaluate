@@ -46,6 +46,8 @@ if (isset($data->id) && $data->id != '') {
 					 <h4 class="modal-title">ตัวแปร</h4>
 				 </div>
 				 <div class="modal-body">
+					 <input type="hidden" name="structure_id" id="structure_id" value="<?php echo $structure_id; ?>">
+					 <input type="hidden" name="tree_id" id="tree_id" value="">
 					 <div id="variable_data"></div>
 				 </div>
 				 <div class="modal-footer">
@@ -78,6 +80,7 @@ if (isset($data->id) && $data->id != '') {
 				type: "GET",
 				success: function (data) {
 					$('#variable_data').html(data)
+					$('#tree_id').val(tree_id)
 					depend_process()
 					$('#myModal').modal('show');
 				},
