@@ -69,16 +69,16 @@
 					<?php
 						for ($i=0; $i < 5; $i++) {
 							?>
-							<th class="text-center">
+							<td class="text-center">
 								<?php echo isset($data[$project->id][$project->year+$i])?number_format($data[$project->id][$project->year+$i]):''; ?>
-							</th>
+							</td>
 							<?php
 						}
 						for ($i=0; $i < 5; $i++) {
 							?>
-							<th class="text-center">
+							<td class="text-center">
 								<?php //echo isset($data[$project->id][$project->year+$i])?number_format($data[$project->id][$project->year+$i]):''; ?>
-							</th>
+							</td>
 							<?php
 						}
 					?>
