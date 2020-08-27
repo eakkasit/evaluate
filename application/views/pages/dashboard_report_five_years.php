@@ -1,17 +1,17 @@
 <?php $this->load->view("template/search"); ?>
 <div class="row">
 	<div class="col-md-12 text-right">
-		<a href="<?php //echo base_url("report_attends/export_attend/{$meeting_data->meeting_id}/{$agenda_id}/pdf"); ?>"  class="table-link" title="พิมพ์ PDF" target="_blank">
+		<a href="<?php echo base_url("report_five_years/export/pdf"); ?>"  class="table-link" title="พิมพ์ PDF" target="_blank">
 			<button type="button" class="btn btn-xs btn-danger">
 				<i class="fa fa-file-pdf-o"></i> PDF
 			</button>
 		</a>
-		<a href="<?php //echo base_url("report_attends/export_attend/{$meeting_data->meeting_id}/{$agenda_id}/word"); ?>" class="table-link" title="ส่งออก Word" target="_blank">
+		<a href="<?php echo base_url("report_five_years/export/word"); ?>" class="table-link" title="ส่งออก Word" target="_blank">
 			<button type="button" class="btn btn-xs btn-primary">
 				<i class="fa fa-file-word-o"></i> Word
 			</button>
 		</a>
-		<a href="<?php //echo base_url("report_attends/export_attend/{$meeting_data->meeting_id}/{$agenda_id}/excel"); ?>" class="table-link" title="ส่งออก Excel" target="_blank">
+		<a href="<?php echo base_url("report_five_years/export/excel"); ?>" class="table-link" title="ส่งออก Excel" target="_blank">
 			<button type="button" class="btn btn-xs btn-success">
 				<i class="fa fa-file-excel-o"></i> Excel
 			</button>

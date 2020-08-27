@@ -1,6 +1,6 @@
 <?php
-header("Content-type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=รายงานเป้าหมายโครงการ.xls");
+header("Content-type: application/vnd.ms-word");
+header("Content-Disposition: attachment; filename=รายงานเป้าหมายโครงการ.doc");
 ?>
 <html>
 <body>

@@ -153,21 +153,37 @@ if (isset($data->id) && $data->id != '') {
         }
     }
 
+		function calulateCriteria(){
+			$("input[class*='percent_total_']").each(function(i,e){
+				var total_id = $(this).attr('data-percent')
+
+				var sum_data = 0;
+				var $percent = '.percent_'+total_id
+				$($percent).each(function(e){
+					var point = parseInt($(this).val())
+					if(!isNaN(point)){
+						sum_data += point;
+					}
+				})
+				console.log('sum_data',sum_data);
+				console.log('$percent',$($percent).length);
+				if(!isNaN(sum_data/$($percent).length)){
+					$(this).val((sum_data/$($percent).length).toFixed(2))
+				}
+
+			})
+		}
+
     jQuery(document).ready(function () {
 				getData();
 
 				setTimeout(function(){
-					$("input[class*='percent_total_']").each(function(i,e){
-						var total_id = $(this).attr('data-percent')
-
-						var sum_data = 0;
-						var $percent = '.percent_'+total_id
-						$($percent).each(function(e){
-							sum_data += parseInt($(this).val());
-						})
-						$(this).val((sum_data/$($percent).length).toFixed(2))
-					})
+					calulateCriteria()
 				} , 1000);
+
+				// $("input").on("keyup change keypress focus",function(e) {
+				//   console.log('change',$(this).attr('class'));
+				// });
 
 				jQuery("#formvariable").submit(function(e){
 					var err_text = ''
@@ -176,10 +192,17 @@ if (isset($data->id) && $data->id != '') {
 							type: "POST",
 							data:  $(this).serialize(),
 							success: function (data) {
-								// console.log(data);
+								var result = JSON.parse(data)
+								// console.log(result);
 								// $('#variable-table tbody').append(data);
 								// // addRowVariable(data)
-								// $('#addKpi').modal('hide')
+								$('#myModal').modal('hide')
+								$('.target_value_'+result['kpi_id']).val(result['grade_map'])
+								$('.result_value_'+result['kpi_id']).val(result['fomular_value'])
+								//
+								setTimeout(function(){
+									calulateCriteria()
+								} , 1000);
 								// aaaaa();
 								// window.location.reload();
 								// console.log('data',data)

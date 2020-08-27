@@ -8,7 +8,7 @@ class Report_five_years extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library(array('session', 'pagination', 'form_validation'));
+		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
 		$this->load->model(array('Commons_model', 'Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
@@ -105,6 +105,46 @@ class Report_five_years extends CI_Controller
 	{
 		redirect(base_url("report_five_years/dashboard_report_five_years"));
 		exit;
+	}
+
+	public function export($type = '')
+	{
+		$cond = $this->search_form(array('project_name'));
+		$config_pager = $this->config->item('pager');
+		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
+		$count_rows = $this->Activities_model->countActivities($cond);
+		$config_pager['total_rows'] = $count_rows;
+		$this->pagination->initialize($config_pager);
+		$page = 0;
+		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
+
+		$data_temp = array();
+		$project_list = $this->Activities_model->getActivities($cond, array('year'=>'DESC'));
+		if(count($project_list) > 0){
+			foreach ($project_list as $key => $value) {
+				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id)[0]->weight;
+			}
+		}
+		$data = array(
+			'project_list'=>$project_list,
+			'data'=>$data_temp,
+			'pages' => $this->pagination->create_links(),
+			'count_rows' => $count_rows,
+		);
+		if($type == 'pdf'){
+			$pdfFilePath = "รายงานโครงการ5ปี.pdf";
+			$html = $this->load->view('pages/report_five_year_pdf', $data,true);
+			$this->m_pdf->pdf->WriteHTML($html);
+			$this->m_pdf->pdf->Output($pdfFilePath, 'D');
+			exit;
+		}else if($type == 'word'){
+			$this->load->view('pages/report_five_year_word', $data);
+		}else if($type == 'excel'){
+			$this->load->view('pages/report_five_year_excel', $data);
+		}else{
+			redirect(base_url("report_targets/view_report"));
+			exit;
+		}
 	}
 
 

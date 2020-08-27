@@ -1,9 +1,17 @@
-<?php
-header("Content-type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=รายงานโครงการ5ปี.xls");
-?>
 <html>
 <body>
+<style>
+table{
+    font-family: "Garuda";
+    font-size: 12pt;
+}
+p{
+    text-align: justify;
+}
+h1{
+    text-align: center;
+}
+</style>
 <table border="1" cellspacing="0" cellpadding="0">
 	<tr>
 		<td colspan="15">

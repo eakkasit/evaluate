@@ -8,7 +8,7 @@ class Report_targets extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library(array('session', 'pagination', 'form_validation'));
+		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
 		$this->load->model(array('Commons_model', 'TargetProfiles_model','Targets_model','Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
@@ -107,6 +107,44 @@ class Report_targets extends CI_Controller
 	{
 		redirect(base_url("report_targets/dashboard_report_targets"));
 		exit;
+	}
+
+	public function export($type = '')
+	{
+		$data_temp = array();
+		$con = array();
+		$year_show = 1;
+		$year_start = date('Y')+543;
+		$year_end = date('Y')+543+5;
+		$con = array("year BETWEEN '$year_start' and '$year_end'");
+		$project_list = $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC'));
+		if(count($project_list) > 0){
+			foreach ($project_list as $key => $value) {
+				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id)[0]->weight;
+			}
+		}
+		$data = array(
+			'project_list' => $project_list,
+			'year_list' => $this->Commons_model->getYearList(),
+			'year_show' => $year_show,
+			'data' => $data_temp,
+			'year_start' => $year_start,
+			'year_end' => $year_end,
+		);
+		if($type == 'pdf'){
+			$pdfFilePath = "รายงานเป้าหมายโครงการ.pdf";
+			$html = $this->load->view('pages/report_target_pdf', $data,true);
+			$this->m_pdf->pdf->WriteHTML($html);
+			$this->m_pdf->pdf->Output($pdfFilePath, 'D');
+			exit;
+		}else if($type == 'word'){
+			$this->load->view('pages/report_target_word', $data);
+		}else if($type == 'excel'){
+			$this->load->view('pages/report_target_excel', $data);
+		}else{
+			redirect(base_url("report_targets/view_report"));
+			exit;
+		}
 	}
 
 

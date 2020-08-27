@@ -411,6 +411,12 @@ class Criteria extends CI_Controller
 			}
 
 		}
+		$result_data = array(
+			'kpi_id'=>$kpi_id,
+			'grade_map'=>$grade_map,
+			'fomular_value'=>$formula_value,
+		);
+		echo  json_encode($result_data);
 		// echo "<pre>";
 		// print_r($data);
 		// die();
