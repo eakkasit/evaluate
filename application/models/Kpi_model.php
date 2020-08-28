@@ -192,4 +192,13 @@ class Kpi_model extends CI_Model
 	// 	$value_fomular = $this->db->query("SELECT formula_value FROM kpi_formula WHERE var_id='$var_id' AND kpi_id='$kpi_id' ")->row()->formula_value;
 	// 	return $value_fomular;
 	// }
+	public function getVarData($kpi_id='',$var_id)
+	{
+		$this->db->select('*');
+		$this->db->where('kpi_id',$kpi_id);
+		$this->db->where('var_id',$var_id);
+		$this->db->from('var_data');
+		$var_data = $this->db->get()->result();
+		return $var_data;
+	}
 }

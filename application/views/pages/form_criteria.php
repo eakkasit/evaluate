@@ -159,16 +159,17 @@ if (isset($data->id) && $data->id != '') {
 
 				var sum_data = 0;
 				var $percent = '.percent_'+total_id
+				var length_percent = 0;
 				$($percent).each(function(e){
 					var point = parseInt($(this).val())
 					if(!isNaN(point)){
 						sum_data += point;
+						length_percent++;
 					}
 				})
-				console.log('sum_data',sum_data);
-				console.log('$percent',$($percent).length);
-				if(!isNaN(sum_data/$($percent).length)){
-					$(this).val((sum_data/$($percent).length).toFixed(2))
+				var percent_data = sum_data/length_percent
+				if(!isNaN(percent_data)){
+					$(this).val(percent_data.toFixed(2))
 				}
 
 			})

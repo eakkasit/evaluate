@@ -364,6 +364,13 @@ class KpiTree_model extends CI_Model
 						$html .= '</div>';
 					}else{
 						$kpi = $this->db->query("SELECT * FROM kpi_data WHERE kpi_id='$value->kpi_id'")->row();
+						$fomular_value =  $this->db->query("SELECT * FROM kpi_formula_data WHERE structure_id='$structure_id' AND kpi_id='$value->kpi_id'")->row();
+						$result = '';
+						$target = '';
+						if(isset($fomular_value)){
+							$target = $fomular_value->grade_map;
+							$result = $fomular_value->formula_value;
+						}
 						// $number = rand(1,5);
 						// $percent = $number*10;
 						$html .= '<div class="row">';
@@ -381,8 +388,8 @@ class KpiTree_model extends CI_Model
 						$html .= '	</div>';
 						$html .= '	<div class="form-group col-md-2">';
 						$html .= '		<div class="input-group ">';
-						$html .= '			<input type="text" class="form-control mini-box target_value_'.$value->kpi_id.'" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data['.$value->kpi_id.'][result]" value="" >';
-						$html .= '			<input type="text" class="form-control mini-box result_value_'.$value->kpi_id.' percent_'.$value->tree_parent.'" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data['.$value->kpi_id.'][percent]" value="" >';
+						$html .= '			<input type="text" class="form-control mini-box target_value_'.$value->kpi_id.'" title="ผลลัพธ์" alt="ผลลัพธ์" name="criteria_data['.$value->kpi_id.'][result]" value="'.$target.'" >';
+						$html .= '			<input type="text" class="form-control mini-box result_value_'.$value->kpi_id.' percent_'.$value->tree_parent.'" title="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" alt="เปอร์เซนต์ผลลัพธ์ของโครงการที่ได้" name="criteria_data['.$value->kpi_id.'][percent]" value="'.$result.'" >';
 						$html .= '			<input type="text" class="form-control mini-box" title="ค่าน้ำหนัก" alt="ค่าน้ำหนัก" name="criteria_data['.$value->kpi_id.'][weight]" value="'.$value->tree_weight.'" >';
 						$html .= '		</div>';
 						$html .= '	</div>';

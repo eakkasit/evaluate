@@ -170,6 +170,7 @@ class Criteria extends CI_Controller
 		$data = array();
 		$data['content_data'] = array(
 			'fomular' => (object) $this->Formula_model->getFomularVariable($kpi_id),
+			'kpi' =>$this->Kpi_model,
 			'tree_id' => $tree_id,
 			'kpi_standard_type' => $kpi_standard_type,
 			'units_list'=> $this->Commons_model->getUnitsList(),

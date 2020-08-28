@@ -6,8 +6,11 @@ if(isset($fomular)){
 
 
 // $input_data = '';
-// $where_var = '';
-// $var_data = $this->db->query("SELECT * FROM kpi_var_data WHERE kpi_id='$data->kpi_id' AND var_id='$data->var_id' $where_var  ")->row();
+$where_var = '';
+$var_data_list = $kpi->getVarData($data->kpi_id,$data->var_id);
+if(isset($var_data_list[0])){
+  $var_data = $var_data_list[0];
+}
 // echo "<pre>";
 // print_r($var_data);
 // die();
