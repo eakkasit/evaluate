@@ -16,11 +16,21 @@ if (isset($data->id) && $data->id != '') {
 <div id="search-filter" class="widget-box">
 	<div class="widget-body">
 		<div class="widget-main">
+			<div class="row">
+				<div class="col-md-12 text-right">
+					<a href="<?php echo $prev; ?>"
+						 class="table-link" title="ย้อนกลับ">
+						<button type="button" class="btn btn-xs btn-info">
+							<i class="fa fa-arrow-left"></i> ย้อนกลับ
+						</button></a>
+
+				</div>
+			</div>
 			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
 				<div id="kpi_list"></div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-12 text-center">
-						<a href="<?php echo $prev; ?>" class="btn btn-sm btn-danger">
+						<a href="<?php //echo $prev; ?>" class="btn btn-sm btn-danger">
 							<i class="fa fa-times"></i>
 							ยกเลิก
 						</a>
@@ -30,7 +40,7 @@ if (isset($data->id) && $data->id != '') {
 							บันทึก
 						</button>
 					</div>
-				</div>
+				</div> -->
 			</form>
 	</div>
 </div>

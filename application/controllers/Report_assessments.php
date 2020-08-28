@@ -46,11 +46,26 @@ class Report_assessments extends CI_Controller
 	public function dashboard_report_assessments()
 	{
 
-		$data['content_data'] = array(
+		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
 
+		$config_pager = $this->config->item('pager');
+		$config_pager['base_url'] = base_url("criteria/dashboard_criteria");
+		$count_rows = $this->Structure_model->countStructure($cond);
+		$config_pager['total_rows'] = $count_rows;
+		$this->pagination->initialize($config_pager);
+		$page = 0;
+		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
+
+		$data['content_data'] = array(
+			'search_url' => base_url("criteria/dashboard_criteria"),
+			'status_list' => $this->Commons_model->getActiveList(),
+			'datas' => $this->Structure_model->getStructure($cond, array(), $config_pager['per_page'], $page),
+			'pages' => $this->pagination->create_links(),
+			'count_rows' => $count_rows,
 		);
 
-		// $data['content_view'] = 'pages/dashboard_report_assessment';
+
+		$data['content_view'] = 'pages/dashboard_report_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
@@ -63,29 +78,9 @@ class Report_assessments extends CI_Controller
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_reports_assessment($id = null)
+	public function FunctionName($value='')
 	{
-		$data['content_data'] = array(
-		);
-		$data['content_view'] = 'pages/form_reports_assessment';
-		$this->load->view($this->theme, $data);
-	}
-
-	public function edit_reports_assessment($id = null)
-	{
-		$data['content_data'] = array(
-
-		);
-		$data['content_view'] = 'pages/form_reports_assessment';
-		$this->load->view($this->theme, $data);
-	}
-
-
-
-	public function delete_reports_assessment($id = null)
-	{
-		redirect(base_url("report_assessments/dashboard_report_assessments"));
-		exit;
+		// code...
 	}
 
 

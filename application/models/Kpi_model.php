@@ -201,4 +201,28 @@ class Kpi_model extends CI_Model
 		$var_data = $this->db->get()->result();
 		return $var_data;
 	}
+
+	public function queryData($query)
+	{
+		$query_data = $this->db->query($query);
+		$var_data = $query_data->result_array();
+		$data = array();
+		if(isset($var_data)){
+			foreach ($var_data as $key => $value) {
+				// $data[$key] =
+				$index = 0;
+				foreach ($value as $key_data => $value_data) {
+						$data[$key][$index] = $value_data;
+						$index++;
+				}
+			}
+		}
+		// echo "<pre>";
+		// print_r($data);
+		// die();
+		// foreach ($variable as $key => $value) {
+		// 	// code...
+		// }
+		return $data;
+	}
 }

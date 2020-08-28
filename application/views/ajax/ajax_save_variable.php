@@ -135,13 +135,15 @@ if($data->var_type_id=='1'){ //Number
           $readonly = 'readonly';
       }
       if($data->var_sql!=''){
-          $var_value = $kpi->get_results($data->var_sql,ARRAY_N);
+          $var_value = $kpi->queryData($data->var_sql);
 
           if(count($var_value)>0){
               foreach( $var_value as $keys => $vals ){
                   $var_data_value .= '<option value="'.$var_value[$keys][0].'"';
-                  if($var_data->var_data==$var_value[$keys][0]){
-                      $var_data_value .= 'selected';
+                  if(isset($var_data->var_data)){
+                    if($var_data->var_data==$var_value[$keys][0]){
+                        $var_data_value .= 'selected';
+                    }
                   }
                   //echo $readonly;
                   $var_data_value .= '>  '.$var_value[$keys][1].'</option> ';

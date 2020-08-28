@@ -33,16 +33,11 @@
 					</td>
 					<td class="text-center white">
 						<div>
-							<a href="<?php echo base_url("criteria/view_criteria/{$data->structure_id}"); ?>"
+							<a href="<?php echo base_url("report_assessments/view_reports_assessment/{$data->structure_id}"); ?>"
 							   class="table-link" title="แสดง">
 								<button type="button" class="btn btn-xs btn-info">
 									<i class="fa fa-eye"></i> แสดง
 								</button></a>
-								<a href="<?php echo base_url("criteria/edit_criteria/{$data->structure_id}"); ?>"
-								   class="table-link" title="เพิ่มเกณฑ์การประเมิน">
-									<button type="button" class="btn btn-xs btn-success">
-										<i class="fa fa-add"></i> บันทึกการประเมิน
-									</button></a>
 						</div>
 					</td>
 				</tr>
