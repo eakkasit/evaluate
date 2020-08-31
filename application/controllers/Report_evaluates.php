@@ -8,7 +8,7 @@ class Report_evaluates extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library(array('session', 'pagination', 'form_validation'));
+		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
 		$this->load->model(array('Commons_model', 'Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
@@ -47,56 +47,61 @@ class Report_evaluates extends CI_Controller
 	{
 
 		$cond = $this->search_form(array('project_name'));
-		$config_pager = $this->config->item('pager');
-		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
-		$count_rows = $this->Activities_model->countActivities($cond);
-		$config_pager['total_rows'] = $count_rows;
-		$this->pagination->initialize($config_pager);
-		$page = 0;
-		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 		$data['content_data'] = array(
-			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC'), $config_pager['per_page'], $page),
-
-			'pages' => $this->pagination->create_links(),
-			'count_rows' => $count_rows,
+			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC')),
 		);
 
 		$data['content_view'] = 'pages/dashboard_report_evaluates';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function view_reports_assessment($id = null)
+	public function view_reports_evaluate($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/view_reports_assessment';
+		$data['content_view'] = 'pages/view_reports_evaluate';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function new_reports_assessment($id = null)
+	public function new_reports_evaluate($id = null)
 	{
 		$data['content_data'] = array(
 		);
-		$data['content_view'] = 'pages/form_reports_assessment';
+		$data['content_view'] = 'pages/form_reports_evaluate';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function edit_reports_assessment($id = null)
+	public function edit_reports_evaluate($id = null)
 	{
 		$data['content_data'] = array(
 
 		);
-		$data['content_view'] = 'pages/form_reports_assessment';
+		$data['content_view'] = 'pages/form_reports_evaluate';
 		$this->load->view($this->theme, $data);
 	}
 
 
 
-	public function delete_reports_assessment($id = null)
+	public function export($type = '')
 	{
-		redirect(base_url("report_evaluates/dashboard_report_evaluates"));
-		exit;
+		$data = array(
+			'datas'=>$this->Activities_model->getActivities(array(), array('year'=>'DESC')),
+		);
+		if($type == 'pdf'){
+			$pdfFilePath = "รายงานการประเมินองค์กร.pdf";
+			$html = $this->load->view('pages/report_evaluate_pdf', $data,true);
+			$this->m_pdf->pdf->WriteHTML($html);
+			$this->m_pdf->pdf->Output($pdfFilePath, 'D');
+			exit;
+		}else if($type == 'word'){
+			$this->load->view('pages/report_evaluate_word', $data);
+		}else if($type == 'excel'){
+			$this->load->view('pages/report_evaluate_excel', $data);
+		}else{
+			redirect(base_url("report_targets/view_report"));
+			exit;
+		}
 	}
 
 

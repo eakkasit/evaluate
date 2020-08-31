@@ -8,7 +8,7 @@ class Report_assessments extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library(array('session', 'pagination', 'form_validation'));
+		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
 		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Formula_model','Kpi_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
@@ -79,16 +79,34 @@ class Report_assessments extends CI_Controller
 			'formula_db' => $this->Formula_model
 
 		);
-		// echo "<pre>";
-		// print_r($data);
-		// die();
 		$data['content_view'] = 'pages/view_reports_assessment';
 		$this->load->view($this->theme, $data);
 	}
 
-	public function FunctionName($value='')
+	public function export($id,$type = '')
 	{
-		// code...
+		$data = array(
+			'structure_id' => $id,
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree_db' => $this->KpiTree_model,
+			'kpi_db' => $this->Kpi_model,
+			'formula_db' => $this->Formula_model
+
+		);
+		if($type == 'pdf'){
+			$pdfFilePath = "รายงานการประเมินองค์กร.pdf";
+			$html = $this->load->view('pages/report_assessment_pdf', $data,true);
+			$this->m_pdf->pdf->WriteHTML($html);
+			$this->m_pdf->pdf->Output($pdfFilePath, 'D');
+			exit;
+		}else if($type == 'word'){
+			$this->load->view('pages/report_assessment_word', $data);
+		}else if($type == 'excel'){
+			$this->load->view('pages/report_assessment_excel', $data);
+		}else{
+			redirect(base_url("report_targets/view_report"));
+			exit;
+		}
 	}
 
 

@@ -34,12 +34,15 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 
 				}else{
 					$kpi = $kpi_db->getKpi(array('kpi_id'=>$value->kpi_id))[0];
-					$fomular_value = $formula_db->getFormulaData(array('structure_id' => $structure_id,'kpi_id' => $value->kpi_id))[0];
+					$fomular_value = $formula_db->getFormulaData(array('structure_id' => $structure_id,'kpi_id' => $value->kpi_id));
+					if(isset($fomular_value[0])){
+						$fomular_value_data = $fomular_value[0];
+					}
 					$result = '';
 					$target = '';
-					if(isset($fomular_value)){
-						$target = $fomular_value->grade_map;
-						$result = $fomular_value->formula_value;
+					if(isset($fomular_value_data)){
+						$target = $fomular_value_data->grade_map;
+						$result = $fomular_value_data->formula_value;
 						$sum_value[$value->tree_parent][] = $result;
 					}
 					$html .= '<tr>';
