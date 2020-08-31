@@ -342,6 +342,7 @@ class KpiTree_model extends CI_Model
 		$this->db->where('structure_id',$structure_id);
 		$this->db->where('tree_parent',$tree_id);
 		$this->db->from('tree');
+		$this->db->order_by('tree_number','ASC');
 		$data = $this->db->get()->result();
 			if(count($data)>0){
 				$html .= '<ol class="dd-list">';
@@ -736,6 +737,7 @@ class KpiTree_model extends CI_Model
 		$this->db->where('structure_id',$structure_id);
 		$this->db->where('tree_parent',$tree_id);
 		$this->db->from('tree');
+		$this->db->order_by('tree_number','ASC');
 		$data = $this->db->get()->result();
 
 		$html .= '<div class="criteria_data_list"><ol class="dd-list">';
