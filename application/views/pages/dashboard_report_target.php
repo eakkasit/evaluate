@@ -24,19 +24,22 @@
 		   class="table table-bordered table-hover dataTable no-footer">
 		<thead>
 			<tr role="row">
-				<th class="text-center start_no" width="8%">ลำดับ</th>
-				<th class="text-center" width="17%">ชื่อโครงการ</th>
-				<th class="text-center" width="6%">ปีงบประมาณ</th>
+				<th class="text-center start_no" width="5%">ลำดับ</th>
+				<th class="text-center" width="40%">ชื่อโครงการ</th>
+				<th class="text-center" width="10%">ปีงบประมาณ</th>
+				<th class="text-center" width="15%">เป้าหมายปี <?php echo $year; ?></th>
+				<th class="text-center" width="15%" >ผลการประเมิน</th>
+				<th class="text-center" width="15%" >ร้อยละความสำเร็จ</th>
 				<?php
-					if($year_show){
-						for($i = 0;$year_start+$i<=$year_end;$i++){
+					// if($year_show){
+						// for($i = 0;$year_start+$i<=$year_end;$i++){
 							?>
-							<th class="text-center" width="35px">เป้าหมายปี <?php echo $year_start+$i; ?></th>
+							<!-- <th class="text-center" width="35px">เป้าหมายปี <?php // echo $year_start+$i; ?></th>
 							<th class="text-center" width="35px" >ผลการประเมิน</th>
-							<th class="text-center" width="35px" >ร้อยละความสำเร็จ</th>
+							<th class="text-center" width="35px" >ร้อยละความสำเร็จ</th> -->
 							<?php
-						}
-					}
+					// 	}
+					// }
 				?>
 			</tr>
 			</thead>
@@ -57,29 +60,27 @@
 						<td class="text-left">
 							<?php echo $project->year ; ?>
 						</td>
-						<?php
-							if($year_show){
-								for($i = 0;$year_start+$i<=$year_end;$i++){
-									?>
-									<td class="text-center" ><?php echo isset($data[$project->id][$year_start+$i])?number_format($data[$project->id][$year_start],2):'' ?></td>
-									<td class="text-center" ><?php echo isset($project->result)?number_format($project->result,2):''; ?></td>
-									<td class="text-center" >
-										<?php
-											if(isset($data[$project->id][$year_start+$i]) && isset($project->result)){
-												if($data[$project->id][$year_start+$i] != 0){
-													$percent =  ($project->result/$data[$project->id][$year_start+$i]) * 100;
-												}else{
-													$percent = 0;
-												}
-												echo number_format($percent,2);
-											}else{
-												echo "";
-											}
-										?>
-									</td>
-									<?php
+						<td class="text-right" ><?php echo isset($data[$project->id][$year])?number_format($data[$project->id][$year],2):'' ?></td>
+						<td class="text-right" ><?php echo isset($project->result)?number_format($project->result,2):''; ?></td>
+						<td class="text-right" >
+							<?php
+								if(isset($data[$project->id][$year]) && isset($project->result)){
+									if($data[$project->id][$year] != 0){
+										$percent =  ($project->result/$data[$project->id][$year]) * 100;
+									}else{
+										$percent = 0;
+									}
+									echo number_format($percent,2);
+								}else{
+									echo "";
 								}
-							}
+							?>
+						</td>
+						<?php
+							// if($year_show){
+							// 	for($i = 0;$year_start+$i<=$year_end;$i++){
+							// 	}
+							// }
 						?>
 					</tr>
 					<?php

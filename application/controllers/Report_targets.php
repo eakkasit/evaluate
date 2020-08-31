@@ -49,9 +49,15 @@ class Report_targets extends CI_Controller
 		$data_temp = array();
 		$con = array();
 		$year_show = 1;
-		$year_start = date('Y')+543;
-		$year_end = date('Y')+543+5;
-		$con = array("year BETWEEN '$year_start' and '$year_end'");
+		// $year_start = date('Y')+543;
+		// $year_end = date('Y')+543+5;
+		// $con = array("year BETWEEN '$year_start' and '$year_end'");
+
+		$year =  date('Y')+543;
+		if(isset($_GET['year'])){
+			$year = $_GET['year'];
+		}
+		$con = array("year"=>$year);
 		$project_list = $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC'));
 		if(count($project_list) > 0){
 			foreach ($project_list as $key => $value) {
@@ -68,6 +74,7 @@ class Report_targets extends CI_Controller
 			'data' => $data_temp,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
+			'year' => $year
 		);
 
 		$data['content_view'] = 'pages/dashboard_report_target';
@@ -114,9 +121,14 @@ class Report_targets extends CI_Controller
 		$data_temp = array();
 		$con = array();
 		$year_show = 1;
-		$year_start = date('Y')+543;
-		$year_end = date('Y')+543+5;
-		$con = array("year BETWEEN '$year_start' and '$year_end'");
+		// $year_start = date('Y')+543;
+		// $year_end = date('Y')+543+5;
+		// $con = array("year BETWEEN '$year_start' and '$year_end'");
+		$year =  date('Y')+543;
+		if(isset($_GET['year'])){
+			$year = $_GET['year'];
+		}
+		$con = array("year"=>$year);
 		$project_list = $this->Activities_model->getActivities($con,array('year'=>'DESC','id'=>'ASC'));
 		if(count($project_list) > 0){
 			foreach ($project_list as $key => $value) {
@@ -130,6 +142,7 @@ class Report_targets extends CI_Controller
 			'data' => $data_temp,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
+			'year' => $year
 		);
 		if($type == 'pdf'){
 			$pdfFilePath = "รายงานเป้าหมายโครงการ.pdf";

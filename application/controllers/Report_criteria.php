@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Report_assessments extends CI_Controller
+class Report_criteria extends CI_Controller
 {
 	private $theme = 'default';
 
@@ -20,7 +20,7 @@ class Report_assessments extends CI_Controller
 
 	public function index()
 	{
-		redirect(base_url("report_assessments/dashboard_report_assessments"));
+		redirect(base_url("report_criteria/dashboard_report_criteria"));
 		exit;
 	}
 
@@ -43,7 +43,7 @@ class Report_assessments extends CI_Controller
 		return $cond;
 	}
 
-	public function dashboard_report_assessments()
+	public function dashboard_report_criteria()
 	{
 
 		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
@@ -65,7 +65,7 @@ class Report_assessments extends CI_Controller
 		);
 
 
-		$data['content_view'] = 'pages/dashboard_report_assessment';
+		// $data['content_view'] = 'pages/dashboard_report_assessment';
 		$this->load->view($this->theme, $data);
 	}
 

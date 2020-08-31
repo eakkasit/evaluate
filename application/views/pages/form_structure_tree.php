@@ -105,18 +105,20 @@ $prev = base_url("structure/dashboard_structure");
                 </div>
                  <div class="col-md-12" id="user_search_div" >
                     <label for="tree_number" class="col-md-2 control-label text-right" style="margin-top: 7px !important">ค้นหา *</label>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
 											<input type="hidden" class="form-control" name="kpi_id" id="kpi_id" value="0" >
 											<input type="text" class="form-control" name="user_search" id="user_search" value=""  onKeyUp="SearchKPI(this.value);"><br>
 										</div>
                 </div>
-
-                    <div class="col-md-2 ">
-                    </div>
-                     <div class="col-md-9 ">
-                     	<span id="SearchKPI">
-                        </span>
-                </div>
+								<div class="col-md-12">
+									<div class="col-md-2"></div>
+										<label class="col-md-10 text-danger">*หากไม่มีเกณฑ์การประเมินสามารถเพิ่มได้จากเมนูเกณฑ์การประเมิน หรือ <a href="<?php echo base_url("kpi/new_kpi"); ?>">คลิกที่นี่เพื่อเพิ่มเกณฑ์การประเมิน</a></label>
+								</div>
+	              <div class="col-md-2 ">
+	                </div>
+	                 <div class="col-md-9 ">
+	                   	<span id="SearchKPI"></span>
+	              	</div>
             </div>
         </div>
       </div>

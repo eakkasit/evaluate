@@ -121,4 +121,38 @@ class Formula_model extends CI_Model
 		$fomular = $this->db->get()->result();
 		return $fomular;
 	}
+
+	public function getFormulaData($cond = array(), $order = array(), $limit = null, $start = 0)
+	{
+		$this->db->select('*');
+		$this->db->from('formula_data');
+		if (!empty($cond)) {
+			foreach ($cond as $k => $v) {
+				if (is_string($k)) {
+					if (is_array($v)) {
+						$this->db->where_in($k, $v);
+					} else {
+						$this->db->where($k, $v);
+					}
+				} else {
+					$this->db->where($v);
+				}
+			}
+		}
+		if (!empty($order)) {
+			foreach ($order as $k => $v) {
+				if (is_string($k)) {
+					$this->db->order_by($k, $v);
+				} else {
+					$this->db->order_by($v);
+				}
+			}
+		} else {//default order
+			$this->db->order_by('create_date', 'desc');
+		}
+		if ($limit != null) {
+			$this->db->limit($limit, $start);
+		}
+		return $this->db->get()->result();
+	}
 }

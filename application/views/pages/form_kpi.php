@@ -324,6 +324,9 @@ if (isset($data->kpi_id) && $data->kpi_id != '') {
 								 </select>
 								 </div>
 							 </div>
+							 <div class="col-md-12">
+								 <label class="text-danger">* หากไม่มีตัวแปรสามารถเพิ่มได้จากเมนู ตัวแปรเกณฑ์การประเมิน หรือ <a href="<?php echo base_url('variable/new_variable'); ?>">คลิ๊กที่นี่เพื่อเพิ่มตัวแปร</a></label>
+							 </div>
 						 </div>
 
 

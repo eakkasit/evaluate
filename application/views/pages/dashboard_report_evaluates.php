@@ -57,11 +57,12 @@
 					<td class="text-left">
 						<?php echo $data->year; ?>
 					</td>
-					<td class="text-left">
+					<td class="text-center">
 						<?php //echo $data->department; ?>
+						-
 					</td>
-					<td class="text-left">
-						<?php //echo $data->detail; ?>
+					<td class="text-right">
+						<?php echo isset($data->result)?$data->result:''; ?>
 					</td>
 				</tr>
 				<?php
