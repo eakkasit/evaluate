@@ -139,28 +139,28 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 				),
 			),
 		),
-		// array(
-		// 	'name' => 'ประเมินผลรายปี',
-		// 	'icon' => 'fa fa-calendar',
-		// 	'base_url' => '',
-		// 	'menu' => array(
-		// 		// 'evaluate_targets' => array(
-		// 		// 	'name' => 'บันทึกเป้าหมายโครงการ',
-		// 		// 	'icon' => 'fa fa-calendar',
-		// 		// 	'base_url' => 'evaluate_targets',
-		// 		// ),
-		// 		'evaluate_datas' => array(
-		// 			'name' => 'บันทึกรายงานประเมินผล',
-		// 			'icon' => 'fa fa-calendar',
-		// 			'base_url' => 'evaluate_datas',
-		// 		),
-		// 		// 'evaluate_five_years' => array(
-		// 		// 	'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
-		// 		// 	'icon' => 'fa fa-calendar',
-		// 		// 	'base_url' => 'evaluate_five_years',
-		// 		// ),
-		// 	),
-		// ),
+		array(
+			'name' => 'ประเมินผลรายปี',
+			'icon' => 'fa fa-calendar',
+			'base_url' => '',
+			'menu' => array(
+				// 'evaluate_targets' => array(
+				// 	'name' => 'บันทึกเป้าหมายโครงการ',
+				// 	'icon' => 'fa fa-calendar',
+				// 	'base_url' => 'evaluate_targets',
+				// ),
+				'evaluate_datas' => array(
+					'name' => 'บันทึกรายงานประเมินผล',
+					'icon' => 'fa fa-calendar',
+					'base_url' => 'evaluate_datas',
+				),
+				// 'evaluate_five_years' => array(
+				// 	'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
+				// 	'icon' => 'fa fa-calendar',
+				// 	'base_url' => 'evaluate_five_years',
+				// ),
+			),
+		),
 		array(
 			'name' => 'รายงาน',
 			'icon' => 'fa fa-file-text-o',
@@ -203,12 +203,12 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-cog',
 					'base_url' => 'units',
 				),
+				'config_variables' => array(
+					'name' => 'ตัวแปรจากระบบ',
+					'icon' => 'fa fa-cog',
+					'base_url' => 'config_variables',
+				),
 			)
-			// 	'agenda_types' => array(
-			// 		'name' => 'ประเภทวาระการประชุม',
-			// 		'icon' => 'fa fa-cog',
-			// 		'base_url' => 'agenda_types',
-			// 	),
 			// 	'agenda_defaults' => array(
 			// 		'name' => 'ค่าเริ่มต้นวาระการประชุม',
 			// 		'icon' => 'fa fa-cog',

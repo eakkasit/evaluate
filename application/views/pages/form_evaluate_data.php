@@ -21,52 +21,52 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 				<div class="row">
 
 					<div class="col-md-8">
+						<div class="row">
+							<div class="col-md-4 text-right">
+								<label for="stext">ชื่อโครงการ :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<label for="stext"><?php echo $data->name; ?></label>
+							</div>
+						</div>
 
 						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">แม่แบบเกณฑ์การประเมิน</label>
+							<div class="col-md-4 text-right">
+								<label for="stext">ปีงบประมาณ :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<label for="stext"><?php echo $data->sql; ?></label>
 							</div>
 						</div>
+
 						<div class="row">
-							<div class="col-md-12">
-								<input type="text" name="citizen_id" class="form-control"
-									   value="" placeholder="ระบุ">
+							<div class="col-md-4 text-right">
+								<label for="stext">ผู้รับผิดชอบ :</label>
 							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
+							<div class="col-md-8 text-left">
+								<label for="stext"><?php echo $data->sql; ?></label>
+							</div>
 						</div>
+
 						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">รายละเอียด</label>
+							<div class="col-md-4 text-right">
+								<label for="stext">วัตถุประสงค์ :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<label for="stext"><?php echo $data->sql; ?></label>
 							</div>
 						</div>
+
 						<div class="row">
-							<div class="col-md-12">
-								<textarea type="text" name="citizen_id" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
+							<div class="col-md-4 text-right">
+								<label for="stext">ผลการดำเนินโครงการ :</label>
 							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("citizen_id"); ?></label>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">สถานะการใช้งาน</label>
+							<div class="col-md-8 text-left">
+								<input type="text" name="result" class="form-control" value="<?php if (isset($data->result)) { echo $data->result;	} ?>" placeholder="ระบุ">
 							</div>
+							<label class="col-md-12 text-danger"><?php echo form_error("result"); ?></label>
 						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<?php foreach ($status_list as $key => $value) { ?>
-									<input type="radio" name="user_status"
-										   id="user_status_<?php echo $key; ?>"
-										   class=""
-										   value="<?php echo $key; ?>" <?php if (isset($user_data->user_status) && $user_data->user_status == $key) {
-										echo 'checked="checked"';
-									} ?>>&nbsp;<label
-										for="user_status_<?php echo $key; ?>"><?php echo $value; ?></label>&emsp;
-								<?php } ?>
-							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("user_status"); ?></label>
-						</div>
+
 					</div>
 				</div>
 				<div class="row">

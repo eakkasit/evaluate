@@ -67,6 +67,25 @@ class Evaluate_datas extends CI_Controller
 		$this->load->view($this->theme, $data);
 	}
 
+	public function dashboard_evaluate_data_detail($id='')
+	{
+		// $cond = $this->search_form(array('project_name'));
+		// $config_pager = $this->config->item('pager');
+		// $config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
+		// $count_rows = $this->Activities_model->countActivities($cond);
+		// $config_pager['total_rows'] = $count_rows;
+		// $this->pagination->initialize($config_pager);
+		// $page = 0;
+		// if (isset($_GET['per_page'])) $page = $_GET['per_page'];
+
+		$data['content_data'] = array(
+			'datas'=>$this->Activities_model->getTasks(array('project_id'=>$id)),
+		);
+
+		$data['content_view'] = 'pages/dashboard_evaluate_data_detail';
+		$this->load->view($this->theme, $data);
+	}
+
 	public function view_evaluate_data($id = null)
 	{
 		$data['content_data'] = array(

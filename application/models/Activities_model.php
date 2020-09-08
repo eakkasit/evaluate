@@ -118,4 +118,41 @@ class Activities_model extends CI_Model
 		$this->db->from('task');
 		return $this->db->get()->result();
 	}
+
+	public function getTasks($cond = array(), $order = array(), $limit = null, $start = 0)
+	{
+		$this->db->select('*');
+		$this->db->from('task');
+		if (!empty($cond)) {
+			foreach ($cond as $k => $v) {
+				if (is_string($k)) {
+					if (is_array($v)) {
+						$this->db->where_in($k, $v);
+					} else {
+						$this->db->where($k, $v);
+					}
+				} else {
+					$this->db->where($v);
+				}
+			}
+		}
+		if (!empty($order)) {
+			foreach ($order as $k => $v) {
+				if (is_string($k)) {
+					$this->db->order_by($k, $v);
+				} else {
+					$this->db->order_by($v);
+				}
+			}
+		} else {//default order
+			$this->db->order_by('task_id', 'asc');
+		}
+		if ($limit != null) {
+			$this->db->limit($limit, $start);
+		}
+		return $this->db->get()->result();
+	}
+
+
+
 }
