@@ -66,7 +66,7 @@ class ConfigVariables_model extends CI_Model
 	public function getConfigVariablesLists()
 	{
 		$list = array();
-		$profile_list = $this->db->select('*')->from('unit')->order_by('unit_id')->get()->result();
+		$profile_list = $this->db->select('*')->from('variable_system')->order_by('id')->get()->result();
 		if(!empty($profile_list)){
 			foreach($profile_list as $val){
 				$list[$val->id] = $val->name;

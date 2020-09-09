@@ -31,7 +31,7 @@
 						<?php echo $data->task_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->task_year; ?>
+						<?php echo $data->task_year+543; ?>
 					</td>
 					<td class="text-left">
 						<?php //echo $data->department; ?>
@@ -47,7 +47,7 @@
 								<?php
 								if($data->parent_task_id != 0){
 									?>
-									<a href="<?php echo base_url("evaluate_datas/edit_evaluate_data/{$data->task_id}"); ?>" class="table-link" title="บันทึกผลการประเมิน">
+									<a href="<?php echo base_url("evaluate_datas/edit_evaluate_data/{$project_id}/{$data->task_id}"); ?>" class="table-link" title="บันทึกผลการประเมิน">
 										<button type="button" class="btn btn-xs btn-success">
 											<i class="fa fa-plus"></i> บันทึกผลการประเมิน
 										</button>

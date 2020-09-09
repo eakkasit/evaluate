@@ -99,7 +99,22 @@ if (isset($data->var_id) && $data->var_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" name="var_value" class="form-control"  value="<?php if (isset($data->var_value)) { echo $data->var_value;	} ?>" placeholder="ระบุ">
+								<input type="text" name="var_value" class="form-control" id="var_value_input"  value="<?php if (isset($data->var_value)) { echo $data->var_value;	} ?>" placeholder="ระบุ">
+								<select name="var_value" id="var_value_select" class="form-control" style="display:none">
+									<?php
+										if(isset($variable_system) && !empty($variable_system)){
+											foreach ($variable_system as $key => $value) {
+												$select = "";
+												if (isset($data->var_value) && $data->var_value == $key) {
+													$select = 'selected';
+												}
+												?>
+												<option value="<?php echo $key; ?>" <?php echo $select; ?>><?php echo $value; ?></option>
+												<?php
+											}
+										}
+									?>
+								</select>
 							</div>
 							<label 	class="col-md-12 text-danger"><?php echo form_error("var_value"); ?></label>
 						</div>
@@ -147,3 +162,26 @@ if (isset($data->var_id) && $data->var_id != '') {
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+				var var_value = jQuery("input[name=var_import_id]:checked").val();
+				if(var_value == 2){
+					$('#var_value_input').hide()
+					$('#var_value_select').show()
+				}else{
+					$('#var_value_input').show()
+					$('#var_value_select').hide()
+				}
+
+        jQuery("input[name=var_import_id]").change(function () {
+					if($(this).val() == 2){
+						$('#var_value_input').hide()
+						$('#var_value_select').show()
+					}else{
+						$('#var_value_input').show()
+						$('#var_value_select').hide()
+					}
+        });
+    });
+</script>

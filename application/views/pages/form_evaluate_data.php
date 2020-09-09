@@ -1,17 +1,10 @@
 <?php
 $title_prefix = 'เพิ่ม';
-$action = base_url("criteria_themes/save");
-$prev = base_url("criteria_themes/dashboard_criteria_themes");
-$btn_img_txt = 'เพิ่มรูป';
-$btn_img_dsp = false;
-if (isset($user_data->user_id) && $user_data->user_id != '') {
-	$title_prefix = 'แก้ไข';
-	$action .= "/{$user_data->user_id}";
-	$prev = base_url("criteria_themes/view_criteria_theme/{$user_data->user_id}");
-}
+$action = base_url("evaluate_datas/save");
+$prev = base_url("evaluate_datas/dashboard_evaluate_data_detail/".$project_id);
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>รายชื่อผู้ประชุม
+	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>บันทึกรายงานประเมินผล
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -26,7 +19,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								<label for="stext">ชื่อโครงการ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->name; ?></label>
+								<label for="stext"><?php echo $data->task_name; ?></label>
 							</div>
 						</div>
 
@@ -35,7 +28,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								<label for="stext">ปีงบประมาณ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->sql; ?></label>
+								<label for="stext"><?php echo $data->task_year+543; ?></label>
 							</div>
 						</div>
 
@@ -44,7 +37,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								<label for="stext">ผู้รับผิดชอบ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->sql; ?></label>
+								<label for="stext"><?php // echo $data->sql; ?>-</label>
 							</div>
 						</div>
 
@@ -53,7 +46,7 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 								<label for="stext">วัตถุประสงค์ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->sql; ?></label>
+								<label for="stext"><?php // echo $data->sql; ?>-</label>
 							</div>
 						</div>
 
@@ -86,24 +79,3 @@ if (isset($user_data->user_id) && $user_data->user_id != '') {
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-    function deletePicture() {
-        $('input[name=profile_picture_tmp]').val('');
-        $('#preview_picture').attr('src', '<?php echo $profile_picture_default; ?>');
-    }
-
-    jQuery(document).ready(function () {
-        jQuery("#profile_picture").change(function () {
-
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    jQuery('#preview_picture').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-    });
-</script>

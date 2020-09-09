@@ -9,7 +9,7 @@ class Variable extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model', 'Variable_model'));
+		$this->load->model(array('Commons_model', 'Variable_model','ConfigVariables_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -87,6 +87,7 @@ class Variable extends CI_Controller
 			'show_type_list'=> $this->Commons_model->getShowTypeList(),
 			'field_type_list'=> $this->Commons_model->getFieldTypeList(),
 			'units_list'=> $this->Commons_model->getUnitsList(),
+			'variable_system'=> $this->ConfigVariables_model->getConfigVariablesLists(),
 		);
 		$data['content_view'] = 'pages/form_variable';
 		$this->load->view($this->theme, $data);
@@ -98,7 +99,8 @@ class Variable extends CI_Controller
 			'show_type_list'=> $this->Commons_model->getShowTypeList(),
 			'field_type_list'=> $this->Commons_model->getFieldTypeList(),
 			'units_list'=> $this->Commons_model->getUnitsList(),
-			'data' => $this->Variable_model->getVariable(array('var_id'=>$id))[0]
+			'data' => $this->Variable_model->getVariable(array('var_id'=>$id))[0],
+			'variable_system'=> $this->ConfigVariables_model->getConfigVariablesLists(),
 		);
 		$data['content_view'] = 'pages/form_variable';
 		$this->load->view($this->theme, $data);

@@ -30,7 +30,7 @@
 						<?php echo $data->project_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->tasyear; ?>
+						<?php echo $data->year; ?>
 					</td>
 					<td class="text-left">
 						<?php //echo $data->department; ?>

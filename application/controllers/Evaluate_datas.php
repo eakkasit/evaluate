@@ -80,6 +80,7 @@ class Evaluate_datas extends CI_Controller
 
 		$data['content_data'] = array(
 			'datas'=>$this->Activities_model->getTasks(array('project_id'=>$id)),
+			'project_id'=>$id,
 		);
 
 		$data['content_view'] = 'pages/dashboard_evaluate_data_detail';
@@ -102,10 +103,11 @@ class Evaluate_datas extends CI_Controller
 		$this->load->view($this->theme, $data);
 	}
 
-	public function edit_evaluate_data($id = null)
+	public function edit_evaluate_data($project_id,$id)
 	{
 		$data['content_data'] = array(
-
+			'data'=>$this->Activities_model->getTasks(array('task_id'=>$id,'project_id'=>$project_id))[0],
+			'project_id'=>$project_id,
 		);
 		$data['content_view'] = 'pages/form_evaluate_data';
 		$this->load->view($this->theme, $data);
