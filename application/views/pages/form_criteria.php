@@ -324,7 +324,14 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 				})
 				var percent_data = sum_data/length_percent
 				if(!isNaN(percent_data)){
-					$(this).val(percent_data.toFixed(2))
+					if(percent_data > 100){
+						$(this).val(100.00)
+					}else if (percent_data < 0) {
+						$(this).val(0.00)
+					}else{
+						$(this).val(percent_data.toFixed(2))
+					}
+
 				}
 
 			})
