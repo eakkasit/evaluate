@@ -9,7 +9,7 @@ class Evaluate_datas extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model', 'Activities_model'));
+		$this->load->model(array('Commons_model', 'Activities_model','CriteriaDatas_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -77,10 +77,17 @@ class Evaluate_datas extends CI_Controller
 		// $this->pagination->initialize($config_pager);
 		// $page = 0;
 		// if (isset($_GET['per_page'])) $page = $_GET['per_page'];
-
+		$result = array();
+		$result_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$id));
+		if(isset($result_data) && !empty($result_data)){
+			foreach ($result_data as $key => $value) {
+				$result[$value->project_id][$value->task_id][$value->year] = $value->result;
+			}
+		}
 		$data['content_data'] = array(
 			'datas'=>$this->Activities_model->getTasks(array('project_id'=>$id)),
 			'project_id'=>$id,
+			'result' => $result
 		);
 
 		$data['content_view'] = 'pages/dashboard_evaluate_data_detail';
@@ -105,14 +112,68 @@ class Evaluate_datas extends CI_Controller
 
 	public function edit_evaluate_data($project_id,$id)
 	{
+		$result = array();
+		$result_data = $this->CriteriaDatas_model->getResult(array('task_id'=>$id,'project_id'=>$project_id));
+		if(isset($result_data[0])){
+			$result = $result_data[0];
+		}
+
 		$data['content_data'] = array(
-			'data'=>$this->Activities_model->getTasks(array('task_id'=>$id,'project_id'=>$project_id))[0],
-			'project_id'=>$project_id,
-		);
+			'data' => $this->Activities_model->getTasks(array('task_id'=>$id,'project_id'=>$project_id))[0],
+			'project_id' => $project_id,
+			'id' => $id,
+			'result' => $result
+ 		);
 		$data['content_view'] = 'pages/form_evaluate_data';
 		$this->load->view($this->theme, $data);
 	}
 
+
+		public function validate()
+		{
+			$this->form_validation->set_rules('result', 'ผลการประเมิน', 'required|trim');
+			$this->form_validation->set_message('required', 'กรุณาระบุ {field}');
+
+			return $this->form_validation->run();
+		}
+
+		public function save($result_id = null)
+		{
+			$error_page = false;
+			$action = 'create';
+			if ($result_id != null && $result_id != '') {
+				$action = 'update';
+			}
+			$project_id = $_POST['project_id'];
+			$id = $_POST['task_id'];
+			if ($this->validate()) {
+				$data = array();
+				foreach ($_POST as $key => $value) {
+					$data[$key] = $this->input->post($key);
+				}
+				if ($action == 'create') {
+					$data_result_id = $this->CriteriaDatas_model->insertResult($data);
+					redirect(base_url("evaluate_datas/dashboard_evaluate_data_detail/".$project_id));
+					exit;
+				}else {
+					$data_result_id = $this->CriteriaDatas_model->updateResult($result_id,$data);
+					redirect(base_url("evaluate_datas/dashboard_evaluate_data_detail/".$project_id));
+					exit;
+				}
+			} else {
+				$error_page = true;
+			}
+
+			if ($error_page) {
+				$data['content_data'] = array(
+					'data'=>$this->Activities_model->getTasks(array('task_id'=>$id,'project_id'=>$project_id))[0],
+					'project_id'=>$project_id,
+					'id'=> $id
+				);
+				$data['content_view'] = 'pages/form_evaluate_data';
+				$this->load->view($this->theme, $data);
+			}
+		}
 
 
 	public function delete_evaluate_data($id = null)

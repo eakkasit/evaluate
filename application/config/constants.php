@@ -137,6 +137,11 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-users',
 					'base_url' => 'criteria',
 				),
+				'reports' => array(
+					'name' => 'รายงานการประเมินองค์กรรายปี',
+					'icon' => 'fa fa-file-text-o',
+					'base_url' => 'report_assessments',
+				),
 			),
 		),
 		array(
@@ -153,23 +158,6 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'name' => 'บันทึกรายงานประเมินผล',
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_datas',
-				),
-				// 'evaluate_five_years' => array(
-				// 	'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
-				// 	'icon' => 'fa fa-calendar',
-				// 	'base_url' => 'evaluate_five_years',
-				// ),
-			),
-		),
-		array(
-			'name' => 'รายงาน',
-			'icon' => 'fa fa-file-text-o',
-			'base_url' => '',
-			'menu' => array(
-				'reports' => array(
-					'name' => 'รายงานการประเมินองค์กรรายปี',
-					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'report_assessments',
 				),
 				'report_target' => array(
 					'name' => 'รายงานเป้าหมายโครงการ',
@@ -191,8 +179,45 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_criteria',
 				)
+				// 'evaluate_five_years' => array(
+				// 	'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
+				// 	'icon' => 'fa fa-calendar',
+				// 	'base_url' => 'evaluate_five_years',
+				// ),
 			),
 		),
+		// array(
+		// 	'name' => 'รายงาน',
+		// 	'icon' => 'fa fa-file-text-o',
+		// 	'base_url' => '',
+		// 	'menu' => array(
+		// 		'reports' => array(
+		// 			'name' => 'รายงานการประเมินองค์กรรายปี',
+		// 			'icon' => 'fa fa-file-text-o',
+		// 			'base_url' => 'report_assessments',
+		// 		),
+		// 		'report_target' => array(
+		// 			'name' => 'รายงานเป้าหมายโครงการ',
+		// 			'icon' => 'fa fa-file-text-o',
+		// 			'base_url' => 'report_targets',
+		// 		),
+		// 		'report_result' => array(
+		// 			'name' => 'รายงานประเมินผล',
+		// 			'icon' => 'fa fa-file-text-o',
+		// 			'base_url' => 'report_evaluates',
+		// 		),
+		// 		'report_total' => array(
+		// 			'name' => 'รายงานโครงการ 5 ปี',
+		// 			'icon' => 'fa fa-file-text-o',
+		// 			'base_url' => 'report_five_years',
+		// 		),
+		// 		'report_criteria' => array(
+		// 			'name' => 'รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด',
+		// 			'icon' => 'fa fa-file-text-o',
+		// 			'base_url' => 'report_criteria',
+		// 		)
+		// 	),
+		// ),
 		array(
 			'name' => 'ตั้งค่าระบบ',
 			'icon' => 'fa fa-cog',

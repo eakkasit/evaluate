@@ -1,12 +1,126 @@
 <?php
 $title_prefix = 'เพิ่ม';
-$action = base_url("criteria/dashboard_criteria");
+$action = base_url("criteria/save_data");
 $prev = base_url("criteria/dashboard_criteria");
 $ajax_form_url = base_url("criteria/ajax_get_data_form/");
 if (isset($data->id) && $data->id != '') {
 	$title_prefix = 'แก้ไข';
 	$action .= "/{$data->id}";
 	$prev = base_url("criteria/view_criteria_data/{$data->id}");
+}
+
+$sum_value = array();
+$sum_all = array();
+function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,$html,$symbol,$activity,$data_result){
+	global $sum_value,$sum_all;
+	$data = $tree_db->getKpiTree(array('structure_id'=>$structure_id,'tree_parent'=>$tree_id),array('tree_number'=>'ASC'));
+		if(count($data)>0){
+			$result = 0;
+			foreach( $data as $key => $value ){
+				if($value->tree_type=='1'){
+					$name = $value->tree_name;
+					$html .= '<tr>';
+					$html	.= '<td class="text-left">';
+					$html .= '<div class="form-group">';
+					$html .= 				'<label class="col-md-4"><b>'.$symbol.'หมวด</b></label>';
+					$html .= 					'<div class="col-md-8">';
+					$html .= 						'<input type="hidden" name="criteria_data['.$value->tree_id.'][structure_id]" class="form-control" value="'.$structure_id.'">';
+					$html .= 						'<input type="hidden" name="criteria_data['.$value->tree_id.'][tree_number]" class="form-control" value="'.$value->tree_number.'">';
+					$html .= 						'<input type="text" name="criteria_data['.$value->tree_id.'][criteria_name]" class="form-control" value="'.$value->tree_number.' '.$value->tree_name.'">';
+					$html .= 					'</div>';
+					$html .= 				'</div>';
+					$html .= '</td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html .= '</tr>';
+				}else{
+					$kpi = $kpi_db->getKpi(array('kpi_id'=>$value->kpi_id))[0];
+					$fomular_value = $formula_db->getFormulaData(array('structure_id' => $structure_id,'kpi_id' => $value->kpi_id));
+					if(isset($fomular_value[0])){
+						$fomular_value_data = $fomular_value[0];
+					}
+					$result = '';
+					$target = '';
+					if(isset($fomular_value_data)){
+						$target = $fomular_value_data->grade_map;
+						$result = $fomular_value_data->formula_value;
+						$sum_value[$value->tree_parent][] = $result;
+					}
+					$html .= '<tr>';
+					$html	.= '<td class="text-left">';
+					$html .= '<div class="form-group">';
+					$html .= 		'<label class="col-md-4"><b>เกณฑ์</b></label>';
+					$html .= 		'<div class="col-md-8">';
+					$html .= 			'<input type="hidden" name="criteria_data['.$value->tree_id.'][structure_id]" class="form-control" value="'.$structure_id.'">';
+					$html .= 			'<input type="hidden" name="criteria_data['.$value->tree_id.'][tree_number]" class="form-control" value="'.$value->tree_number.'">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][criteria_name]" class="form-control" value="'.$value->tree_number.' '.$kpi->kpi_name.'">';
+					$html .= 		'</div>';
+					$html .= '</div>';
+					$html .= '</td>';
+					$html	.= '<td>';
+					$html	.= '<select name="criteria_data['.$value->tree_id.'][project_id]" class="form-control mw-150"><option value="">----- เลือกโครงการ -----</option>';
+					if(isset($activity) && !empty($activity)){
+						foreach ($activity as $activity_key => $activity_value) {
+							$sel = "";
+							if(isset($data_result['project_id'][$value->tree_id])){
+								if($activity_key == $data_result['project_id'][$value->tree_id]){
+									$sel = "selected";
+								}else{
+									$sel = "";
+								}
+							}
+							$html	.= '<option value="'.$activity_key.'" '.$sel.'>'.$activity_value.'</option>';
+						}
+					}
+					$html	.= '</select>';
+					// $html .= '<label></label>';
+					// $html	.= '<select name="" class="form-control mw-150"><option>----- เลือกกิจกรรม -----</option>';
+					// $html	.= '</select>';
+					$html	.= '</td>';
+					$html	.= '<td><a href="#" onClick="show_variable(\''.$value->kpi_id.'\',\''.$value->tree_id.'\',\''.$kpi->kpi_standard_type.'\')" class="btn btn-sm btn-success">บันทึกค่าตัวแปร</a></td>';
+					$html	.= '<td class="text-right">';
+					$html .= '<div class="form-group">';
+					$html .= 		'<label class="col-md-6">ผลลัพธ์ > </label>';
+					$html .= 		'<div class="col-md-6">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][result]" class="form-control w-50 text-right target_value_'.$value->kpi_id.'" value="'.$target.'">';
+					$html .= 		'</div>';
+					$html .= '</div>';
+					$html .= '</td>';
+					$html	.= '<td class="text-right">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][percent]" class="form-control w-50 text-right result_value_'.$value->kpi_id.' percent_'.$value->tree_parent.'" value="'.$result.'">';
+					$html	.= '</td>';
+					$html	.= '<td class="text-right">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][weight]" class="form-control w-50 text-right" value="'.$value->tree_weight.'">';
+					$html	.= '</td>';
+					$html	.= '<td><a href="#" class="btn btn-sm btn-warning">เอกสารแนบ</a></td>';
+					$html .= '</tr>';
+				}
+
+				$html .= loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;&emsp;&emsp;',$activity,$data_result);
+
+				if($value->tree_type=='1'){
+					$sum_result = 0;
+					if(isset($sum_value[$value->tree_id])){
+						$sum_result =  ceil( array_sum($sum_value[$value->tree_id]) / count($sum_value[$value->tree_id]) );
+						$sum_all[] = $sum_result;
+					}
+					$html .= '<tr>';
+					$html	.= '<td colspan="3" align="center">&emsp;&emsp;&emsp;&emsp;<b>คะแนนเฉลี่ยรวมรายหมวด</b></td>';
+					$html	.= '<td></td>';
+					$html	.= '<td class="text-right">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][total]" data-percent="'.$value->tree_id.'" class="form-control w-50 text-right percent_total_'.$value->tree_id.'" value="'.$sum_result.'">';
+					$html	.= '</td>';
+					$html	.= '<td></td>';
+					$html	.= '<td></td>';
+					$html .= '</tr>';
+				}
+			}
+	}
+	return $html;
 }
 ?>
 <p class="h4 header text-success">
@@ -27,10 +141,41 @@ if (isset($data->id) && $data->id != '') {
 				</div>
 			</div>
 			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
-				<div id="kpi_list"></div>
-				<!-- <div class="row">
+				<input type="hidden" name="structure_id" class="form-control" value="<?php echo $structure_id; ?>">
+				<table class="table borderless" >
+					<?php
+					if(isset($tree) && !empty($tree)){
+						foreach ($tree as $key => $value) {
+							?>
+							<tr>
+								<td class="text-left">
+									<div class="form-group">
+										<label class="col-md-3"><b>หมวด</b></label>
+										<div class="col-md-8">
+											<input type="hidden" name="criteria_data[<?php echo $value->tree_id; ?>][structure_id]" class="form-control" value="<?php echo $structure_id; ?>">
+											<input type="hidden" name="criteria_data[<?php echo $value->tree_id; ?>][tree_number]" class="form-control" value="<?php echo $value->tree_number; ?>">
+											<input type="text" name="criteria_data[<?php echo $value->tree_id; ?>][criteria_name]" class="form-control" value="<?php echo $value->tree_number.' '.$value->tree_name; ?>">
+										</div>
+									</div>
+								</td>
+								<td></td>
+								<td></td>
+								<td align="center">ผลลัพธ์</td>
+								<td>เปอร์เซนต์</td>
+								<td>ค่าน้ำหนัก</td>
+								<td></td>
+							</tr>
+							<?php
+							echo loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;',$activity,$result);
+						}
+						?>
+						<?php
+					}
+					?>
+				</table>
+				<div class="row">
 					<div class="col-md-12 text-center">
-						<a href="<?php //echo $prev; ?>" class="btn btn-sm btn-danger">
+						<a href="<?php echo $prev; ?>" class="btn btn-sm btn-danger">
 							<i class="fa fa-times"></i>
 							ยกเลิก
 						</a>
@@ -40,7 +185,7 @@ if (isset($data->id) && $data->id != '') {
 							บันทึก
 						</button>
 					</div>
-				</div> -->
+				</div>
 			</form>
 	</div>
 </div>
@@ -236,5 +381,12 @@ if (isset($data->id) && $data->id != '') {
 	.mini-box{
 		width: 40px !important;
 		margin: 0px 1px;
+	}
+	.w-50{
+		width: 50px !important;
+	}
+
+	.mw-150{
+		width: 150px !important;
 	}
 </style>

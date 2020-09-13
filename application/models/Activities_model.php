@@ -63,10 +63,37 @@ class Activities_model extends CI_Model
 		return $this->db->get()->result();
 	}
 
-	public function getActivityLists()
+	public function getActivityLists($cond=array(),$order = array())
 	{
 		$list = array();
-		$profile_list = $this->db->select('*')->from('project')->order_by('id')->get()->result();
+		$this->db->select('*');
+		$this->db->from('project');
+		if (!empty($cond)) {
+			foreach ($cond as $k => $v) {
+				if (is_string($k)) {
+					if (is_array($v)) {
+						$this->db->where_in($k, $v);
+					} else {
+						$this->db->where($k, $v);
+					}
+				} else {
+					$this->db->where($v);
+				}
+			}
+		}
+		if (!empty($order)) {
+			foreach ($order as $k => $v) {
+				if (is_string($k)) {
+					$this->db->order_by($k, $v);
+				} else {
+					$this->db->order_by($v);
+				}
+			}
+		} else {//default order
+			$this->db->order_by('id', 'asc');
+		}
+		$profile_list = $this->db->get()->result();
+
 		if(!empty($profile_list)){
 			foreach($profile_list as $val){
 				$list[$val->id] = $val->project_name;

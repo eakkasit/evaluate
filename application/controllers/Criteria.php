@@ -9,7 +9,7 @@ class Criteria extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','Formula_model'));
+		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','Formula_model','Activities_model','CriteriaDatas_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -70,9 +70,11 @@ class Criteria extends CI_Controller
 	public function view_criteria($id = null)
 	{
 		$data['content_data'] = array(
-			'status_list' => $this->Commons_model->getActiveList(),
-			'year_list' => $this->Commons_model->getYearList(),
-			'data' => $this->Structure_model->getStructure(array('id'=>$id))[0]
+			'structure_id' => $id,
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree_db' => $this->KpiTree_model,
+			'kpi_db' => $this->Kpi_model,
+			'formula_db' => $this->Formula_model
 		);
 		$data['content_view'] = 'pages/view_criteria';
 		$this->load->view($this->theme, $data);
@@ -90,11 +92,35 @@ class Criteria extends CI_Controller
 
 	public function edit_criteria($id = null)
 	{
+		$result_query = $this->CriteriaDatas_model->getCriteriaDataResult(array('structure_id'=>$id));
+		$result = array();
+		if(isset($result_query) && !empty($result_query)){
+			foreach ($result_query as $key => $value) {
+				$result['tree_id'][$value->tree_id] = $value->tree_id;
+				$result['structure_id'][$value->tree_id] = $value->structure_id;
+				$result['tree_number'][$value->tree_id] = $value->tree_number;
+				$result['criteria_name'][$value->tree_id] = $value->criteria_name;
+				$result['project_id'][$value->tree_id] = $value->project_id;
+				$result['result'][$value->tree_id] = $value->result;
+				$result['percent'][$value->tree_id] = $value->percent;
+				$result['weight'][$value->tree_id] = $value->weight;
+				$result['total'][$value->tree_id] = $value->total;
+			}
+		}
+		// echo "<pre>";
+		// print_r($result);
+		// die();
 		$data['content_data'] = array(
 			// 'status_list' => $this->Commons_model->getActiveList(),
 			// 'year_list' => $this->Commons_model->getYearList(),
 			// 'data' => $this->Structure_model->getStructure(array('criteria_id'=>$id))[0]
-			'structure_id'=>$id
+			'structure_id' => $id,
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree_db' => $this->KpiTree_model,
+			'kpi_db' => $this->Kpi_model,
+			'formula_db' => $this->Formula_model,
+			'activity' => $this->Activities_model->getActivityLists(array('status'=>'2')),
+			'result' => $result
 		);
 		$data['content_view'] = 'pages/form_criteria';
 		$this->load->view($this->theme, $data);
@@ -421,5 +447,81 @@ class Criteria extends CI_Controller
 		// echo "<pre>";
 		// print_r($data);
 		// die();
+	}
+
+	public function save_data($criteria_id = null)
+	{
+		$error_page = false;
+		$upload_msg = '';
+		$action = 'create';
+		if ($criteria_id != null && $criteria_id != '') {
+			$action = 'update';
+		}
+
+
+		// if ($this->validate()) {
+			$data = array();
+			foreach ($_POST as $key => $value) {
+				$data[$key] = $this->input->post($key);
+			}
+			$id = $data['structure_id'];
+			// echo "<pre>";
+			// print_r($data);
+			// print_r($data['criteria_data']);
+			// die();
+			// if ($action == 'create') {
+				try {
+					$this->db->trans_start();
+					$this->db->where('structure_id',$data['structure_id']);
+					$this->db->delete('criteria_result');
+					// $criteria_id = $this->CriteriaDatas_model->insertCriteriaDatas($data);
+					if(isset($data['criteria_data'])){
+						foreach ($data['criteria_data'] as $key => $value) {
+							$data_temp = array();
+							foreach ($value as $key_temp => $value_temp) {
+								$data_temp[$key_temp] = $value_temp;
+							}
+							$data_temp['tree_id'] = $key;
+							$this->CriteriaDatas_model->insertCriteriaResult($data_temp);
+						}
+					}
+					$this->db->trans_complete();
+					if ($this->db->trans_status() === FALSE) {
+					    $this->db->trans_rollback();
+							$error_page = true;
+					}
+					else {
+					    $this->db->trans_commit();
+							redirect(base_url("criteria/dashboard_criteria"));
+							exit;
+					}
+
+				}catch (Exception $e) {
+					$error_page = true;
+					// exit();
+				}
+			// } else {
+			// 	$this->CriteriaDatas_model->updateCriteriaDatas($criteria_id, $data);
+			// 	redirect(base_url("criteria_datas/dashboard_criteria_datas"));
+			// 	exit;
+			// }
+		// } else {
+		// 	$error_page = true;
+		// }
+
+		if ($error_page) {
+			$data['content_data'] = array(
+				'data' => (object)array(
+					'structure_id' => $id,
+					'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+					'tree_db' => $this->KpiTree_model,
+					'kpi_db' => $this->Kpi_model,
+					'formula_db' => $this->Formula_model,
+					'activity' => $this->Activities_model->getActivityLists(array('status'=>'2'))
+				)
+			);
+			$data['content_view'] = 'pages/form_criteria';
+			$this->load->view($this->theme, $data);
+		}
 	}
 }

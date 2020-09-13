@@ -2,6 +2,11 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("evaluate_datas/save");
 $prev = base_url("evaluate_datas/dashboard_evaluate_data_detail/".$project_id);
+if (isset($result->id) && $result->id != '') {
+	$title_prefix = 'แก้ไข';
+	$action .= "/{$result->id}";
+	// $prev = base_url("evaluate_datas/dashboard_evaluate_data_detail/{$result->id}");
+}
 ?>
 <p class="h4 header text-success">
 	<i class="fa fa-file-text-o"></i> <?php echo $title_prefix; ?>บันทึกรายงานประเมินผล
@@ -55,7 +60,11 @@ $prev = base_url("evaluate_datas/dashboard_evaluate_data_detail/".$project_id);
 								<label for="stext">ผลการดำเนินโครงการ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<input type="text" name="result" class="form-control" value="<?php if (isset($data->result)) { echo $data->result;	} ?>" placeholder="ระบุ">
+								<input type="hidden" name="id" class="form-control" value="<?php  if(isset($result->id)){echo $result->id;}; ?>" >
+								<input type="hidden" name="project_id" class="form-control" value="<?php echo $project_id; ?>" >
+								<input type="hidden" name="task_id" class="form-control" value="<?php echo $id; ?>" >
+								<input type="hidden" name="year" class="form-control" value="<?php echo $data->task_year; ?>" >
+								<input type="number" name="result" class="form-control" value="<?php if (isset($result->result)) { echo $result->result;	} ?>" placeholder="ระบุ">
 							</div>
 							<label class="col-md-12 text-danger"><?php echo form_error("result"); ?></label>
 						</div>

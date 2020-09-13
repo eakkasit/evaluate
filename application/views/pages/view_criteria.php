@@ -1,5 +1,4 @@
 <?php
-$prev = base_url("report_assessments/dashboard_report_assessments");
 $sum_value = array();
 $sum_all = array();
 function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,$html,$symbol){
@@ -65,11 +64,9 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 	}
 	return $html;
 }
-
-
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> รายงานการประเมินองค์กรรายปี
+	<i class="fa fa-file-text-o"></i> บันทึกการประเมินองค์กรรายปี
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -77,31 +74,21 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 		<div class="widget-main">
 			<div class="row">
 				<div class="col-md-12 text-right">
-					<a href="<?php echo $prev; ?>"
-						 class="table-link" title="ย้อนกลับ">
+					<a href="<?php echo base_url("criteria/dashboard_criteria"); ?>"
+					   class="table-link" title="ย้อนกลับ">
 						<button type="button" class="btn btn-xs btn-info">
 							<i class="fa fa-arrow-left"></i> ย้อนกลับ
 						</button></a>
-						<a href="<?php echo base_url("report_assessments/export/$structure_id/pdf"); ?>"
-					   class="table-link" title="พิมพ์ PDF" target="_blank">
-						<button type="button" class="btn btn-xs btn-danger">
-							<i class="fa fa-file-pdf-o"></i> PDF
-						</button></a>
 
-					<a href="<?php echo base_url("report_assessments/export/$structure_id/word"); ?>"
-					   class="table-link" title="ส่งออก Word" target="_blank">
-						<button type="button" class="btn btn-xs btn-primary">
-							<i class="fa fa-file-word-o"></i> Word
-						</button></a>
-
-					<a href="<?php echo base_url("report_assessments/export/$structure_id/excel"); ?>"
-					   class="table-link" title="ส่งออก Excel" target="_blank">
-						<button type="button" class="btn btn-xs btn-success">
-							<i class="fa fa-file-excel-o"></i> Excel
+					<a href="<?php echo base_url("criteria/edit_criteria/{$structure_id}"); ?>"
+					   class="table-link" title="แก้ไข">
+						<button type="button" class="btn btn-xs btn-warning">
+							<i class="fa fa-edit"></i> แก้ไข
 						</button></a>
 
 				</div>
 			</div>
+
 			<div class="row">
 				<div class="col-xs-12 col-md-offset-2 col-md-8 text-center">
 					<table class="table borderless" >
@@ -130,15 +117,26 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					</table>
 				</div>
 			</div>
-
+		</div>
 	</div>
 </div>
-<style>
-	.dd-item .row{
-		padding: 1px
-	}
-	.mini-box{
-		width: 40px !important;
-		margin: 0px 1px;
-	}
-</style>
+
+<script type="text/javascript">
+    function delete_user(id) {
+        swal({
+                title: "แจ้งเตือน",
+                text: "ต้องการลบตัวแปรเกณฑ์การประเมิน",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "ลบ",
+                cancelButtonText: "ยกเลิก",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    location.href = '<?php echo base_url("variable/delete_variable/"); ?>' + id;
+                }
+            });
+    }
+</script>
