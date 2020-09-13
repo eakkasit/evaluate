@@ -51,7 +51,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					if(isset($sum_value[$value->tree_id])){
 						$sum_result =  ceil( array_sum($sum_value[$value->tree_id]) / count($sum_value[$value->tree_id]) );
 						if($sum_result > 100){
-							$sum_result = 100
+							$sum_result = 100;
 						}
 						$sum_all[] = $sum_result;
 					}
