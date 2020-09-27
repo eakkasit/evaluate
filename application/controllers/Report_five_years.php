@@ -148,11 +148,32 @@ class Report_five_years extends CI_Controller
 				$data_temp[$value->id][$value->year] = $this->Activities_model->getTargetTask($value->id)[0]->weight;
 			}
 		}
+
+		$target_data_temp = $this->CriteriaDatas_model->getTarget();
+		$target_data = array();
+		if(isset($target_data_temp) && !empty($target_data_temp)){
+			foreach ($target_data_temp as $key => $value) {
+				$target_data[$value->project_id][$value->year] = $value->target;
+			}
+		}
+		$result_data_temp = $this->CriteriaDatas_model->getResult();
+		$result_data = array();
+		if(isset($result_data_temp) && !empty($result_data_temp)){
+			foreach ($result_data_temp as $key => $value) {
+				$result_data[$value->project_id][$value->year] = $value->assessment_results;
+			}
+		}
+		$year_start = date('Y');
+		$year_end = date('Y')+5;
 		$data = array(
 			'project_list'=>$project_list,
 			'data'=>$data_temp,
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
+			'target_data' => $target_data,
+			'result_data' => $result_data,
+			'year_start' => $year_start,
+			'year_end' => $year_end,
 		);
 		if($type == 'pdf'){
 			$pdfFilePath = "รายงานโครงการ5ปี.pdf";

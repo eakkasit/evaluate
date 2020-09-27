@@ -25,10 +25,10 @@
 		<thead>
 		<tr role="row">
 			<th class="text-center start_no" width="5%">ลำดับ</th>
-			<th class="text-center" width="30%">ชื่อโครงการ</th>
-			<th class="text-center" width="10%">ปีงบประมาณ</th>
-			<th class="text-center" width="15%">รายละเอียด</th>
-			<th class="text-center" width="20%"></th>
+			<th class="text-center" width="35%">ชื่อโครงการ</th>
+			<th class="text-center" width="15%">ปีงบประมาณ</th>
+			<th class="text-center" width="35%">รายละเอียด</th>
+			<th class="text-center" width="10%"></th>
 		</tr>
 		</thead>
 		<tbody>

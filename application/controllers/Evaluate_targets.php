@@ -70,7 +70,7 @@ class Evaluate_targets extends CI_Controller
 	{
 		$data['content_data'] = array(
 			'project_data'=>$this->Activities_model->getActivities(array('id'=>$project_id)),
-			'datas'=>$this->CriteriaDatas_model->getTarget(array(), array('year'=>'ASC')),
+			'datas'=>$this->CriteriaDatas_model->getTarget(array('project_id'=>$project_id), array('year'=>'ASC')),
 			'year_list' => $this->Commons_model->getYearList(),
 			'project_id' => $project_id
 		);

@@ -159,11 +159,11 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_datas',
 				),
-				'report_target' => array(
-					'name' => 'รายงานเป้าหมายโครงการ',
-					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'report_targets',
-				),
+				// 'report_target' => array(
+				// 	'name' => 'รายงานเป้าหมายโครงการ',
+				// 	'icon' => 'fa fa-file-text-o',
+				// 	'base_url' => 'report_targets',
+				// ),
 				'report_result' => array(
 					'name' => 'รายงานประเมินผล',
 					'icon' => 'fa fa-file-text-o',
