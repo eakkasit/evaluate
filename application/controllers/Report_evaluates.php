@@ -9,7 +9,7 @@ class Report_evaluates extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
-		$this->load->model(array('Commons_model', 'Activities_model'));
+		$this->load->model(array('Commons_model', 'Activities_model','CriteriaDatas_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -45,12 +45,25 @@ class Report_evaluates extends CI_Controller
 
 	public function dashboard_report_evaluates()
 	{
-
+		$result = array();
+		$result_data = $this->CriteriaDatas_model->getResult();
+		if(isset($result_data) && !empty($result_data)){
+			foreach ($result_data as $key => $value) {
+				// if($result[$value->project_id][$value->year]){
+					$result[$value->project_id][$value->year] = $value->result;
+				// }else{
+					// $result[$value->project_id][$value->year] = $value->result;
+				// }
+			}
+		}
 		$cond = $this->search_form(array('project_name'));
 		$data['content_data'] = array(
 			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC')),
+			'result'=>$result
 		);
-
+		echo "<pre>";
+		print_r($result);
+		die();
 		$data['content_view'] = 'pages/dashboard_report_evaluates';
 		$this->load->view($this->theme, $data);
 	}
