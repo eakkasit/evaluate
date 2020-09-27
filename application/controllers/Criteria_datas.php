@@ -50,7 +50,8 @@ class Criteria_datas extends CI_Controller
 
 		$data['content_data'] = array(
 			'profiles' => $this->CriteriaProfiles_model->getCriteriaProfileLists(),
-			'datas' => $this->CriteriaDatas_model->getCriteriaDatas()
+			'datas' => $this->CriteriaDatas_model->getCriteriaDatas(),
+			'year_list' => $this->Commons_model->getYearList(),
 		);
 
 		$data['content_view'] = 'pages/dashboard_criteria_data';

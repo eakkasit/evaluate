@@ -24,7 +24,7 @@ if (isset($result->id) && $result->id != '') {
 								<label for="stext">ชื่อโครงการ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->task_name; ?></label>
+								<label for="stext"><?php echo $data->project_name; ?></label>
 							</div>
 						</div>
 
@@ -32,9 +32,37 @@ if (isset($result->id) && $result->id != '') {
 							<div class="col-md-4 text-right">
 								<label for="stext">ปีงบประมาณ :</label>
 							</div>
-							<div class="col-md-8 text-left">
-								<label for="stext"><?php echo $data->task_year+543; ?></label>
+							<?php
+								if(isset($result->id)){
+									?>
+									<div class="col-md-8 text-left">
+										<label for="stext"><?php echo $result->year+543 ; ?></label>
+										<input type="hidden" name="year" class="form-control" value="<?php echo $result->year ; ?>" >
+									</div>
+									<?php
+								}else{
+							?>
+							<div class="col-md-4 text-left">
+								<select name="year" class="form-control" >
+									<?php
+									 if(isset($year_list)){
+										 foreach ($year_list as $key => $value) {
+											 $selected = "";
+											 if(isset($result->year)){
+												 if($result->year == $key){
+													 $selected = "selected";
+												 }
+											 }
+										 		?>
+												<option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+												<?php
+										 }
+									 }
+									?>
+								</select>
 							</div>
+						<?php } ?>
+							<label class="col-md-12 text-danger"><?php echo form_error("year"); ?></label>
 						</div>
 
 						<div class="row">
@@ -60,15 +88,44 @@ if (isset($result->id) && $result->id != '') {
 								<label for="stext">ผลการดำเนินโครงการ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<input type="hidden" name="id" class="form-control" value="<?php  if(isset($result->id)){echo $result->id;}; ?>" >
-								<input type="hidden" name="project_id" class="form-control" value="<?php echo $project_id; ?>" >
-								<input type="hidden" name="task_id" class="form-control" value="<?php echo $id; ?>" >
-								<input type="hidden" name="year" class="form-control" value="<?php echo $data->task_year; ?>" >
-								<input type="number" name="result" class="form-control" value="<?php if (isset($result->result)) { echo $result->result;	} ?>" placeholder="ระบุ">
+								<textarea name="project_result" class="form-control"  rows="4" cols="5"><?php if(isset($result->project_result)){echo $result->project_result;}  ?></textarea>
+							</div>
+							<label class="col-md-12 text-danger"><?php echo form_error("project_result"); ?></label>
+						</div>
+
+						<div class="row">
+							<div class="col-md-4 text-right">
+								<label for="stext">ผลผลิต :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<textarea name="product" class="form-control" rows="4" cols="5"><?php if(isset($result->product)){echo $result->product;}  ?></textarea>
+							</div>
+							<label class="col-md-12 text-danger"><?php echo form_error("product"); ?></label>
+						</div>
+
+						<div class="row">
+							<div class="col-md-4 text-right">
+								<label for="stext">ผลลัพธ์ :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<textarea name="result" class="form-control"  rows="4" cols="5"><?php if(isset($result->result)){echo $result->result;}  ?></textarea>
 							</div>
 							<label class="col-md-12 text-danger"><?php echo form_error("result"); ?></label>
 						</div>
 
+						<div class="row">
+							<div class="col-md-4 text-right">
+								<label for="stext">ผลการประเมิน <span class="red">*</span> :</label>
+							</div>
+							<div class="col-md-8 text-left">
+								<input type="hidden" name="id" class="form-control" value="<?php  if(isset($result->id)){echo $result->id;}; ?>" >
+								<input type="hidden" name="project_id" class="form-control" value="<?php echo $project_id; ?>" >
+								<!-- <input type="hidden" name="task_id" class="form-control" value="<?php //echo $id; ?>" > -->
+								<!-- <input type="hidden" name="year" class="form-control" value="<?php //echo $data->task_year; ?>" > -->
+								<input type="number" name="assessment_results" class="form-control" value="<?php if (isset($result->assessment_results)) { echo $result->assessment_results;	} ?>" placeholder="ระบุ">
+							</div>
+							<label class="col-md-12 text-danger"><?php echo form_error("result"); ?></label>
+						</div>
 					</div>
 				</div>
 				<div class="row">

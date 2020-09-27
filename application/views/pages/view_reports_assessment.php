@@ -2,7 +2,7 @@
 $prev = base_url("report_assessments/dashboard_report_assessments");
 $sum_value = array();
 $sum_all = array();
-function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,$html,$symbol){
+function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,$html,$symbol,$result_data){
 	global $sum_value,$sum_all;
 	$data = $tree_db->getKpiTree(array('structure_id'=>$structure_id,'tree_parent'=>$tree_id),array('tree_number'=>'ASC'));
 		if(count($data)>0){
@@ -12,6 +12,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$name = $value->tree_name;
 					$html .= '<tr>';
 					$html	.= '<td class="text-left"><b>'.$symbol.$value->tree_number.' '.$value->tree_name.'</b></td>';
+					$html	.= '<td></td>';
 					$html	.= '<td></td>';
 					$html	.= '<td></td>';
 					$html	.= '<td></td>';
@@ -37,15 +38,23 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 						$result = $fomular_value_data->formula_value;
 						$sum_value[$value->tree_parent][] = $result;
 					}
+					$project_name = '';
+					// echo "<pre/>";
+					// echo "string $value->tree_id";
+					// print_r($result_data);
+					if(isset($result_data['project_name'][$value->tree_id])){
+						$project_name = $result_data['project_name'][$value->tree_id];
+					}
 					$html .= '<tr>';
 					$html	.= '<td class="text-left">'.$symbol.$value->tree_number.' '.$kpi->kpi_name.'</td>';
+					$html	.= '<td class="text-left">'.$project_name.'</td>';
 					$html	.= '<td class="text-right">'.$target.'</td>';
 					$html	.= '<td class="text-right">'.$result.'</td>';
 					$html	.= '<td class="text-right">'.$value->tree_weight.'</td>';
 					$html .= '</tr>';
 				}
 
-				$html .= loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;&emsp;&emsp;');
+				$html .= loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;&emsp;&emsp;',$result_data);
 
 				if($value->tree_type=='1'){
 					$sum_result = 0;
@@ -60,6 +69,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$html .= '<tr>';
 					$html	.= '<td>&emsp;&emsp;&emsp;&emsp;<b>รวม</b></td>';
 					$html	.= '<td></td>';
+					$html	.= '<td></td>';
 					$html	.= '<td class="text-right">'.$sum_result.'</td>';
 					$html	.= '<td></td>';
 					$html .= '</tr>';
@@ -72,7 +82,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 
 ?>
 <p class="h4 header text-success">
-	<i class="fa fa-file-text-o"></i> รายงานการประเมินองค์กรรายปี
+	<i class="fa fa-file-text-o"></i> รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด
 </p>
 
 <div id="search-filter" class="widget-box">
@@ -110,7 +120,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					<table class="table borderless" >
 						<tr>
 							<td class="text-center h4 strong" colspan="3">
-								รายงานการประเมินองค์กรรายปี
+								รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด
 							</td>
 						</tr>
 						<?php
@@ -119,12 +129,13 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 								?>
 								<tr>
 									<td class="text-left"><b><?php echo $value->tree_number.' '.$value->tree_name; ?></b></td>
+									<td>โครงการ</td>
 									<td>ผลลัพธ์</td>
 									<td>เปอร์เซนต์</td>
 									<td>ค่าน้ำหนัก</td>
 								</tr>
 								<?php
-								echo loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;');
+								echo loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;',$result);
 							}
 							?>
 							<?php

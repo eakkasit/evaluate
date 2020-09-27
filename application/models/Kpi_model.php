@@ -202,6 +202,15 @@ class Kpi_model extends CI_Model
 		return $var_data;
 	}
 
+	public function getVarSystemData($var_id)
+	{
+		$this->db->select('*');
+		$this->db->where('id',$var_id);
+		$this->db->from('variable_system');
+		$var_data = $this->db->get()->result();
+		return $var_data;
+	}
+
 	public function queryData($query)
 	{
 		$query_data = $this->db->query($query);

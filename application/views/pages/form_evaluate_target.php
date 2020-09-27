@@ -2,12 +2,10 @@
 $title_prefix = 'เพิ่ม';
 $action = base_url("evaluate_targets/save");
 $prev = base_url("evaluate_targets/dashboard_evaluate_targets");
-$btn_img_txt = 'เพิ่มรูป';
-$btn_img_dsp = false;
-if (isset($data->id) && $data->id != '') {
+if (isset($result->id) && $result->id != '') {
 	$title_prefix = 'แก้ไข';
-	$action .= "/{$data->id}";
-	$prev = base_url("evaluate_targets/view_evaluate_target/{$data->id}");
+	$action .= "/{$result->id}";
+	// $prev = base_url("evaluate_datas/dashboard_evaluate_data_detail/{$result->id}");
 }
 ?>
 <p class="h4 header text-success">
@@ -23,59 +21,75 @@ if (isset($data->id) && $data->id != '') {
 					<div class="col-md-8">
 
 						<div class="row">
-							<div class="col-md-12">
-								<label for="stext">ชื่อ</label>
+							<div class="col-md-4 text-right">
+								<label for="stext">ชื่อโครงการ</label>
+							</div>
+							<div class="col-md-8">
+								<label for="stext"><?php echo $data->project_name; ?></label>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
-								<input type="text" name="name" class="form-control"
-									   value="<?php echo isset($data->name)?$data->name:''; ?>" placeholder="ระบุ">
-							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("name"); ?></label>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-4 text-right">
 								<label for="stext">ปี</label>
 							</div>
+						<?php
+							if(isset($result->id)){
+								?>
+								<div class="col-md-8 text-left">
+									<label for="stext"><?php echo $result->year+543 ; ?></label>
+									<input type="hidden" name="year" class="form-control" value="<?php echo $result->year ; ?>" >
+								</div>
+								<?php
+							}else{
+						?>
+						<div class="col-md-4 text-left">
+							<select name="year" class="form-control" >
+								<?php
+								 if(isset($year_list)){
+									 foreach ($year_list as $key => $value) {
+										 $selected = "";
+										 if(isset($result->year)){
+											 if($result->year == $key){
+												 $selected = "selected";
+											 }
+										 }
+											?>
+											<option value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+											<?php
+									 }
+								 }
+								?>
+							</select>
+						</div>
+					<?php } ?>
+
 						</div>
 						<div class="row">
-							<div class="col-md-4">
-								<select class="form-control" name="year_start">
-									<?php foreach ($year_list as $key => $value) { ?>
-										<option
-											value="<?php echo $key; ?>"<?php if (isset($data->year_start) && $data->year_start == $key) {
-											echo 'selected="selected"';
-										} ?>><?php echo $value; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-							<label class="col-md-1"> - </label>
-							<div class="col-md-4">
-								<select class="form-control" name="year_end">
-									<?php foreach ($year_list as $key => $value) { ?>
-										<option
-											value="<?php echo $key; ?>"<?php if (isset($data->year_end) && $data->year_end == $key) {
-											echo 'selected="selected"';
-										} ?>><?php echo $value; ?></option>
-									<?php } ?>
-								</select>
-							</div>
-							<label class="col-md-12 text-danger"><?php echo form_error("year_start"); ?></label>
-							<label class="col-md-12 text-danger"><?php echo form_error("year_end"); ?></label>
+							<div class="col-md-4"></div>
+							<label class="col-md-8 text-danger"><?php echo form_error("year"); ?></label>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-4 text-right">
 								<label for="stext">รายละเอียด</label>
 							</div>
+							<div class="col-md-8">
+								<label for="stext"><?php echo $data->detail; ?></label>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
-								<textarea type="text" name="detail" cols="4" rows="5" class="form-control" placeholder="ระบุ"></textarea>
+							<div class="col-md-4 text-right">
+								<label for="stext">เป้าหมายโครงการ <span class="red">*</span> :</label>
 							</div>
-							<label
-								class="col-md-12 text-danger"><?php echo form_error("detail"); ?></label>
+							<div class="col-md-8 text-left">
+								<input type="hidden" name="id" class="form-control" value="<?php  if(isset($result->id)){echo $result->id;}; ?>" >
+								<input type="hidden" name="project_id" class="form-control" value="<?php echo $project_id; ?>" >
+								<input type="number" name="target" class="form-control" value="<?php if (isset($result->target)) { echo $result->target;	} ?>" placeholder="ระบุ">
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-4"></div>
+							<label class="col-md-8 text-danger"><?php echo form_error("target"); ?></label>
 						</div>
 					</div>
 				</div>

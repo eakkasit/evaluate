@@ -125,12 +125,15 @@ class CriteriaDatas_model extends CI_Model
 	public function insertResult($data=array())
 	{
 		$this->db->set('project_id', $data['project_id']);
-		$this->db->set('task_id', $data['task_id']);
+		// $this->db->set('task_id', $data['task_id']);
 		$this->db->set('year', $data['year']);
+		$this->db->set('project_result', $data['project_result']);
+		$this->db->set('product', $data['product']);
 		$this->db->set('result', $data['result']);
+		$this->db->set('assessment_results', $data['assessment_results']);
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('data_result');
-		$this->sumReult($data['project_id'],$data['task_id']);
+		// $this->sumReult($data['project_id'],$data['task_id']);
 		return $this->db->insert_id();
 	}
 
@@ -198,12 +201,15 @@ class CriteriaDatas_model extends CI_Model
 	public function updateResult($id,$data=array())
 	{
 		$this->db->set('project_id', $data['project_id']);
-		$this->db->set('task_id', $data['task_id']);
+		// $this->db->set('task_id', $data['task_id']);
 		$this->db->set('year', $data['year']);
+		$this->db->set('project_result', $data['project_result']);
+		$this->db->set('product', $data['product']);
 		$this->db->set('result', $data['result']);
+		$this->db->set('assessment_results', $data['assessment_results']);
 		$this->db->where('id', $id);
 		$this->db->update('data_result');
-		$this->sumReult($data['project_id'],$data['task_id']);
+		// $this->sumReult($data['project_id'],$data['task_id']);
 		return $id;
 	}
 
@@ -315,5 +321,74 @@ class CriteriaDatas_model extends CI_Model
 		}
 		return $this->db->get()->result();
 	}
+
+	public function deleteResult($id = null)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete('data_result');
+		return $id;
+	}
+
+	public function getTarget($cond = array(), $order = array(), $limit = null, $start = 0)
+	{
+		$this->db->select('*');
+		$this->db->from('data_target');
+		if (!empty($cond)) {
+			foreach ($cond as $k => $v) {
+				if (is_string($k)) {
+					if (is_array($v)) {
+						$this->db->where_in($k, $v);
+					} else {
+						$this->db->where($k, $v);
+					}
+				} else {
+					$this->db->where($v);
+				}
+			}
+		}
+		if (!empty($order)) {
+			foreach ($order as $k => $v) {
+				if (is_string($k)) {
+					$this->db->order_by($k, $v);
+				} else {
+					$this->db->order_by($v);
+				}
+			}
+		} else {//default order
+			$this->db->order_by('create_date', 'desc');
+		}
+		if ($limit != null) {
+			$this->db->limit($limit, $start);
+		}
+		return $this->db->get()->result();
+	}
+
+
+		public function insertTarget($data=array())
+		{
+			$this->db->set('project_id', $data['project_id']);
+			$this->db->set('year', $data['year']);
+			$this->db->set('target', $data['target']);
+			$this->db->set('create_date', 'NOW()', false);
+			$this->db->insert('data_target');
+			return $this->db->insert_id();
+		}
+
+		public function updateTarget($id,$data=array())
+		{
+			$this->db->set('project_id', $data['project_id']);
+			$this->db->set('year', $data['year']);
+			$this->db->set('target', $data['target']);
+			$this->db->where('id', $id);
+			$this->db->update('data_target');
+			return $this->db->insert_id();
+		}
+
+		public function deleteTarget($id = null)
+		{
+			$this->db->where('id', $id);
+			$this->db->delete('data_target');
+			return $id;
+		}
 
 }

@@ -31,42 +31,59 @@ table#table_evaluate td {
 	<tr>
 		<td>
 			<table border="1" id="table_evaluate"  cellspacing="0" cellpadding="0" width="100%">
-				<tr role="row">
-					<th align="center" width="5%">ลำดับ</th>
-					<th align="center" width="30%">ชื่อโครงการ</th>
-					<th align="center" width="10%">ปีงบประมาณ</th>
-					<th align="center" width="15%">ผู้รับผิดชอบ</th>
-					<th align="center" width="20%">ผลการดำเนินงาน</th>
-				</tr>
-				<?php
-				if (isset($datas) && !empty($datas)) {
-					$no = 1;
-					foreach ($datas as $key => $data) {
-						?>
-						<tr class="odd" role="row">
-							<td align="center">
-								<?php
-								echo number_format($no + $key, 0);
-								?>
-							</td>
-							<td align="left">
-								<?php echo $data->project_name; ?>
-							</td>
-							<td align="left">
-								<?php echo $data->year; ?>
-							</td>
-							<td align="center">
-								<?php //echo $data->department; ?>
-								-
-							</td>
-							<td align="right">
-								<?php echo isset($data->result)?$data->result:''; ?>
-							</td>
-						</tr>
-						<?php
-					}
-				}
-				?>
+        <tr role="row">
+  				<th class="text-center start_no" width="5%">ลำดับ</th>
+  				<th class="text-center" width="15%">ชื่อโครงการ</th>
+  				<th class="text-center" width="5%">ปีงบประมาณ</th>
+  				<th class="text-center" width="10%">ผู้รับผิดชอบ</th>
+  				<th class="text-center" width="10%">วัตถุประสงค์</th>
+  				<th class="text-center" width="10%">ผลการดำเนินโครงการ</th>
+  				<th class="text-center" width="10%">ผลผลิต</th>
+  				<th class="text-center" width="10%">ผลลัพธ์</th>
+  				<th class="text-center" width="10%">ผลการประเมิน</th>
+  			</tr>
+        <?php
+  			$no = 1;
+  			
+  			if (isset($datas) && !empty($datas)) {
+  				foreach ($datas as $key => $data) {
+  					?>
+  					<tr class="odd" role="row">
+  						<td class="text-center">
+  							<?php
+  							echo number_format($no + $key, 0);
+  							?>
+  						</td>
+  						<td class="text-left">
+  							<?php echo $project_data[0]->project_name; ?>
+  						</td>
+  						<td class="text-left">
+  							<?php echo $data->year+543; ?>
+  						</td>
+  						<td class="text-left"> -
+  							<?php //echo $data->department; ?>
+  						</td>
+  						<td class="text-left"> -
+  							<?php //echo $data->detail; ?>
+  						</td>
+  						<td class="text-left">
+  							<?php echo $data->project_result; ?>
+  						</td>
+  						<td class="text-left">
+  							<?php echo $data->product; ?>
+  						</td>
+  						<td class="text-left">
+  							<?php echo $data->result; ?>
+  						</td>
+  						<td class="text-right">
+  							<?php echo $data->assessment_results; ?>
+  						</td>
+
+  					</tr>
+  					<?php
+  				}
+  			}
+  			?>
 			</table>
 		</td>
 	</tr>

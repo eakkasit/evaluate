@@ -138,7 +138,7 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'base_url' => 'criteria',
 				),
 				'reports' => array(
-					'name' => 'รายงานการประเมินองค์กรรายปี',
+					'name' => 'รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด',
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_assessments',
 				),
@@ -149,11 +149,11 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 			'icon' => 'fa fa-calendar',
 			'base_url' => '',
 			'menu' => array(
-				// 'evaluate_targets' => array(
-				// 	'name' => 'บันทึกเป้าหมายโครงการ',
-				// 	'icon' => 'fa fa-calendar',
-				// 	'base_url' => 'evaluate_targets',
-				// ),
+				'evaluate_targets' => array(
+					'name' => 'บันทึกเป้าหมายโครงการ',
+					'icon' => 'fa fa-calendar',
+					'base_url' => 'evaluate_targets',
+				),
 				'evaluate_datas' => array(
 					'name' => 'บันทึกรายงานประเมินผล',
 					'icon' => 'fa fa-calendar',
@@ -174,11 +174,11 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_five_years',
 				),
-				'report_criteria' => array(
-					'name' => 'รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด',
-					'icon' => 'fa fa-file-text-o',
-					'base_url' => 'report_criteria',
-				)
+				// 'report_criteria' => array(
+				// 	'name' => 'รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด',
+				// 	'icon' => 'fa fa-file-text-o',
+				// 	'base_url' => 'report_criteria',
+				// )
 				// 'evaluate_five_years' => array(
 				// 	'name' => 'บันทึกรายงานโครงการระยะ 5 ปี',
 				// 	'icon' => 'fa fa-calendar',

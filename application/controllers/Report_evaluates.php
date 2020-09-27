@@ -61,17 +61,21 @@ class Report_evaluates extends CI_Controller
 			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC')),
 			'result'=>$result
 		);
-		echo "<pre>";
-		print_r($result);
-		die();
+		// echo "<pre>";
+		// print_r($result);
+		// die();
 		$data['content_view'] = 'pages/dashboard_report_evaluates';
 		$this->load->view($this->theme, $data);
 	}
 
 	public function view_reports_evaluate($id = null)
 	{
+		$project_data = $this->Activities_model->getActivities(array('id'=>$id));
+		$result_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$id),array('year'=>'ASC'));
 		$data['content_data'] = array(
-
+			'project_data' => $project_data,
+			'project_id'=>$id,
+			'datas' => $result_data,
 		);
 		$data['content_view'] = 'pages/view_reports_evaluate';
 		$this->load->view($this->theme, $data);
@@ -96,11 +100,22 @@ class Report_evaluates extends CI_Controller
 
 
 
-	public function export($type = '')
+	public function export($id,$type = '')
 	{
+		$project_data = $this->Activities_model->getActivities(array('id'=>$id));
+		$result_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$id),array('year'=>'ASC'));
 		$data = array(
-			'datas'=>$this->Activities_model->getActivities(array(), array('year'=>'DESC')),
+			'project_data' => $project_data,
+			'project_id'=>$id,
+			'datas' => $result_data,
 		);
+		// $project_data = $this->Activities_model->getActivities(array('id'=>$id));
+		// $result_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$id),array('year'=>'ASC'));
+		// $data['content_data'] = array(
+		// 	'project_data' => $project_data,
+		// 	'project_id'=>$id,
+		// 	'datas' => $result_data,
+		// );
 		if($type == 'pdf'){
 			$pdfFilePath = "รายงานการประเมินองค์กร.pdf";
 			$html = $this->load->view('pages/report_evaluate_pdf', $data,true);

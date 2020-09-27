@@ -9,7 +9,7 @@ class Report_assessments extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation','m_pdf'));
-		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Formula_model','Kpi_model'));
+		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Formula_model','Kpi_model','CriteriaDatas_model','Activities_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -71,12 +71,31 @@ class Report_assessments extends CI_Controller
 
 	public function view_reports_assessment($id = null)
 	{
+		$result_query = $this->CriteriaDatas_model->getCriteriaDataResult(array('structure_id'=>$id));
+		$project_list = $this->Activities_model->getActivityLists();
+		$result = array();
+		if(isset($result_query) && !empty($result_query)){
+			foreach ($result_query as $key => $value) {
+				$result['tree_id'][$value->tree_id] = $value->tree_id;
+				$result['structure_id'][$value->tree_id] = $value->structure_id;
+				$result['tree_number'][$value->tree_id] = $value->tree_number;
+				$result['criteria_name'][$value->tree_id] = $value->criteria_name;
+				$result['project_id'][$value->tree_id] = $value->project_id;
+				$result['project_name'][$value->tree_id] = $project_list[$value->project_id];
+				$result['result'][$value->tree_id] = $value->result;
+				$result['percent'][$value->tree_id] = $value->percent;
+				$result['weight'][$value->tree_id] = $value->weight;
+				$result['total'][$value->tree_id] = $value->total;
+			}
+		}
 		$data['content_data'] = array(
 			'structure_id' => $id,
 			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
-			'formula_db' => $this->Formula_model
+			'formula_db' => $this->Formula_model,
+			'result' => $result
+
 
 		);
 		$data['content_view'] = 'pages/view_reports_assessment';

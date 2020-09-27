@@ -27,16 +27,17 @@
 				<th class="text-center start_no" width="5%">ลำดับ</th>
 				<th class="text-center" width="40%">ชื่อโครงการ</th>
 				<th class="text-center" width="10%">ปีงบประมาณ</th>
-				<!-- <th class="text-center" width="15%">เป้าหมายปี <?php echo $year; ?></th>
+				<th class="text-center" width="10%">น้ำหนักโครงการ</th>
+				<!-- <th class="text-center" width="15%">เป้าหมายปี <?php //echo $year; ?></th>
 				<th class="text-center" width="15%" >ผลการประเมิน</th>
 				<th class="text-center" width="15%" >ร้อยละความสำเร็จ</th> -->
 				<?php
 					if($year_show){
 						for($i = 0;$year_start+$i<=$year_end;$i++){
 							?>
-							<th class="text-center" width="35px">เป้าหมายปี <?php  echo $year_start+$i; ?></th>
-							<th class="text-center" width="35px" >ผลการประเมิน</th>
-							<th class="text-center" width="35px" >ร้อยละความสำเร็จ</th>
+							<th class="text-center" width="125px">เป้าหมายปี <?php  echo $year_start+$i; ?></th>
+							<th class="text-center" width="125px" >ผลการประเมิน</th>
+							<th class="text-center" width="125px" >ร้อยละความสำเร็จ</th>
 							<?php
 						}
 					}
@@ -58,9 +59,19 @@
 							<?php echo $project->project_name ?>
 						</td>
 						<td class="text-left">
-							<?php echo $project->year ; ?>
+							<?php
+							if($project->year_start == $project->year_end){
+								echo $project->year_start+543;
+							}else{
+								$year_start_show = $project->year_start+543;
+								$year_end_show = $project->year_end+543;
+								echo "$year_start_show - $year_end_show" ;
+							}
+							?>
 						</td>
-
+						<td class="text-right">
+							<?php echo $project->weight ; ?>
+						</td>
 						<?php
 							if($year_show){
 								for($i = 0;$year_start+$i<=$year_end;$i++){

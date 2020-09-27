@@ -30,7 +30,7 @@
 						<?php echo $data->project_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->year; ?>
+						<?php echo $data->year+543; ?>
 					</td>
 					<td class="text-left">
 						<?php //echo $data->department; ?>
@@ -40,11 +40,11 @@
 					</td>
 					<td  class="text-left">
 						<div>
-							<a href="<?php echo base_url("evaluate_datas/view_evaluate_datas/{$data->id}"); ?>"
+							<!-- <a href="<?php //echo base_url("evaluate_datas/view_evaluate_datas/{$data->id}"); ?>"
 							   class="table-link" title="แสดง">
 								<button type="button" class="btn btn-xs btn-info">
 									<i class="fa fa-eye"></i> แสดง
-								</button></a>
+								</button></a> -->
 
 							<a href="<?php echo base_url("evaluate_datas/dashboard_evaluate_data_detail/{$data->id}"); ?>"
 							   class="table-link" title="แก้ไข">
