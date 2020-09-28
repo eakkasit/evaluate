@@ -1,5 +1,28 @@
 <?php $this->load->view("template/search_year"); ?>
 
+<?php
+	$action = base_url("evaluate_five_years/save");
+?>
+<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
+<div class="row">
+	<div class="col-md-12 text-right">
+		<a href="#" class="btn btn-sm btn-warning btn_edit" onclick="showSave()">
+			<i class="fa fa-pencil"></i>
+			แก้ไข
+		</a>
+		&nbsp;&nbsp;
+		<a href="#" class="btn btn-sm btn-danger btn_cancel"  onclick="showEdit()">
+			<i class="fa fa-times"></i>
+			ยกเลิก
+		</a>
+		&nbsp;&nbsp;
+		<button class="btn btn-sm btn-success" type="submit" id="btn_save_data">
+			<i class="fa fa-floppy-o"></i>
+			บันทึก
+		</button>
+	</div>
+	<label class="col-md-12"></label>
+</div>
 <div class="table-responsive">
 	<table role="grid" id="table-example"
 		   class="table table-bordered table-hover dataTable no-footer">
@@ -113,9 +136,17 @@
 								$weight_diff = number_format(($weight_per_year - $weight_actual),2);
 
 							}
-
+							$disable = '';
+							if( ($search_year_start+$i) >= $data->year_start &&  ($search_year_start+$i) <= $data->year_end){
+								$disable = '';
+							}else{
+								$disable = 'disabled';
+							}
 							?>
-							<td class="text-center"><?php echo $target; ?></td>
+							<td class="text-center">
+								<span class="save_data_text"><?php echo $target; ?></span>
+								<input type="number" class="form-control save_data" <?php echo $disable; ?> name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo $target; ?>" >
+							</td>
 							<td class="text-center"><?php echo $weight_per_year;?></td>
 							<?php
 							if($i == 0){
@@ -158,7 +189,10 @@
 							?>
 
 
-							<td class="text-center"><?php echo $result; ?></td>
+							<td class="text-center">
+								<span class="save_data_text"><?php echo $result; ?></span>
+								<input type="number" class="form-control save_data"  <?php echo $disable; ?> name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo $result; ?>" >
+							</td>
 							<td class="text-center"><?php echo $weight_diff; ?></td>
 							<td class="text-center"><?php echo $result_diff; ?></td>
 							<td class="text-center"><?php echo $evaluate_result; ?></td>
@@ -174,6 +208,7 @@
 		</tbody>
 	</table>
 </div>
+</form>
 <div class="pagination pull-right">
 	<?php //$this->load->view("template/pagination"); ?>
 </div>
@@ -205,22 +240,24 @@ table{
                 }
             });
     }
-		// jQuery(document).ready(function () {
-		// 	var table = jQuery('#table-example').removeAttr('width').DataTable( {
-	  //       scrollY:        "300px",
-	  //       scrollX:        true,
-	  //       scrollCollapse: true,
-	  //       paging:         false,
-		// 			searching: 			false,
-		// 			ordering: 			false,
-		// 			info:						false,
-		// 			autoWidth: 			false,
-	  //       // columnDefs: [
-		// 			// 		{ width: 50, targets: 0 }
-	  //       //     { width: 250, targets: 1 }
-		// 			// 		{ width: 150, targets: 2 }
-	  //       // ],
-	  //       // fixedColumns: true
-	  //   } );
-		// })
+		function showSave(){
+			$('.save_data').show();
+			$('#btn_save_data').show();
+			$('.btn_cancel').show();
+			$('.btn_edit').hide();
+			$('.save_data_text').hide();
+		}
+
+		function showEdit(){
+			$('.save_data').hide();
+			$('#btn_save_data').hide();
+			$('.btn_cancel').hide();
+			$('.btn_edit').show();
+			$('.save_data_text').show();
+		}
+		jQuery(document).ready(function () {
+			$('.save_data').hide();
+			$('#btn_save_data').hide();
+			$('.btn_cancel').hide();
+		})
 </script>

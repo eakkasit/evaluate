@@ -213,6 +213,14 @@ class CriteriaDatas_model extends CI_Model
 		return $id;
 	}
 
+	public function replaceResult($data=array())
+	{
+		$this->db->set('assessment_results', $data['result']);
+		$this->db->where('project_id',$data['project_id']);
+		$this->db->where('year',$data['year']);
+		$this->db->update('data_result');
+	}
+
 	public function getResult($cond = array(), $order = array(), $limit = null, $start = 0)
 	{
 		$this->db->select('*');
@@ -382,6 +390,14 @@ class CriteriaDatas_model extends CI_Model
 			$this->db->where('id', $id);
 			$this->db->update('data_target');
 			return $this->db->insert_id();
+		}
+
+		public function replaceTarget($data=array())
+		{
+			$this->db->set('target', $data['target']);
+			$this->db->where('project_id',$data['project_id']);
+			$this->db->where('year',$data['year']);
+			$this->db->update('data_target');
 		}
 
 		public function deleteTarget($id = null)

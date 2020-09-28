@@ -247,7 +247,8 @@ class Evaluate_targets extends CI_Controller
 
 	public function delete_evaluate_target($id = null)
 	{
-		$this->TargetProfiles_model->deleteTargetProfiles($id);
+		// $this->TargetProfiles_model->deleteTargetProfiles($id);
+		$this->CriteriaDatas_model->deleteTarget($id);
 		redirect(base_url("evaluate_targets/dashboard_evaluate_targets"));
 		exit;
 	}

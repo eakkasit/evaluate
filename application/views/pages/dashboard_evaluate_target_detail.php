@@ -72,7 +72,7 @@
 							</a>
 							<a href="#"
 							   class="table-link"
-							   onclick="delete_evaluate_target(<?php //echo $data->id; ?>);" title="ลบ">
+							   onclick="delete_evaluate_target(<?php echo $data->id; ?>);" title="ลบ">
 								<button type="button" class="btn btn-xs btn-danger">
 									<i class="fa fa-trash-o"></i> ลบ
 								</button>
@@ -101,7 +101,7 @@
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    location.href = '<?php echo base_url("evaluate_targets/delete_evaluate_targets/"); ?>' + id;
+                    location.href = '<?php echo base_url("evaluate_targets/delete_evaluate_target/"); ?>' + id;
                 }
             });
     }

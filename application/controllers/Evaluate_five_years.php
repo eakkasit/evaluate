@@ -130,6 +130,54 @@ class Evaluate_five_years extends CI_Controller
 	}
 
 
+	public function save($result_id = null)
+	{
+		// echo "<pre>";
+		// print_r($_POST);
+		$result_array = array();
+		$target_array = array();
+		$this->db->trans_start(); # Starting Transaction
+		$this->db->trans_strict(FALSE); # See Note 01. If you wish can remove as well
+		foreach ($_POST['data'] as $key => $value) {
+			if($key == 'target'){
+				foreach ($value as $key_target => $value_target) {
+					foreach ($value_target as $key_profile => $target) {
+						$target_array['project_id'] = $key_target;
+						$target_array['year'] = $key_profile;
+						$target_array['target'] = $target;
+						$this->CriteriaDatas_model->replaceTarget($target_array);
+					}
+				}
+			}else{
+				foreach ($value as $key_result => $value_result) {
+					foreach ($value_result as $key_r_profile => $result) {
+						$result_array['project_id'] = $key_result;
+						$result_array['year'] = $key_r_profile;
+						$result_array['result'] = $result;
+						$this->CriteriaDatas_model->replaceResult($result_array);
+					}
+				}
+			}
+		}
+		$this->db->trans_complete(); # Completing transaction
+
+		/*Optional*/
+
+		if ($this->db->trans_status() === FALSE) {
+		    # Something went wrong.
+		    $this->db->trans_rollback();
+				redirect(base_url("evaluate_five_years/dashboard_evaluate_five_years"));
+				exit;
+		}
+		else {
+		    # Everything is Perfect.
+		    # Committing data to the database.
+		    $this->db->trans_commit();
+				redirect(base_url("evaluate_five_years/dashboard_evaluate_five_years"));
+				exit;
+		}
+	}
+
 
 	public function delete_evaluate_five_year($id = null)
 	{
