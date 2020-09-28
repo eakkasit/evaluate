@@ -159,17 +159,22 @@ define('SYSTEM_MENU', json_encode(// เมนูระบบ
 					'icon' => 'fa fa-calendar',
 					'base_url' => 'evaluate_datas',
 				),
+				'evaluate_five_years' => array(
+					'name' => 'บันทึกรายงานโครงการ 5 ปี',
+					'icon' => 'fa fa-calendar',
+					'base_url' => 'evaluate_five_years',
+				),
 				// 'report_target' => array(
 				// 	'name' => 'รายงานเป้าหมายโครงการ',
 				// 	'icon' => 'fa fa-file-text-o',
 				// 	'base_url' => 'report_targets',
 				// ),
-				'report_result' => array(
+				'report_evaluates' => array(
 					'name' => 'รายงานประเมินผล',
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_evaluates',
 				),
-				'report_total' => array(
+				'report_five_years' => array(
 					'name' => 'รายงานโครงการ 5 ปี',
 					'icon' => 'fa fa-file-text-o',
 					'base_url' => 'report_five_years',

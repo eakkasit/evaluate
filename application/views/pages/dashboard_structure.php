@@ -35,7 +35,7 @@
 						<?php echo $data->structure_name; ?>
 					</td>
 					<td class="text-left">
-						<?php echo $data->profile_year; ?>
+						<?php echo $data->profile_year+543; ?>
 					</td>
 					<td class="text-center">
 						<?php if($data->structure_status == '1'){?> 	<span class="label label-success">ใช้งาน</span> <?php }else{ ?> <span class="label label-danger">ไม่ใช้งาน</span> <?php } ?>

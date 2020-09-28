@@ -27,7 +27,7 @@ class Report_five_years extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element') && !empty($fields)) {
+		if ($this->input->post('form_search_element')['text'] && !empty($fields)) {
 			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
@@ -49,6 +49,25 @@ class Report_five_years extends CI_Controller
 		$cond = $this->search_form(array('project_name'));
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
+		$search_year_start = date('Y');
+		$search_year_end = date('Y')+4;
+		if(isset($_POST['search_year_start']) &&  isset($_POST['search_year_end'])){
+			$search_year_start = $_POST['search_year_start'];
+			$search_year_end = $_POST['search_year_end'];
+			$con = "year BETWEEN '{$search_year_start}' AND '{$search_year_end}'";
+			array_push($cond,$con);
+
+		}else if(isset($_POST['search_year_start'])){
+			$search_year_start = $_POST['search_year_start'];
+			$con = "year >= '{$search_year_start}'";
+			array_push($cond,$con);
+		}else if(isset($_POST['search_year_end'])){
+			$search_year_end = $_POST['search_year_end'];
+			$con = "year <= '{$search_year_end}'";
+			array_push($cond,$con);
+		}else{
+
+		}
 		$count_rows = $this->Activities_model->countActivities($cond);
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);
@@ -88,6 +107,9 @@ class Report_five_years extends CI_Controller
 			'result_data' => $result_data,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
+			'year_list' => $this->Commons_model->getYearList(),
+			'search_year_start' => $search_year_start,
+			'search_year_end' => $search_year_end,
 		);
 		// echo "<pre>";
 		// print_r($data['content_data']);
@@ -133,8 +155,28 @@ class Report_five_years extends CI_Controller
 	public function export($type = '')
 	{
 		$cond = $this->search_form(array('project_name'));
+
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
+		$search_year_start = date('Y');
+		$search_year_end = date('Y')+4;
+		if(isset($_POST['search_year_start']) &&  isset($_POST['search_year_end'])){
+			$search_year_start = $_POST['search_year_start'];
+			$search_year_end = $_POST['search_year_end'];
+			$con = "year BETWEEN '{$search_year_start}' AND '{$search_year_end}'";
+			array_push($cond,$con);
+
+		}else if(isset($_POST['search_year_start'])){
+			$search_year_start = $_POST['search_year_start'];
+			$con = "year >= '{$search_year_start}'";
+			array_push($cond,$con);
+		}else if(isset($_POST['search_year_end'])){
+			$search_year_end = $_POST['search_year_end'];
+			$con = "year <= '{$search_year_end}'";
+			array_push($cond,$con);
+		}else{
+
+		}
 		$count_rows = $this->Activities_model->countActivities($cond);
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);
@@ -174,6 +216,9 @@ class Report_five_years extends CI_Controller
 			'result_data' => $result_data,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
+			'year_list' => $this->Commons_model->getYearList(),
+			'search_year_start' => $search_year_start,
+			'search_year_end' => $search_year_end,
 		);
 		if($type == 'pdf'){
 			$pdfFilePath = "รายงานโครงการ5ปี.pdf";

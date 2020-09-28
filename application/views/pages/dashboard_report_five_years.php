@@ -1,4 +1,4 @@
-<?php $this->load->view("template/search"); ?>
+<?php $this->load->view("template/search_year"); ?>
 <div class="row">
 	<div class="col-md-12 text-right">
 		<a href="<?php echo base_url("report_five_years/export/pdf"); ?>"  class="table-link" title="พิมพ์ PDF" target="_blank">
@@ -23,92 +23,135 @@
 	<table role="grid" id="table-example"
 		   class="table table-bordered table-hover dataTable no-footer">
 		<thead>
-			<tr role="row">
-				<th class="text-center start_no" width="5%">ลำดับ</th>
-				<th class="text-center" width="40%">ชื่อโครงการ</th>
-				<th class="text-center" width="10%">ปีงบประมาณ</th>
-				<th class="text-center" width="10%">น้ำหนักโครงการ</th>
-				<!-- <th class="text-center" width="15%">เป้าหมายปี <?php //echo $year; ?></th>
-				<th class="text-center" width="15%" >ผลการประเมิน</th>
-				<th class="text-center" width="15%" >ร้อยละความสำเร็จ</th> -->
-				<?php
-					// if($year_show){
-						for($i = 0;$year_start+$i<=$year_end;$i++){
+		<tr role="row" class="d-flex">
+			<th class="text-center start_no " width="70px" >ลำดับ</th>
+			<th class="text-center " width="250px"  >ชื่อโครงการ</th>
+			<th class="text-center" width="100px"  >ปีงบประมาณ</th>
+			<th class="text-center" width="100px"  >น้ำหนักโครงการ</th>
+			<?php
+			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+				?>
+				<th class="text-center" width="100px"  >เป้าหมายปี <?php echo $search_year_start+$i+543; ?></th>
+				<th class="text-center" width="100px"  >ผลการประเมิน</th>
+				<th class="text-center" width="100px"  >ร้อยละความสำเร็จ</th>
+			<?php } ?>
+		</tr>
+		</thead>
+		<tbody>
+		<?php
+		$no = 1;
+		if (isset($project_list) && !empty($project_list)) {
+			foreach ($project_list as $key => $data) {
+				?>
+				<tr class="odd" role="row">
+					<td class="text-center">
+						<?php
+						echo number_format($no + $key, 0);
+						?>
+					</td>
+					<td class="text-left">
+						<?php echo $data->project_name; ?>
+					</td>
+					<td class="text-left" >
+						<?php
+						if($data->year_start == $data->year_end){
+							echo $data->year_start+543;
+						}else{
+							$year_start_show = $data->year_start+543;
+							$year_end_show = $data->year_end+543;
+							echo "$year_start_show - $year_end_show" ;
+						}
+						?>
+					</td>
+					<td class="text-right" >
+						<?php echo $data->weight; ?>
+					</td>
+					<?php
+						$weight = $data->weight;
+						$weight_total = 0;
+						$point_total = 0;
+						for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+							$target = isset($target_data[$data->id][$search_year_start+$i])?number_format($target_data[$data->id][$search_year_start+$i],2):'';
+							$result = isset($result_data[$data->id][$search_year_start+$i])?number_format($result_data[$data->id][$search_year_start+$i],2):'';
+							$weight_per_year = '';
+							if($weight != '' && $target != ''){
+								$weight_per_year = number_format((($weight * $target)/100),2);
+							}
+							$evaluate_result = '';
+							$weight_actual = '';
+							$weight_diff = '';
+							$result_diff = '';
+							if($target != '' && $result != ''){
+								if($target != 0){
+									$weight_actual = number_format((($result * $weight_per_year)/$target),2);
+								}
+								$result_diff = number_format(($target - $result),2);
+							}
+
+							if($weight_per_year != '' && $weight_actual != ''){
+								$weight_diff = number_format(($weight_per_year - $weight_actual),2);
+							}
 							?>
-							<th class="text-center" width="125px">เป้าหมายปี <?php  echo $year_start+$i+543; ?></th>
-							<th class="text-center" width="125px" >ผลการประเมิน</th>
-							<th class="text-center" width="125px" >ร้อยละความสำเร็จ</th>
+							<td class="text-center"><?php echo $target; ?></td>
+							<?php
+							if($i == 0){
+								$evaluate_result = number_format((($result*100)/$target),2);
+								$weight_total += $weight_diff;
+								$point_total += $result_diff;
+								?>
+								<?php
+							}else{
+								if($target == ''){
+									$weight_total = '';
+								}else{
+									$weight_total += $weight_per_year;
+								}
+
+								if($result == ''){
+									$point_total = '';
+								}else{
+									$point_total += $target;
+									$weight_actual = number_format((($result * $weight_total)/$point_total),2);
+									$evaluate_result = number_format((($result*100)/$point_total),2);
+									$weight_diff = $weight_total - $weight_actual;
+									$result_diff = $point_total - $result;
+								}
+								?>
+								<?php
+
+								$weight_total = $weight_diff;
+								$point_total = $result_diff;
+							}
+							?>
+
+
+							<td class="text-center"><?php echo $result; ?></td>
+							<td class="text-center"><?php echo $evaluate_result; ?></td>
 							<?php
 						}
-					// }
-				?>
-			</tr>
-			</thead>
-			<tbody>
-			<?php
-			if (isset($project_list) && !empty($project_list)) {
-				foreach ($project_list as $key => $project) {
 					?>
-					<tr class="odd" role="row">
-						<td class="text-center">
-							<?php
-							echo $key+1;
-							?>
-						</td>
-						<td class="text-left">
-							<?php echo $project->project_name ?>
-						</td>
-						<td class="text-left">
-							<?php
-							if($project->year_start == $project->year_end){
-								echo $project->year_start+543;
-							}else{
-								$year_start_show = $project->year_start+543;
-								$year_end_show = $project->year_end+543;
-								echo "$year_start_show - $year_end_show" ;
-							}
-							?>
-						</td>
-						<td class="text-right">
-							<?php echo $project->weight ; ?>
-						</td>
-						<?php
-							// if($year_show){
-								$arr_temp = array();
-								for($i = 0;$year_start+$i<=$year_end;$i++){
-									$target = isset($target_data[$project->id][$year_start+$i])?number_format($target_data[$project->id][$year_start+$i],2):'' ;
-									$result = isset($result_data[$project->id][$year_start+$i])?number_format($result_data[$project->id][$year_start+$i],2):'' ;
-									$evaluate_result = '';
-									if($target != '' && $result != ''){
-										if($project->year == $year_start+$i){
-											$evaluate_result = ($result*100)/$target;
-											$arr_temp[$year_start+$i]  = $target - $result;
-										}else{
-											$arr_temp[$year_start+$i] = ($target + $arr_temp[$year_start+$i-1]);
-											$point_before = $target_data[$project->id][$year_start+$i] + ($target_data[$project->id][$year_start+$i-1] - $result_data[$project->id][$year_start+$i-1])  ;
-											$evaluate_result = number_format((($result*100)/$point_before),2);
-										}
 
-									}
-									?>
-									<td class="text-right" ><?php echo $target ?></td>
-									<td class="text-right" ><?php echo $result ?></td>
-									<td class="text-right" ><?php echo $evaluate_result; ?></td>
-									<?php
-								// }
-							}
-						?>
-					</tr>
-					<?php
-				}
+				</tr>
+				<?php
 			}
-			?>
-			</tbody>
+		}
+		?>
+		</tbody>
 	</table>
 </div>
 <div class="pagination pull-right">
 	<?php //$this->load->view("template/pagination"); ?>
 </div>
+<style>
+table{
+  margin: 0 auto;
+  width: 100%;
+  clear: both;
+  border-collapse: collapse;
+  table-layout: fixed;
+  word-wrap:break-word;
+}
+</style>
 <script type="text/javascript">
     function delete_criteria_assessment(user_id) {
         swal({

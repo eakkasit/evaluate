@@ -110,7 +110,9 @@ class Activities_model extends CI_Model
 		$this->db->set('date_end', $data['date_end']);
 		$this->db->set('detail', $data['detail']);
 		$this->db->set('status', $data['status']);
-
+		$this->db->set('year_start', $data['year_start']);
+		$this->db->set('year_end', $data['year_end']);
+		$this->db->set('weight', $data['weight']);
 		$this->db->set('create_dt', 'NOW()', false);
 		$this->db->insert('project');
 		return $this->db->insert_id();
@@ -124,8 +126,11 @@ class Activities_model extends CI_Model
 		$this->db->set('date_end', $data['date_end']);
 		$this->db->set('detail', $data['detail']);
 		$this->db->set('status', $data['status']);
+		$this->db->set('year_start', $data['year_start']);
+		$this->db->set('year_end', $data['year_end']);
+		$this->db->set('weight', $data['weight']);
 		$this->db->where('id', $project_id);
-		$this->db->update('project', $update);
+		$this->db->update('project');
 		return $project_id;
 	}
 

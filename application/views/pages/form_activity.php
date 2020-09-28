@@ -70,6 +70,42 @@ if (isset($data->id) && $data->id != '') {
 							<label class="col-md-5 text-danger"><?php echo form_error("date_end"); ?></label>
 						</div>
 						<div class="row">
+							<div class="col-md-5">
+								<label for="stext">ปีที่เริ่มโครงการ</label>
+							</div>
+							<div class="col-md-2"></div>
+							<div class="col-md-5">
+								<label for="stext">ปีที่สิ้นสุดโครงการ</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+								<select class="form-control" name="year_start">
+									<?php foreach ($year_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->year_start) && $data->year_start == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="col-md-2 text-center">
+								<span> - </span>
+							</div>
+							<div class="col-md-5">
+								<select class="form-control" name="year_end">
+									<?php foreach ($year_list as $key => $value) { ?>
+										<option
+											value="<?php echo $key; ?>"<?php if (isset($data->year_end) && $data->year_end == $key) {
+											echo 'selected="selected"';
+										} ?>><?php echo $value; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<!-- <label class="col-md-7 text-danger"><?php //echo form_error("date_start"); ?></label>
+							<label class="col-md-5 text-danger"><?php //echo form_error("date_end"); ?></label> -->
+						</div>
+						<div class="row">
 							<div class="col-md-12">
 								<label for="stext">สถานะโครงการ / กิจกรรม</label>
 							</div>
@@ -100,8 +136,16 @@ if (isset($data->id) && $data->id != '') {
 							<label
 								class="col-md-12 text-danger"><?php echo form_error("detail"); ?></label>
 						</div>
-
-					</div>
+						<div class="row">
+							<div class="col-md-12">
+								<label for="stext">ค่าน้ำหนักโครงการ</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+									<input type="number" name="weight" id="weight" class="form-control" value="<?php if (isset($data->weight)) { echo $data->weight;	} ?>" placeholder="ค่าน้ำหนักโครงการ">
+							</div>
+						</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">

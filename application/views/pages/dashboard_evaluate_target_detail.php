@@ -59,7 +59,7 @@
 					<td class="text-left">
 						<?php echo $project_data[0]->detail; ?>
 					</td>
-					<td class="text-right">
+					<td class="text-center">
 						<?php echo $data->target; ?>
 					</td>
 					<td class="text-center white">

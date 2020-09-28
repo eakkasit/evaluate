@@ -47,7 +47,7 @@
 							<label for="stext">ปี :</label>
 						</div>
 						<div class="col-md-8">
-							<label for="stext"><?php echo $data->year; ?></label>
+							<label for="stext"><?php echo $data->year+543; ?></label>
 						</div>
 					</div>
 					<div class="row">
@@ -81,6 +81,14 @@
 						</div>
 						<div class="col-md-8">
 							<label for="stext"><?php echo $data->detail; ?></label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 text-right">
+							<label for="stext">ค่าน้ำหนักโครงการ :</label>
+						</div>
+						<div class="col-md-8">
+							<label for="stext"><?php echo $data->weight; ?></label>
 						</div>
 					</div>
 				</div>
