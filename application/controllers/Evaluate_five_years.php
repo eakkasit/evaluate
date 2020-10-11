@@ -88,19 +88,180 @@ class Evaluate_five_years extends CI_Controller
 			}
 		}
 
+		$data = $this->Activities_model->getActivities($cond, array('year'=>'DESC'));
+		$data_point = $this->calculateScore($data,$target_data,$result_data,$search_year_start,$search_year_end);
+
+
+
+
+		// $weight_result = array();
+		// $point_result = array();
+
+		// $weight_diff = array(); //น้ำหนักส่วนต่าง
+		// $point_diff = array(); // คะแนนส่วนต่าง
+		// $result = array(); // ร้อยละความสำเร็จ
+		//
+		// $point_new = array(); // คะแนนเต็มใหม่
+		// $weight_total = array();//น้ำหนักรวม
+		// echo "<pre>";
+		// print_r($data_point);
+		// echo "</pre>";
+		// die();
+
+
+
 		$data['content_data'] = array(
-			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC')),
+			'datas'=>$data,
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
 			'year_list' => $this->Commons_model->getYearList(),
 			'search_year_start' => $search_year_start,
 			'search_year_end' => $search_year_end,
 			'target_data' => $target_data,
-			'result_data' => $result_data
+			'result_data' => $result_data,
+			'data_detail' => $data_point
 		);
 
 		$data['content_view'] = 'pages/dashboard_evaluate_five_year';
 		$this->load->view($this->theme, $data);
+	}
+
+	private function calculateScore($data,$target_data,$result_data,$search_year_start,$search_year_end)
+	{
+		$target = array(); //เป้าหมายร้อยล่ะ
+		$score = array(); // คะแนนที่ทำได้
+		// $weight = array(); // น้ำหนัก
+		$point = array(); // คะแนนเต็ม
+		$weight_per_year = array(); //น้ำหนักรายปี
+		$weight_result = array(); // น้ำหนักที่ได้
+		$point_result = array();
+		$weight_diff = array(); //น้ำหนักส่วนต่าง
+		$point_diff = array(); // คะแนนส่วนต่าง
+		$result = array(); // ร้อยละความสำเร็จ
+
+		$point_new = array(); // คะแนนเต็มใหม่
+		$weight_total = array();//น้ำหนักรวม
+		if(!empty($data)){
+
+			foreach ($data as $activity_key => $activity_data) {
+				$weight_all = $activity_data->weight;
+
+				for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+
+					// หาค่าเป้าหมายร้อยละ
+					if(isset($target_data[$activity_data->id][$search_year_start+$i])){
+						$target[$activity_data->id][$search_year_start+$i] = $target_data[$activity_data->id][$search_year_start+$i];
+						// คะแนนเต็ม
+						$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
+					}else{
+						$target[$activity_data->id][$search_year_start+$i] = '';
+						// คะแนนเต็ม
+						$point[$activity_data->id][$search_year_start+$i] = '';
+					}
+
+					// หาค่าคะแนนที่ได้
+					if(isset($result_data[$activity_data->id][$search_year_start+$i])){
+						$score[$activity_data->id][$search_year_start+$i] = $result_data[$activity_data->id][$search_year_start+$i];
+					}else{
+						$score[$activity_data->id][$search_year_start+$i] = '';
+					}
+
+					// หาค่าน้ำหนักรายปี
+					if($target[$activity_data->id][$search_year_start+$i] != 0 && $weight_all != 0){
+						$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
+					}else{
+						$weight_per_year[$activity_data->id][$search_year_start+$i] = '';
+					}
+
+
+
+					if($search_year_start+$i == $activity_data->year_start ){
+						// น้ำหนักที่ได้
+						if($point[$activity_data->id][$search_year_start+$i] !='' && $point[$activity_data->id][$search_year_start+$i] != 0){
+							$weight_result[$activity_data->id][$search_year_start+$i] = ($score[$activity_data->id][$search_year_start+$i] * $weight_per_year[$activity_data->id][$search_year_start+$i]) / $point[$activity_data->id][$search_year_start+$i];
+
+							$result[$activity_data->id][$search_year_start+$i] = ($score[$activity_data->id][$search_year_start+$i] * 100) / $point[$activity_data->id][$search_year_start+$i];
+						}else{
+							$weight_result[$activity_data->id][$search_year_start+$i] = '';
+							$result[$activity_data->id][$search_year_start+$i] = '';
+						}
+
+						// ส่วนต่างน้ำหนัก
+						$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_per_year[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
+
+						// ส่วนต่างคะแนน
+						$point_diff[$activity_data->id][$search_year_start+$i] = $point[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+
+
+
+					}else if(($search_year_start+$i > $activity_data->year_start) && ($search_year_start+$i <= $activity_data->year_end) && ($activity_data->year_start != $activity_data->year_end)){
+						// echo "<pre>";
+						// echo $search_year_start+$i;
+						// echo $search_year_start+$i-1;
+						// print_r($weight_diff);
+						// น้ำหนักรวม
+						$weight_total[$activity_data->id][$search_year_start+$i] = $weight_per_year[$activity_data->id][$search_year_start+$i] + $weight_diff[$activity_data->id][$search_year_start+$i-1];
+						// หาคะแนนเต็มใหม่
+						$point_new[$activity_data->id][$search_year_start+$i] = $point[$activity_data->id][$search_year_start+$i] + $point_diff[$activity_data->id][$search_year_start+$i-1];
+
+						// น้ำหนักที่ได้
+						if($point_new[$activity_data->id][$search_year_start+$i] !='' && $point_new[$activity_data->id][$search_year_start+$i] != 0){
+							$weight_result[$activity_data->id][$search_year_start+$i] = ($score[$activity_data->id][$search_year_start+$i] * $weight_total[$activity_data->id][$search_year_start+$i]) / $point_new[$activity_data->id][$search_year_start+$i];
+
+							$result[$activity_data->id][$search_year_start+$i] = ($score[$activity_data->id][$search_year_start+$i] * 100) / $point_new[$activity_data->id][$search_year_start+$i];
+						}else{
+							$weight_result[$activity_data->id][$search_year_start+$i] = '';
+							$result[$activity_data->id][$search_year_start+$i] = '';
+						}
+
+						// ส่วนต่างน้ำหนัก
+						$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_total[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
+
+						// ส่วนต่างคะแนน
+						$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+
+					}else{
+						if($weight_diff[$activity_data->id][$search_year_start+$i-1] != 0 && $weight_diff[$activity_data->id][$search_year_start+$i-1] != ''){
+							$weight_total[$activity_data->id][$search_year_start+$i] = $weight_diff[$activity_data->id][$search_year_start+$i-1];
+							$weight_result[$activity_data->id][$search_year_start+$i] = $weight_diff[$activity_data->id][$search_year_start+$i-1];
+							$point_new[$activity_data->id][$search_year_start+$i] = $point_diff[$activity_data->id][$search_year_start+$i-1];
+							$target[$activity_data->id][$search_year_start+$i] = 0;
+							$weight_per_year[$activity_data->id][$search_year_start+$i] = 0;
+							$point[$activity_data->id][$search_year_start+$i] = 0;
+							$weight_diff[$activity_data->id][$search_year_start+$i] = 0;
+							$point_diff[$activity_data->id][$search_year_start+$i] = 0;
+							$result[$activity_data->id][$search_year_start+$i] = 100;
+							$score[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i];
+						}else{
+							$weight_total[$activity_data->id][$search_year_start+$i] = '';
+							$point_new[$activity_data->id][$search_year_start+$i] = '';
+							$weight_diff[$activity_data->id][$search_year_start+$i] = '';
+							$point_diff[$activity_data->id][$search_year_start+$i] = '';
+						}
+
+
+
+
+					}
+
+
+				}
+
+			}
+		}
+		$result_temp = array();
+		$result_temp['target'] = $target;
+		$result_temp['score'] = $score;
+		// $result_temp['weight'] = $weight;
+		$result_temp['point'] = $point;
+		$result_temp['weight_per_year'] = $weight_per_year;
+		$result_temp['weight_result'] = $weight_result;
+		$result_temp['weight_diff'] = $weight_diff;
+		$result_temp['point_diff'] = $point_diff;
+		$result_temp['result'] = $result;
+		$result_temp['point_new'] = $point_new;
+		$result_temp['weight_total'] = $weight_total;
+		return $result_temp;
 	}
 
 	public function view_evaluate_five_year($id = null)

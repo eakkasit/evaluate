@@ -35,6 +35,7 @@
 				<th class="text-center" width="100px"  >ผลการประเมิน</th>
 				<th class="text-center" width="100px"  >ร้อยละความสำเร็จ</th>
 			<?php } ?>
+			<th class="text-center" width="75px"  >ร้อยละความสำเร็จทั้งโครงการ</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -64,73 +65,62 @@
 						?>
 					</td>
 					<td class="text-right" >
-						<?php echo $data->weight; ?>
+						<span id="text_weight_<?php echo $data->id; ?>">
+							<?php echo $data->weight; ?>
+						</span>
+					</td>
+					<td class="text-center">
+						<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
+							<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
+						</span>
 					</td>
 					<?php
-						$weight = $data->weight;
-						$weight_total = 0;
-						$point_total = 0;
-						for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-							$target = isset($target_data[$data->id][$search_year_start+$i])?number_format($target_data[$data->id][$search_year_start+$i],2):'';
-							$result = isset($result_data[$data->id][$search_year_start+$i])?number_format($result_data[$data->id][$search_year_start+$i],2):'';
-							$weight_per_year = '';
-							if($weight != '' && $target != ''){
-								$weight_per_year = number_format((($weight * $target)/100),2);
-							}
-							$evaluate_result = '';
-							$weight_actual = '';
-							$weight_diff = '';
-							$result_diff = '';
-							if($target != '' && $result != ''){
-								if($target != 0){
-									$weight_actual = number_format((($result * $weight_per_year)/$target),2);
-								}
-								$result_diff = number_format(($target - $result),2);
-							}
+					$result_all = 0;
+					for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+						if(isset($data_detail['score'][$data->id][$search_year_start+$i])){
+							$result_all += $data_detail['score'][$data->id][$search_year_start+$i];
+						}
 
-							if($weight_per_year != '' && $weight_actual != ''){
-								$weight_diff = number_format(($weight_per_year - $weight_actual),2);
-							}
+						if($i == 0){
 							?>
-							<td class="text-center"><?php echo $target; ?></td>
+							<td class="text-center">
+								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
+									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+							</td>
+
+							<td class="text-center">
+								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
+									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+
+							</td>
 							<?php
-							if($i == 0){
-								$evaluate_result = number_format((($result*100)/$target),2);
-								$weight_total += $weight_diff;
-								$point_total += $result_diff;
-								?>
-								<?php
-							}else{
-								if($target == ''){
-									$weight_total = '';
-								}else{
-									$weight_total += $weight_per_year;
-								}
-
-								if($result == ''){
-									$point_total = '';
-								}else{
-									$point_total += $target;
-									$weight_actual = number_format((($result * $weight_total)/$point_total),2);
-									$evaluate_result = number_format((($result*100)/$point_total),2);
-									$weight_diff = $weight_total - $weight_actual;
-									$result_diff = $point_total - $result;
-								}
-								?>
-								<?php
-
-								$weight_total = $weight_diff;
-								$point_total = $result_diff;
-							}
+						}else{
 							?>
+							<td class="text-center">
+								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
+									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+							</td>
 
-
-							<td class="text-center"><?php echo $result; ?></td>
-							<td class="text-center"><?php echo $evaluate_result; ?></td>
+							<td class="text-center">
+								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
+									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+							</td>
+							<td class="text-center">
+								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
+									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != ''?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
+								</span>
+							</td>
 							<?php
 						}
+					}
 					?>
-
+					<td class="text_center">
+						<span id="result_all_<?php echo $data->id; ?>"><?php echo $result_all ?></span>
+					</td>
 				</tr>
 				<?php
 			}

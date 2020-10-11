@@ -15,5 +15,6 @@ class m_pdf
     {
         $this->param = $param;
         $this->pdf = new mPDF($this->param);
+        // echo "string".$this->param ;
     }
 }

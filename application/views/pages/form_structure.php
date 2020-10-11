@@ -35,7 +35,7 @@ if (isset($data->structure_id) && $data->structure_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<label for="stext">ปี</label>
+								<label for="stext">ปีงบประมาณ</label>
 							</div>
 						</div>
 						<div class="row">
