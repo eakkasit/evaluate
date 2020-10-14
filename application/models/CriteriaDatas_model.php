@@ -127,9 +127,20 @@ class CriteriaDatas_model extends CI_Model
 		$this->db->set('project_id', $data['project_id']);
 		// $this->db->set('task_id', $data['task_id']);
 		$this->db->set('year', $data['year']);
-		$this->db->set('project_result', $data['project_result']);
-		$this->db->set('product', $data['product']);
-		$this->db->set('result', $data['result']);
+		// $this->db->set('project_result', $data['project_result']);
+		// $this->db->set('product', $data['product']);
+		// $this->db->set('result', $data['result']);
+		if(isset($data['project_result'])){
+			$this->db->set('project_result', $data['project_result']);
+		}
+
+		if(isset($data['product'])){
+			$this->db->set('product', $data['product']);
+		}
+
+		if(isset($data['result'])){
+			$this->db->set('result', $data['result']);
+		}
 		$this->db->set('assessment_results', $data['assessment_results']);
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('data_result');
@@ -203,9 +214,18 @@ class CriteriaDatas_model extends CI_Model
 		$this->db->set('project_id', $data['project_id']);
 		// $this->db->set('task_id', $data['task_id']);
 		$this->db->set('year', $data['year']);
-		$this->db->set('project_result', $data['project_result']);
-		$this->db->set('product', $data['product']);
-		$this->db->set('result', $data['result']);
+		if(isset($data['project_result'])){
+			$this->db->set('project_result', $data['project_result']);
+		}
+
+		if(isset($data['product'])){
+			$this->db->set('product', $data['product']);
+		}
+
+		if(isset($data['result'])){
+			$this->db->set('result', $data['result']);
+		}
+
 		$this->db->set('assessment_results', $data['assessment_results']);
 		$this->db->where('id', $id);
 		$this->db->update('data_result');
@@ -215,10 +235,21 @@ class CriteriaDatas_model extends CI_Model
 
 	public function replaceResult($data=array())
 	{
-		$this->db->set('assessment_results', $data['result']);
+		// $this->db->set('assessment_results', $data['result']);
+		// $this->db->where('project_id',$data['project_id']);
+		// $this->db->where('year',$data['year']);
+		// $this->db->update('data_result');
+		$this->db->select('*');
 		$this->db->where('project_id',$data['project_id']);
 		$this->db->where('year',$data['year']);
-		$this->db->update('data_result');
+		$this->db->from('data_result');
+		$query = $this->db->get();
+		$data['assessment_results'] = $data['result'];
+		if($query->num_rows() > 0){
+			$this->updateResult($query->row('id'),$data);
+		}else{
+			$this->insertResult($data);
+		}
 	}
 
 	public function getResult($cond = array(), $order = array(), $limit = null, $start = 0)
@@ -394,10 +425,16 @@ class CriteriaDatas_model extends CI_Model
 
 		public function replaceTarget($data=array())
 		{
-			$this->db->set('target', $data['target']);
+			$this->db->select('*');
 			$this->db->where('project_id',$data['project_id']);
 			$this->db->where('year',$data['year']);
-			$this->db->update('data_target');
+			$this->db->from('data_target');
+			$query = $this->db->get();
+			if($query->num_rows() > 0){
+				$this->updateTarget($query->row('id'),$data);
+			}else{
+				$this->insertTarget($data);
+			}
 		}
 
 		public function deleteTarget($id = null)
