@@ -36,11 +36,11 @@
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
 				if($i == 0){
 					?>
-					<th class="text-center" width="225px"  colspan="3">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
+					<th class="text-center" width="260px"  colspan="4">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
 					<?php
 				}else{
 					?>
-					<th class="text-center" width="375px"  colspan="5">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
+					<th class="text-center" width="410px"  colspan="6">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
 					<?php
 				}
 				?>
@@ -57,6 +57,7 @@
 				for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
 					?>
 					<th class="text-center">*เป้าหมายร้อยละ</th>
+					<th class="text-center">เป้าหมายร้อยละ(รวม)</th>
 					<th class="text-center">น้ำหนักรายปี</th>
 
 					<?php
@@ -97,7 +98,7 @@
 					<td class="text-left">
 						<?php echo $data->project_name; ?>
 					</td>
-					<td class="text-left" >
+					<td class="text-center" >
 						<?php
 						if($data->year_start == $data->year_end){
 							echo $data->year_start+543;
@@ -108,7 +109,7 @@
 						}
 						?>
 					</td>
-					<td class="text-right" >
+					<td class="text-center" >
 						<span id="text_weight_<?php echo $data->id; ?>">
 							<?php echo $data->weight; ?>
 						</span>
@@ -130,7 +131,12 @@
 								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" id="target_<?php echo "{$data->id}_".$i; ?>" class="form-control save_data" <?php //echo $disable; ?> onchange="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" id="target_<?php echo "{$data->id}_".$i; ?>" class="form-control save_data" <?php //echo $disable; ?> oninput="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+							</td>
+							<td class="text-center">
+								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
+									<?php echo isset($data_detail['target_total'][$data->id][$search_year_start+$i])?$data_detail['target_total'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
 							</td>
 							<td class="text-center">
 								<span id="weight_per_year_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -151,7 +157,7 @@
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> oninput="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -175,7 +181,12 @@
 								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" class="form-control save_data" id="target_<?php echo "{$data->id}_".$i ; ?>" <?php //echo $disable; ?> onchange="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" class="form-control save_data" id="target_<?php echo "{$data->id}_".$i ; ?>" <?php //echo $disable; ?> oninput="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+							</td>
+							<td class="text-center">
+								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
+									<?php echo isset($data_detail['target_total'][$data->id][$search_year_start+$i])?$data_detail['target_total'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
 							</td>
 							<td class="text-center">
 								<span id="weight_per_year_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -206,7 +217,7 @@
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> oninput="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -296,6 +307,7 @@ table{
 			var year_start = $('#year_start_'+profile_id).val();
 			var year_end = $('#year_end_'+profile_id).val();
 			var year_search = $('#year_search_'+profile_id).val();
+			var index_last_year = '';
 			$('input[id^=target_'+profile_id+']').each(function(index,value){
 				var target_text = $(this).val();
 				var target = $(this).val();
@@ -353,6 +365,7 @@ table{
 						result = (result*1).toFixed(2);
 					}
 					$('#target_text_'+profile_id+'_'+index).html(target_text);
+					$('#target_total_text_'+profile_id+'_'+index).html(target_total);
 					$('#weight_per_year_'+profile_id+'_'+index).html(weight_per_year);
 					$('#point_'+profile_id+'_'+index).html(point);
 					$('#weight_result_'+profile_id+'_'+index).html(weight_result);
@@ -360,19 +373,83 @@ table{
 					$('#point_diff_'+profile_id+'_'+index).html(point_diff);
 					$('#result_'+profile_id+'_'+index).html(result);
 				}else{
+					// console.log(target_total);
 					// if(target == '' && ((100 - target_total) > 0) && ){
 					// 	target = (100 - target_total);
 					// 	target_total += (target * 1);
 					// }
 					// console.log(year_search);
-					if(((year_search*1)+index) == year_end && (position != index)){
-						// console.log('ss');
-						var temp_last = (100 - (target_total - target))
-						if(temp_last > 0){
-							target = temp_last ;
+					if(((year_search*1)+index) == year_end && (position < index)){
+						// console.log('ssa');
+						if(target_total > 100){
+							alert('เป้าหมายร้อยละไม่ถูกต้อง')
+							$('#target_text_'+profile_id+'_'+(position)).html($(ele).val()-1);
+							$('#target_'+profile_id+'_'+(position)).val($(ele).val()-1);
+							console.log('target',$(ele).val());
 						}
-					}
-					weight_per_year = ((weight * target)/100).toFixed(2);
+
+						if($('#target_'+profile_id+'_'+(index+1)).val() != '' && typeof $('#target_'+profile_id+'_'+(index+1)).val() !== undefined){
+							var temp_last = (100 - target_total )
+							// if(temp_last > 0){
+								// target = temp_last ;
+								console.log('temp_last',temp_last);
+								if(temp_last >= 0){
+									$('#target_text_'+profile_id+'_'+(index+1)).html(temp_last);
+									$('#target_'+profile_id+'_'+(index+1)).val(temp_last);
+								}else{
+									$('#target_text_'+profile_id+'_'+(index+1)).html('');
+									$('#target_'+profile_id+'_'+(index+1)).val('');
+								}
+
+							// }
+
+						}else{
+							var temp_last = (100 - (target_total - target))
+							if(temp_last > 0){
+								target = temp_last ;
+							}
+							console.log('a');
+						}
+					}else if(((year_search*1)+index) == year_end && (position == index)){
+						index_last_year = index
+						if(target_total > 100 ){
+							alert('เป้าหมายร้อยละไม่ถูกต้อง')
+							target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+						}else{
+							var amount_target = (100 - target_total)
+							$('#target_text_'+profile_id+'_'+(index+1)).html(amount_target);
+							$('#target_'+profile_id+'_'+(index+1)).val(amount_target);
+							// console.log(amount_target);
+						}
+						// if(position == index){
+						// 	console.log('a');
+						// }else{
+						// 	console.log('b');
+						// }
+
+						}else if(((year_search*1)+index) > year_end && (position == index)){
+							var check_last_year = (year_end-year_search);
+
+							// console.log('index_last_year',(year_end-year_search));
+							// console.log('year', ((year_search*1)+index)-year_end);
+							// console.log('index',index);
+							if((index - check_last_year) > 1){
+								// console.log('gd');
+								alert('เป้าหมายร้อยละไม่ถูกต้อง กรุณาขยายระยะเวลาโครงการ / กิจจกรรม');
+								target = ''
+							}else{
+								if(target_total > 100){
+									alert('เป้าหมายร้อยละไม่ถูกต้อง')
+									target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+								}
+								// console.log('s');
+							}
+						// console.log('target_total',target_total);
+						// console.log('da');
+						}else{
+							// console.log('ss');
+						}
+					weight_per_year = ((weight * target)/100);
 					point = target;
 					point_new = parseFloat(point) + parseFloat(target_data[index-1].point_diff)
 					weight_total = parseFloat(weight_per_year) + parseFloat(target_data[index-1].weight_diff)
@@ -386,10 +463,11 @@ table{
 					weight_diff =  (weight_total - weight_result);
 					point_diff = (point_new - score);
 
-					if(isNaN(weight_per_year)){
-						weight_per_year = (weight_per_year*1).toFixed(2)
-					}else{
+					if(isNaN(weight_per_year) || weight_per_year == 0){
 						weight_per_year = ''
+					}else{
+						// console.log('weight_per_year',weight_per_year);
+						weight_per_year = (weight_per_year*1).toFixed(2)
 					}
 					if(isNaN(weight_total)){
 						weight_total = ''
@@ -429,8 +507,13 @@ table{
 						}
 					}
 
+					if(target == ''){
+						target_total = ''
+					}
+
 					$('#target_text_'+profile_id+'_'+index).html(target);
 					$('#target_'+profile_id+'_'+index).val(target);
+					$('#target_total_text_'+profile_id+'_'+index).html(target_total);
 					$('#weight_per_year_'+profile_id+'_'+index).html(weight_per_year);
 					$('#point_'+profile_id+'_'+index).html(point);
 					$('#weight_total_'+profile_id+'_'+index).html(weight_total);

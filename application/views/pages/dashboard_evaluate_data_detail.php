@@ -57,7 +57,7 @@
 						<td class="text-left">
 							<?php echo $project_data[0]->project_name; ?>
 						</td>
-						<td class="text-left">
+						<td class="text-center">
 							<?php echo $data->year+543; ?>
 						</td>
 						<td class="text-left"> -
@@ -72,10 +72,10 @@
 						<td class="text-left">
 							<?php echo word_limiter($data->product,10); ?>
 						</td>
-						<td class="text-left">
+						<td class="text-center">
 							<?php echo word_limiter($data->result,10); ?>
 						</td>
-						<td class="text-right">
+						<td class="text-center">
 							<?php echo word_limiter($data->assessment_results,10); ?>
 						</td>
 						<td  class="text-left">

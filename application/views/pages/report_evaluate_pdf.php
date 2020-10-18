@@ -44,7 +44,7 @@ table#table_evaluate td {
   			</tr>
         <?php
   			$no = 1;
-  			
+
   			if (isset($datas) && !empty($datas)) {
   				foreach ($datas as $key => $data) {
   					?>
@@ -57,7 +57,7 @@ table#table_evaluate td {
   						<td class="text-left">
   							<?php echo $project_data[0]->project_name; ?>
   						</td>
-  						<td class="text-left">
+  						<td class="text-center">
   							<?php echo $data->year+543; ?>
   						</td>
   						<td class="text-left"> -
@@ -72,10 +72,10 @@ table#table_evaluate td {
   						<td class="text-left">
   							<?php echo $data->product; ?>
   						</td>
-  						<td class="text-left">
+  						<td class="text-center">
   							<?php echo $data->result; ?>
   						</td>
-  						<td class="text-right">
+  						<td class="text-center">
   							<?php echo $data->assessment_results; ?>
   						</td>
 

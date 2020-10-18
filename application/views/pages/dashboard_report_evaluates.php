@@ -47,7 +47,7 @@
 					<td class="text-left">
 						<?php echo $data->project_name; ?>
 					</td>
-					<td class="text-left">
+					<td class="text-center">
 						<?php echo $data->year+543; ?>
 					</td>
 					<td class="text-left">

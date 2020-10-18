@@ -119,7 +119,8 @@ class Criteria extends CI_Controller
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model,
-			'activity' => $this->Activities_model->getActivityLists(array('status'=>'2')),
+			// 'activity' => $this->Activities_model->getActivityLists(array('status'=>'2')),
+			'activity' => $this->Activities_model->getActivityLists(array('status >='=>'2')), // sbs
 			'result' => $result
 		);
 		$data['content_view'] = 'pages/form_criteria';

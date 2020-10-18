@@ -53,7 +53,7 @@
 					<td class="text-left">
 						<?php echo $data->project_name; ?>
 					</td>
-					<td class="text-left" >
+					<td class="text-center" >
 						<?php
 						if($data->year_start == $data->year_end){
 							echo $data->year_start+543;
@@ -64,16 +64,12 @@
 						}
 						?>
 					</td>
-					<td class="text-right" >
+					<td class="text-center" >
 						<span id="text_weight_<?php echo $data->id; ?>">
 							<?php echo $data->weight; ?>
 						</span>
 					</td>
-					<td class="text-center">
-						<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
-							<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
-						</span>
-					</td>
+
 					<?php
 					$result_all = 0;
 					for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
@@ -94,6 +90,11 @@
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 
+							</td>
+							<td class="text-center">
+								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
+									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
+								</span>
 							</td>
 							<?php
 						}else{

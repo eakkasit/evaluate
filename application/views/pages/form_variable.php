@@ -131,12 +131,13 @@ if (isset($data->var_id) && $data->var_id != '') {
 							<label 	class="col-md-12 text-danger"><?php echo form_error("var_max_length"); ?></label>
 						</div>
 
-						<div class="row">
+						<!-- sbs hide -->
+						<div class="row hide">
 							<div class="col-md-12">
 								<label for="stext">sql</label>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row hide">
 							<div class="col-md-12">
 								<textarea type="text" name="var_sql" cols="4" rows="5" class="form-control" placeholder="ระบุ"><?php if (isset($data->var_sql)) { echo $data->var_sql;	} ?></textarea>
 							</div>

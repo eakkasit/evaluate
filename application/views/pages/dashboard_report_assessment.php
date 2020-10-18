@@ -28,7 +28,7 @@
 					<td class="text-left">
 						<?php echo $data->structure_name; ?>
 					</td>
-					<td class="text-left">
+					<td class="text-center">
 						<?php echo $data->profile_year+543; ?>
 					</td>
 					<td class="text-center white">
