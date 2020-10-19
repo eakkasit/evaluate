@@ -195,7 +195,7 @@ class Report_five_years extends CI_Controller
 
 						// คะแนนเต็ม
 						$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
-						$target_all += $target[$activity_data->id][$search_year_start+$i];
+						$target_all += ($target[$activity_data->id][$search_year_start+$i]*1);
 					}else{
 						$target[$activity_data->id][$search_year_start+$i] = '';
 						// คะแนนเต็ม
@@ -277,6 +277,7 @@ class Report_five_years extends CI_Controller
 									}else{
 										if($target_all != 0){
 											$target[$activity_data->id][$search_year_start+$i] = 100 - $target_all;
+											$target_all += $target[$activity_data->id][$search_year_start+$i];
 											$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
 											$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
 										}
@@ -284,11 +285,12 @@ class Report_five_years extends CI_Controller
 									}
 							}
 						}
-						if(isset($target_total[$activity_data->id][$search_year_start+$i-1])){
-								$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] + $target_total[$activity_data->id][$search_year_start+$i-1];
-						}else{
-							$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] ;
-						}
+						// if(isset($target_total[$activity_data->id][$search_year_start+$i-1])){
+						// 		$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] + $target_total[$activity_data->id][$search_year_start+$i-1];
+						// }else{
+						// 	$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i]  ;
+						// }
+						$target_total[$activity_data->id][$search_year_start+$i] = $target_all;
 
 						if(!isset($weight_diff[$activity_data->id][$search_year_start+$i-1])){
 							$weight_diff[$activity_data->id][$search_year_start+$i-1] = '';
@@ -327,6 +329,8 @@ class Report_five_years extends CI_Controller
 							$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 							$weight_total[$activity_data->id][$search_year_start+$i] = '';
 							$point_new[$activity_data->id][$search_year_start+$i] = '';
+							$weight_per_year[$activity_data->id][$search_year_start+$i] = '';
+							$weight_result[$activity_data->id][$search_year_start+$i] = '';
 						}
 
 					}
@@ -348,16 +352,23 @@ class Report_five_years extends CI_Controller
 							$target[$activity_data->id][$search_year_start+$i] = '';
 						}else{
 							if($target[$activity_data->id][$search_year_start+$i-1] != ''){
-								$target[$activity_data->id][$search_year_start+$i] = (100 - $target_all);
+
+								// echo "$target_all";
+								// die();
+								if( $target_all < 100){
+									$target[$activity_data->id][$search_year_start+$i] = (100 - $target_all);
+								}
+
 
 								$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
 								$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
 
-								if(isset($target_total[$activity_data->id][$search_year_start+$i-1])){
-										$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] + $target_total[$activity_data->id][$search_year_start+$i-1];
-								}else{
-									$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] ;
-								}
+								// if(isset($target_total[$activity_data->id][$search_year_start+$i-1])){
+								// 		$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] + $target_total[$activity_data->id][$search_year_start+$i-1];
+								// }else{
+								// 	$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] ;
+								// }
+								$target_total[$activity_data->id][$search_year_start+$i] = $target_all;
 
 								if(!isset($weight_diff[$activity_data->id][$search_year_start+$i-1])){
 									$weight_diff[$activity_data->id][$search_year_start+$i-1] = '';
@@ -399,6 +410,8 @@ class Report_five_years extends CI_Controller
 									$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 									$weight_total[$activity_data->id][$search_year_start+$i] = '' ;
 									$point_new[$activity_data->id][$search_year_start+$i] = '';
+									$weight_per_year[$activity_data->id][$search_year_start+$i] = '';
+									$weight_result[$activity_data->id][$search_year_start+$i] = '';
 								}
 							}
 
