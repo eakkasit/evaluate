@@ -254,6 +254,8 @@ class Report_five_years extends CI_Controller
 
 							// ส่วนต่างคะแนน
 							$point_diff[$activity_data->id][$search_year_start+$i] = '';
+
+							$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 						}
 
 
@@ -267,15 +269,18 @@ class Report_five_years extends CI_Controller
 						// $target_total[$activity_data->id][$search_year_start+$i] += $target[$activity_data->id][$search_year_start+$i];
 
 						if($search_year_start+$i == $activity_data->year_end){
-							if($target[$activity_data->id][$search_year_start+$i] == ''){
+							if($target[$activity_data->id][$search_year_start+$i] == '' ){
 								if( (100 - $target_all) < 0){
 										$target[$activity_data->id][$search_year_start+$i] = 0;
 										$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
 										$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
 									}else{
-										$target[$activity_data->id][$search_year_start+$i] = 100 - $target_all;
-										$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
-										$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
+										if($target_all != 0){
+											$target[$activity_data->id][$search_year_start+$i] = 100 - $target_all;
+											$weight_per_year[$activity_data->id][$search_year_start+$i] = ($weight_all * ($target[$activity_data->id][$search_year_start+$i]))/100;
+											$point[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i];
+										}
+
 									}
 							}
 						}
@@ -307,12 +312,22 @@ class Report_five_years extends CI_Controller
 							$weight_result[$activity_data->id][$search_year_start+$i] = '';
 							$result[$activity_data->id][$search_year_start+$i] = '';
 						}
+						if($target[$activity_data->id][$search_year_start+$i] != ''){
+							// ส่วนต่างน้ำหนัก
+							$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_total[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
 
-						// ส่วนต่างน้ำหนัก
-						$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_total[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
+							// ส่วนต่างคะแนน
+							$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+						}else{
+							// ส่วนต่างน้ำหนัก
+							$weight_diff[$activity_data->id][$search_year_start+$i] = '';
 
-						// ส่วนต่างคะแนน
-						$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+							// ส่วนต่างคะแนน
+							$point_diff[$activity_data->id][$search_year_start+$i] = '';
+							$target_total[$activity_data->id][$search_year_start+$i] = '' ;
+							$weight_total[$activity_data->id][$search_year_start+$i] = '';
+							$point_new[$activity_data->id][$search_year_start+$i] = '';
+						}
 
 					}
 					// else if(($search_year_start+$i == $activity_data->year_end) && ($activity_data->year_start != $activity_data->year_end) ){
@@ -367,11 +382,24 @@ class Report_five_years extends CI_Controller
 									$result[$activity_data->id][$search_year_start+$i] = '';
 								}
 
-								// ส่วนต่างน้ำหนัก
-								$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_total[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
+								if($target[$activity_data->id][$search_year_start+$i] != ''){
 
-								// ส่วนต่างคะแนน
-								$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+									// ส่วนต่างน้ำหนัก
+									$weight_diff[$activity_data->id][$search_year_start+$i] = $weight_total[$activity_data->id][$search_year_start+$i] - $weight_result[$activity_data->id][$search_year_start+$i];
+
+									// ส่วนต่างคะแนน
+									$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+								}else{
+									// ส่วนต่างน้ำหนัก
+									$weight_diff[$activity_data->id][$search_year_start+$i] = '';
+
+									// ส่วนต่างคะแนน
+									$point_diff[$activity_data->id][$search_year_start+$i] = '';
+
+									$target_total[$activity_data->id][$search_year_start+$i] = '' ;
+									$weight_total[$activity_data->id][$search_year_start+$i] = '' ;
+									$point_new[$activity_data->id][$search_year_start+$i] = '';
+								}
 							}
 
 						}

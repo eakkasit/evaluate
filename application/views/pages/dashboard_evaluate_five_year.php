@@ -382,9 +382,10 @@ table{
 					if(((year_search*1)+index) == year_end && (position < index)){
 						// console.log('ssa');
 						if(target_total > 100){
-							alert('เป้าหมายร้อยละไม่ถูกต้อง')
+
 							$('#target_text_'+profile_id+'_'+(position)).html($(ele).val()-1);
 							$('#target_'+profile_id+'_'+(position)).val($(ele).val()-1);
+							alert('เป้าหมายร้อยละไม่ถูกต้อง')
 							console.log('target',$(ele).val());
 						}
 
@@ -404,17 +405,20 @@ table{
 							// }
 
 						}else{
-							var temp_last = (100 - (target_total - target))
-							if(temp_last > 0){
-								target = temp_last ;
+							if(($('#target_'+profile_id+'_'+(index-1)).val() != '' && typeof $('#target_'+profile_id+'_'+(index-1)).val() !== undefined) ){
+								var temp_last = (100 - (target_total - target))
+								if(temp_last > 0){
+									target = temp_last ;
+								}
 							}
+
 							console.log('a');
 						}
 					}else if(((year_search*1)+index) == year_end && (position == index)){
 						index_last_year = index
 						if(target_total > 100 ){
-							alert('เป้าหมายร้อยละไม่ถูกต้อง')
 							target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+							alert('เป้าหมายร้อยละไม่ถูกต้อง')
 						}else{
 							var amount_target = (100 - target_total)
 							$('#target_text_'+profile_id+'_'+(index+1)).html(amount_target);
@@ -439,10 +443,10 @@ table{
 								target = ''
 							}else{
 								if(target_total > 100){
-									alert('เป้าหมายร้อยละไม่ถูกต้อง')
 									target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+									alert('เป้าหมายร้อยละไม่ถูกต้อง')
 								}
-								// console.log('s');
+								console.log('s');
 							}
 						// console.log('target_total',target_total);
 						// console.log('da');
