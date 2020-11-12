@@ -45,11 +45,28 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					}
 					$result = '';
 					$target = '';
+					$weight = '';
 					if(isset($fomular_value_data)){
 						$target = $fomular_value_data->grade_map;
 						$result = $fomular_value_data->formula_value;
-						$sum_value[$value->tree_parent][] = $result;
 					}
+
+					if(isset($data_result['result'][$value->tree_id])){
+						$target = $data_result['result'][$value->tree_id];
+					}
+
+					if(isset($data_result['percent'][$value->tree_id])){
+						$result = $data_result['percent'][$value->tree_id];
+					}
+
+					if(isset($data_result['weight'][$value->tree_id])){
+						$weight = $data_result['weight'][$value->tree_id];
+					}
+
+					if($result != ''){
+							$sum_value[$value->tree_parent][] = $result;
+					}
+
 					$html .= '<tr>';
 					$html	.= '<td class="text-left">';
 					$html .= '<div class="form-group">';
@@ -62,26 +79,28 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$html .= '</div>';
 					$html .= '</td>';
 					$html	.= '<td>';
-					$html	.= '<select name="criteria_data['.$value->tree_id.'][project_id]" class="form-control mw-150"><option value="">----- เลือกโครงการ -----</option>';
-					if(isset($activity) && !empty($activity)){
-						foreach ($activity as $activity_key => $activity_value) {
-							$sel = "";
-							if(isset($data_result['project_id'][$value->tree_id])){
-								if($activity_key == $data_result['project_id'][$value->tree_id]){
-									$sel = "selected";
-								}else{
-									$sel = "";
-								}
-							}
-							$html	.= '<option value="'.$activity_key.'" '.$sel.'>'.$activity_value.'</option>';
-						}
-					}
-					$html	.= '</select>';
+					$html .= '<a href="#" onClick="show_project(\''.$structure_id.'\',\''.$value->tree_id.'\')" class="btn btn-sm btn-success">บันทึกค่าโครงการ</a>';
+					// $html	.= '<select name="criteria_data['.$value->tree_id.'][project_id]" class="form-control mw-150"><option value="">----- เลือกโครงการ -----</option>';
+					// if(isset($activity) && !empty($activity)){
+					// 	foreach ($activity as $activity_key => $activity_value) {
+					// 		$sel = "";
+					// 		if(isset($data_result['project_id'][$value->tree_id])){
+					// 			if($activity_key == $data_result['project_id'][$value->tree_id]){
+					// 				$sel = "selected";
+					// 			}else{
+					// 				$sel = "";
+					// 			}
+					// 		}
+					// 		$html	.= '<option value="'.$activity_key.'" '.$sel.'>'.$activity_value.'</option>';
+					// 	}
+					// }
+					// $html	.= '</select>';
 					// $html .= '<label></label>';
 					// $html	.= '<select name="" class="form-control mw-150"><option>----- เลือกกิจกรรม -----</option>';
 					// $html	.= '</select>';
 					$html	.= '</td>';
 					$html	.= '<td><a href="#" onClick="show_variable(\''.$value->kpi_id.'\',\''.$value->tree_id.'\',\''.$kpi->kpi_standard_type.'\')" class="btn btn-sm btn-success">บันทึกค่าตัวแปร</a></td>';
+
 					$html	.= '<td class="text-right">';
 					$html .= '<div class="form-group">';
 					$html .= 		'<label class="col-md-6">ผลลัพธ์ > </label>';
@@ -91,12 +110,12 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$html .= '</div>';
 					$html .= '</td>';
 					$html	.= '<td class="text-right">';
-					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][percent]" class="form-control w-50 text-right result_value_'.$value->kpi_id.' percent_'.$value->tree_parent.'" value="'.$result.'">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][percent]" onchange="calulateCriteria()" class="form-control w-50 text-right result_value_'.$value->kpi_id.' percent_'.$value->tree_parent.'" value="'.$result.'">';
 					$html	.= '</td>';
 					$html	.= '<td class="text-right">';
-					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][weight]" class="form-control w-50 text-right" value="'.$value->tree_weight.'">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][weight]" class="form-control w-50 text-right" value="'.$weight.'">';
 					$html	.= '</td>';
-					$html	.= '<td><a href="#" class="btn btn-sm btn-warning">เอกสารแนบ</a></td>';
+					$html	.= '<td><a href="#" class="btn btn-sm btn-warning" onClick="show_attach(\''.$structure_id.'\',\''.$value->tree_id.'\')">เอกสารแนบ</a></td>';
 					$html .= '</tr>';
 				}
 
@@ -105,14 +124,14 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 				if($value->tree_type=='1'){
 					$sum_result = 0;
 					if(isset($sum_value[$value->tree_id])){
-						$sum_result =  ceil( array_sum($sum_value[$value->tree_id]) / count($sum_value[$value->tree_id]) );
+						$sum_result =   number_format(array_sum($sum_value[$value->tree_id]) / count($sum_value[$value->tree_id]),2) ;
 						$sum_all[] = $sum_result;
 					}
 					$html .= '<tr>';
 					$html	.= '<td colspan="3" align="center">&emsp;&emsp;&emsp;&emsp;<b>คะแนนเฉลี่ยรวมรายหมวด</b></td>';
 					$html	.= '<td></td>';
 					$html	.= '<td class="text-right">';
-					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][total]" data-percent="'.$value->tree_id.'" class="form-control w-50 text-right percent_total_'.$value->tree_id.'" value="'.$sum_result.'">';
+					$html .= 			'<input type="text" name="criteria_data['.$value->tree_id.'][total]" onchange="calulateCriteria()" data-percent="'.$value->tree_id.'" class="form-control w-50 text-right percent_total_'.$value->tree_id.' percent_'.$value->tree_parent.'" value="'.$sum_result.'">';
 					$html	.= '</td>';
 					$html	.= '<td></td>';
 					$html	.= '<td></td>';
@@ -122,6 +141,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 	}
 	return $html;
 }
+
 ?>
 <p class="h4 header text-success">
 	<i class="fa fa-file-text-o"></i> บันทึกการประเมินองค์กรรายปี
@@ -145,7 +165,9 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 				<table class="table borderless" >
 					<?php
 					if(isset($tree) && !empty($tree)){
+						$no = 0;
 						foreach ($tree as $key => $value) {
+							$no++;
 							?>
 							<tr>
 								<td class="text-left">
@@ -160,13 +182,49 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 								</td>
 								<td></td>
 								<td></td>
-								<td align="center">ผลลัพธ์</td>
-								<td>เปอร์เซนต์</td>
-								<td>ค่าน้ำหนัก</td>
+								<?php
+									if($no == 1){
+										?>
+										<td align="center">ผลลัพธ์</td>
+										<td>เปอร์เซนต์</td>
+										<td>ค่าน้ำหนัก</td>
+
+										<?php
+									}else{
+										?>
+										<td></td>
+										<td></td>
+										<td></td>
+										<?php
+									}
+								?>
 								<td></td>
 							</tr>
 							<?php
 							echo loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;',$activity,$result);
+							if($value->tree_type=='1'){
+								$sum_result = 0;
+
+								if(isset($sum_value[$value->tree_id])){
+									$sum_result =  ceil( array_sum($sum_value[$value->tree_id]) / count($sum_value[$value->tree_id]) );
+									$sum_all[] = $sum_result;
+								}
+								?>
+								<tr>
+									<td colspan="2" align="center">&emsp;&emsp;&emsp;&emsp;<b>คะแนนเฉลี่ยรวมรายหมวด</b></td>
+									<td></td>
+									<td></td>
+									<td class="text-right">
+										<input type="text" name="criteria_data[<?php echo $value->tree_id ?>][total]" data-percent="<?php echo $value->tree_id; ?>" class="form-control w-50 text-right percent_total_<?php echo $value->tree_id; ?>" value="<?php  echo (isset($result['total'][$value->tree_id]))? number_format($result['total'][$value->tree_id],2):''; ?>">
+									</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<?php
+							}
+							?>
+
+							<?php
 						}
 						?>
 						<?php
@@ -215,6 +273,56 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 		 </div>
 	 </div>
  </form>
+
+	<form  method="post" action="" name="formproject" id="formproject">
+  	 <div id="projectModal" class="modal fade" role="dialog">
+  		 <div class="modal-dialog">
+
+  			 <!-- Modal content-->
+  			 <div class="modal-content">
+  				 <div class="modal-header">
+  					 <button type="button" class="close" data-dismiss="modal">&times;</button>
+  					 <h4 class="modal-title">บันทึกโครงการ</h4>
+  				 </div>
+  				 <div class="modal-body">
+						 <input type="hidden" name="structure_id" id="structure_id" value="<?php echo $structure_id; ?>">
+						 <input type="hidden" name="tree_id" id="project_tree_id" value="">
+						 <div id="project_data"></div>
+  				 </div>
+  				 <div class="modal-footer">
+  					 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  					 <button type="submit" name="savechange" value="savechange" class="btn btn-success" id="savechange" >บันทึก</button>
+  				 </div>
+  			 </div>
+
+  		 </div>
+  	 </div>
+   </form>
+
+ <form  method="post" action="" name="formattach" id="formattach">
+ 	 <div id="attachModal" class="modal fade" role="dialog">
+ 		 <div class="modal-dialog">
+
+ 			 <!-- Modal content-->
+ 			 <div class="modal-content">
+ 				 <div class="modal-header">
+ 					 <button type="button" class="close" data-dismiss="modal">&times;</button>
+ 					 <h4 class="modal-title">เอกสารแนบ</h4>
+ 				 </div>
+ 				 <div class="modal-body">
+ 					 <input type="hidden" name="structure_id" id="structure_id" value="<?php echo $structure_id; ?>">
+ 					 <input type="hidden" name="tree_id" id="attach_tree_id" value="">
+ 					 <div id="attach_data"></div>
+ 				 </div>
+ 				 <div class="modal-footer">
+ 					 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+ 					 <button type="submit" name="savechange" value="savechange" class="btn btn-success" id="savechange" >บันทึก</button>
+ 				 </div>
+ 			 </div>
+
+ 		 </div>
+ 	 </div>
+  </form>
 <script type="text/javascript">
 	var dependvar = {};
 	var dependcond = {};
@@ -238,6 +346,30 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$('#tree_id').val(tree_id)
 					depend_process()
 					$('#myModal').modal('show');
+				},
+			})
+		}
+
+		function show_project(structure_id,tree_id){
+			$.ajax({
+				url: '<?php echo base_url('criteria/ajax_project_data/'); ?>' + structure_id +'/'+ tree_id ,
+				type: "GET",
+				success: function (data) {
+					$('#project_data').html(data)
+					$('#project_tree_id').val(tree_id)
+					$('#projectModal').modal('show');
+				},
+			})
+		}
+
+		function show_attach(structure_id,tree_id){
+			$.ajax({
+				url: '<?php echo base_url('criteria/ajax_attach_data/'); ?>' + structure_id +'/'+ tree_id ,
+				type: "GET",
+				success: function (data) {
+					$('#attach_data').html(data)
+					$('#attach_tree_id').val(tree_id)
+					$('#attachModal').modal('show');
 				},
 			})
 		}
@@ -340,9 +472,9 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
     jQuery(document).ready(function () {
 				getData();
 
-				setTimeout(function(){
-					calulateCriteria()
-				} , 1000);
+				// setTimeout(function(){
+				// 	calulateCriteria()
+				// } , 1000);
 
 				// $("input").on("keyup change keypress focus",function(e) {
 				//   console.log('change',$(this).attr('class'));
@@ -378,6 +510,44 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 
 					e.preventDefault();
 				})
+
+				jQuery("#formproject").submit(function(e){
+					var err_text = ''
+						$.ajax({
+							url: '<?php echo base_url("criteria/ajax_save_project_data"); ?>',
+							type: "POST",
+							data:  $(this).serialize(),
+							success: function (data) {
+								var result = JSON.parse(data)
+								$('#projectModal').modal('hide')
+							},
+							error:function (error) {
+								console.log('err',error)
+							}
+						})
+					e.preventDefault();
+				})
+
+				jQuery("#formattach").submit(function(e){
+					e.preventDefault();
+					var data = new FormData(this);
+						$.ajax({
+							url: '<?php echo base_url("criteria/ajax_save_attach_data"); ?>',
+							type: "POST",
+							data:  data,
+							processData: false,
+        			contentType: false,
+							success: function (data) {
+								var result = JSON.parse(data)
+								$('#attachModal').modal('hide')
+							},
+							error:function (error) {
+								console.log('err',error)
+							}
+						})
+				})
+
+
 
     });
 </script>

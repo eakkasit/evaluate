@@ -73,6 +73,8 @@ class Report_assessments extends CI_Controller
 	{
 		$result_query = $this->CriteriaDatas_model->getCriteriaDataResult(array('structure_id'=>$id));
 		$project_list = $this->Activities_model->getActivityLists();
+		$activity_model = $this->load->database('db_activity',true);
+		$evaluate_model = $this->load->database('default',true);
 		$result = array();
 		if(isset($result_query) && !empty($result_query)){
 			foreach ($result_query as $key => $value) {
@@ -86,6 +88,21 @@ class Report_assessments extends CI_Controller
 				$result['percent'][$value->tree_id] = $value->percent;
 				$result['weight'][$value->tree_id] = $value->weight;
 				$result['total'][$value->tree_id] = $value->total;
+				$project_content = '';
+
+
+				$project_data = $evaluate_model->query("select * from `evaluate_criteria_project` where structure_id = '".$value->structure_id."' and tree_id = '{$value->tree_id}'")->result();
+				if(!empty($project_data)){
+					$project_detail = $project_data[0];
+					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
+						$project = $activity_model->query("select group_concat(project_name) as project_name from `activities_project` WHERE id in (" . $project_detail->project_data .")")->result();
+						if(!empty($project)){
+							$project_content .= $project[0]->project_name;
+						}
+					}
+				}
+				$result['project_name_list'][$value->tree_id] = $project_content;
+
 			}
 		}
 		$data['content_data'] = array(
@@ -95,8 +112,6 @@ class Report_assessments extends CI_Controller
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model,
 			'result' => $result
-
-
 		);
 		$data['content_view'] = 'pages/view_reports_assessment';
 		$this->load->view($this->theme, $data);
@@ -104,13 +119,47 @@ class Report_assessments extends CI_Controller
 
 	public function export($id,$type = '')
 	{
+		$result_query = $this->CriteriaDatas_model->getCriteriaDataResult(array('structure_id'=>$id));
+		$project_list = $this->Activities_model->getActivityLists();
+		$activity_model = $this->load->database('db_activity',true);
+		$evaluate_model = $this->load->database('default',true);
+		$result = array();
+		if(isset($result_query) && !empty($result_query)){
+			foreach ($result_query as $key => $value) {
+				$result['tree_id'][$value->tree_id] = $value->tree_id;
+				$result['structure_id'][$value->tree_id] = $value->structure_id;
+				$result['tree_number'][$value->tree_id] = $value->tree_number;
+				$result['criteria_name'][$value->tree_id] = $value->criteria_name;
+				$result['project_id'][$value->tree_id] = $value->project_id;
+				$result['project_name'][$value->tree_id] = $project_list[$value->project_id];
+				$result['result'][$value->tree_id] = $value->result;
+				$result['percent'][$value->tree_id] = $value->percent;
+				$result['weight'][$value->tree_id] = $value->weight;
+				$result['total'][$value->tree_id] = $value->total;
+				$project_content = '';
+
+
+				$project_data = $evaluate_model->query("select * from `evaluate_criteria_project` where structure_id = '".$value->structure_id."' and tree_id = '{$value->tree_id}'")->result();
+				if(!empty($project_data)){
+					$project_detail = $project_data[0];
+					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
+						$project = $activity_model->query("select group_concat(project_name) as project_name from `activities_project` WHERE id in (" . $project_detail->project_data .")")->result();
+						if(!empty($project)){
+							$project_content .= $project[0]->project_name;
+						}
+					}
+				}
+				$result['project_name_list'][$value->tree_id] = $project_content;
+
+			}
+		}
 		$data = array(
 			'structure_id' => $id,
 			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
-			'formula_db' => $this->Formula_model
-
+			'formula_db' => $this->Formula_model,
+			'result' => $result
 		);
 		if($type == 'pdf'){
 			$pdfFilePath = "รายงานการประเมินองค์กร.pdf";

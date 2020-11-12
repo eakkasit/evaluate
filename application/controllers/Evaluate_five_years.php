@@ -88,6 +88,14 @@ class Evaluate_five_years extends CI_Controller
 			}
 		}
 
+		$remark_data_temp = $this->CriteriaDatas_model->getRemark();
+		$remark_data = array();
+		if(isset($remark_data_temp) && !empty($remark_data_temp)){
+			foreach ($remark_data_temp as $key => $value) {
+				$remark_data[$value->project_id] = $value->remark;
+			}
+		}
+
 		$data = $this->Activities_model->getActivities($cond, array('year'=>'DESC'));
 		$data_point = $this->calculateScore($data,$target_data,$result_data,$search_year_start,$search_year_end);
 
@@ -119,6 +127,7 @@ class Evaluate_five_years extends CI_Controller
 			'search_year_end' => $search_year_end,
 			'target_data' => $target_data,
 			'result_data' => $result_data,
+			'remark_data' => $remark_data,
 			'data_detail' => $data_point
 		);
 		// echo "<pre>";
@@ -220,12 +229,18 @@ class Evaluate_five_years extends CI_Controller
 
 							// ส่วนต่างคะแนน
 							$point_diff[$activity_data->id][$search_year_start+$i] = $point[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+
+							// ส่วนต่างเป้าหมายร้อยละ
+							$target_diff[$activity_data->id][$search_year_start+$i] = $point[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
 						}else{
 							// ส่วนต่างน้ำหนัก
 							$weight_diff[$activity_data->id][$search_year_start+$i] = '';
 
-							// ส่วนต่างคะแนน
+							// ส่วนต่างเป้าหมายร้อยละ
 							$point_diff[$activity_data->id][$search_year_start+$i] = '';
+
+							// ส่วนต่างคะแนน
+							$target_diff[$activity_data->id][$search_year_start+$i] = '';
 
 							$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 						}
@@ -262,7 +277,10 @@ class Evaluate_five_years extends CI_Controller
 						// }else{
 						// 	$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i]  ;
 						// }
-						$target_total[$activity_data->id][$search_year_start+$i] = $target_all;
+						if(!isset($target_diff[$activity_data->id][$search_year_start+$i-1])){
+							$target_diff[$activity_data->id][$search_year_start+$i-1] = '';
+						}
+						$target_total[$activity_data->id][$search_year_start+$i] = $target[$activity_data->id][$search_year_start+$i] + $target_diff[$activity_data->id][$search_year_start+$i-1];
 
 						if(!isset($weight_diff[$activity_data->id][$search_year_start+$i-1])){
 							$weight_diff[$activity_data->id][$search_year_start+$i-1] = '';
@@ -292,12 +310,19 @@ class Evaluate_five_years extends CI_Controller
 
 							// ส่วนต่างคะแนน
 							$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+
+							//เป้าหมายร้อยละส่วนต่าง
+							$target_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
 						}else{
 							// ส่วนต่างน้ำหนัก
 							$weight_diff[$activity_data->id][$search_year_start+$i] = '';
 
 							// ส่วนต่างคะแนน
 							$point_diff[$activity_data->id][$search_year_start+$i] = '';
+
+							//เป้าหมายร้อยละส่วนต่าง
+							$target_diff[$activity_data->id][$search_year_start+$i] = '';
+
 							$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 							$weight_total[$activity_data->id][$search_year_start+$i] = '';
 							$point_new[$activity_data->id][$search_year_start+$i] = '';
@@ -372,12 +397,18 @@ class Evaluate_five_years extends CI_Controller
 
 									// ส่วนต่างคะแนน
 									$point_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
+
+									// ส่วนต่างเป้าหมายร้อยล่ะ
+									$target_diff[$activity_data->id][$search_year_start+$i] = $point_new[$activity_data->id][$search_year_start+$i] - $score[$activity_data->id][$search_year_start+$i];
 								}else{
 									// ส่วนต่างน้ำหนัก
 									$weight_diff[$activity_data->id][$search_year_start+$i] = '';
 
 									// ส่วนต่างคะแนน
 									$point_diff[$activity_data->id][$search_year_start+$i] = '';
+
+									// ส่วนต่างเป้าหมายร้อยล่ะ
+									$target_diff[$activity_data->id][$search_year_start+$i] = '';
 
 									$target_total[$activity_data->id][$search_year_start+$i] = '' ;
 									$weight_total[$activity_data->id][$search_year_start+$i] = '' ;
@@ -430,6 +461,7 @@ class Evaluate_five_years extends CI_Controller
 		$result_temp['weight_result'] = $weight_result;
 		$result_temp['weight_diff'] = $weight_diff;
 		$result_temp['point_diff'] = $point_diff;
+		$result_temp['target_diff'] = $target_diff;
 		$result_temp['result'] = $result;
 		$result_temp['point_new'] = $point_new;
 		$result_temp['weight_total'] = $weight_total;
@@ -469,6 +501,7 @@ class Evaluate_five_years extends CI_Controller
 		// print_r($_POST);
 		$result_array = array();
 		$target_array = array();
+		$remark_array = array();
 		$this->db->trans_start(); # Starting Transaction
 		$this->db->trans_strict(FALSE); # See Note 01. If you wish can remove as well
 		// echo "<pre>";
@@ -487,7 +520,7 @@ class Evaluate_five_years extends CI_Controller
 
 					}
 				}
-			}else{
+			}elseif ($key == 'result') {
 				foreach ($value as $key_result => $value_result) {
 					foreach ($value_result as $key_r_profile => $result) {
 						if($result != ''){
@@ -499,6 +532,16 @@ class Evaluate_five_years extends CI_Controller
 
 					}
 				}
+			}else if($key == 'remark'){
+				foreach ($value as $key_remark => $value_remark) {
+					if($value_remark != ''){
+						$remark_array['project_id'] = $key_remark;
+						$remark_array['remark'] = $value_remark;
+						$this->CriteriaDatas_model->replaceRemark($remark_array);
+					}
+				}
+			}else{
+				//
 			}
 		}
 		$this->db->trans_complete(); # Completing transaction

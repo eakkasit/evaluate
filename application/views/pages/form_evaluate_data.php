@@ -70,7 +70,7 @@ if (isset($result->id) && $result->id != '') {
 								<label for="stext">ผู้รับผิดชอบ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php // echo $data->sql; ?>-</label>
+								<label for="stext"><?php echo  $responsible_person != ''?$responsible_person:'-'; ?></label>
 							</div>
 						</div>
 
@@ -79,7 +79,7 @@ if (isset($result->id) && $result->id != '') {
 								<label for="stext">วัตถุประสงค์ :</label>
 							</div>
 							<div class="col-md-8 text-left">
-								<label for="stext"><?php // echo $data->sql; ?>-</label>
+								<label for="stext"><?php  echo $target != ''?strip_tags($target):'-'; ?></label>
 							</div>
 						</div>
 

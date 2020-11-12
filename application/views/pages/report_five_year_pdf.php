@@ -45,6 +45,7 @@ table#table_five_year td {
     				<th class="text-center" width="100px"  >ร้อยละความสำเร็จ</th>
     			<?php } ?>
     			<th class="text-center" width="75px"  >ร้อยละความสำเร็จทั้งโครงการ</th>
+          <th class="text-center" width="100px"  >หมายเหตุ</th>
         </tr>
         <?php
         if (isset($project_list) && !empty($project_list)) {
@@ -127,6 +128,9 @@ table#table_five_year td {
     					?>
     					<td class="text_center">
     						<span id="result_all_<?php echo $data->id; ?>"><?php echo $result_all ?></span>
+    					</td>
+              <td>
+    						<?php echo isset($remark_data[$data->id])?$remark_data[$data->id]:''; ?>
     					</td>
     				</tr>
     				<?php

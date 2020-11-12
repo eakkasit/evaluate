@@ -58,12 +58,22 @@ class Evaluate_datas extends CI_Controller
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);
 		$page = 0;
+		$project_data = $this->Activities_model->getActivities($cond, array('year'=>'DESC'), $config_pager['per_page'], $page);
+
+		$responsible_person = array();
+		foreach ($project_data as $key => $value) {
+			$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$value->responsible_person.")")->result();
+			if(isset($responsible_person_qry[0])){
+				$responsible_person[$value->id] = $responsible_person_qry[0]->fullname;
+			}
+		}
 
 		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 		$data['content_data'] = array(
-			'datas'=>$this->Activities_model->getActivities($cond, array('year'=>'DESC'), $config_pager['per_page'], $page),
+			'datas'=>$project_data,
 			'year_list' => $this->Commons_model->getYearList(),
 			'pages' => $this->pagination->create_links(),
+			'responsible_person' => $responsible_person,
 			'count_rows' => $count_rows,
 		);
 
@@ -74,6 +84,8 @@ class Evaluate_datas extends CI_Controller
 	public function dashboard_evaluate_data_detail($id='')
 	{
 		$result = array();
+		$responsible_person = array();
+		$target = array();
 		$project_data = $this->Activities_model->getActivities(array('id'=>$id));
 		$result_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$id),array('year'=>'ASC'));
 		$count_result = count($result_data);
@@ -89,11 +101,25 @@ class Evaluate_datas extends CI_Controller
 		if($count_result != 0 && $count_result >=  $year_len){
 			$btn_add = false;
 		}
+
+		foreach ($project_data as $key => $value) {
+			$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$value->responsible_person.")")->result();
+			if(isset($responsible_person_qry[0])){
+				$responsible_person[$value->id] = $responsible_person_qry[0]->fullname;
+			}
+
+			$target_qry = $this->db->query("SELECT id,pj_detail FROM project_list where id = '".$value->id."' and type = '2_1'")->result();
+			if(isset($target_qry[0])){
+				$target[$value->id] = $target_qry[0]->pj_detail;
+			}
+		}
 		$data['content_data'] = array(
 			// 'datas'=>$this->Activities_model->getTasks(array('project_id'=>$id)),
 			'project_data' => $project_data,
 			'project_id'=>$id,
 			'datas' => $result_data,
+			'responsible_person' => $responsible_person,
+			'target' => $target,
 			'btn_add' => $btn_add
 		);
 
@@ -112,7 +138,19 @@ class Evaluate_datas extends CI_Controller
 
 	public function new_evaluate_data($project_id)
 	{
+		// $test  = $this->db->query("select * from meeting_db.meeting_user")->result();
+		// echo "<pre>";
+		// print_r($test);
+		// die();
+		$responsible_person = '';
+		$target = '';
 		$project_data = $this->Activities_model->getActivities(array('id'=>$project_id))[0];
+		if(isset($project_data->responsible_person) && !empty($project_data->responsible_person)){
+			$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$project_data->responsible_person.")")->result();
+			if(isset($responsible_person_qry[0])){
+				$responsible_person = $responsible_person_qry[0]->fullname;
+			}
+		}
 		$year_list = array();
 		if($project_data->year_start == $project_data->year_end){
 			$year_list[$project_data->year_start] = $project_data->year_start+543;
@@ -122,9 +160,16 @@ class Evaluate_datas extends CI_Controller
 				$year_list[$project_data->year_start+$i] = $project_data->year_start+$i+543;
 			}
 		}
+
+		$target_qry = $this->db->query("SELECT id,pj_detail FROM project_list where id = '".$project_id."' and type = '2_1'")->result();
+		if(isset($target_qry[0])){
+			$target = $target_qry[0]->pj_detail;
+		}
 		$data['content_data'] = array(
 			'project_id' => $project_id,
 			'data' => $project_data,
+			'responsible_person' => $responsible_person,
+			'target' => $target,
 			'year_list' => $year_list
 		);
 		$data['content_view'] = 'pages/form_evaluate_data';
@@ -135,7 +180,19 @@ class Evaluate_datas extends CI_Controller
 	{
 		// $result = array();
 		// $result_data = $this->CriteriaDatas_model->getResult(array('id'=>$id));
+		$responsible_person = '';
+		$target = '';
 		$project_data = $this->Activities_model->getActivities(array('id'=>$project_id))[0];
+		if(isset($project_data->responsible_person) && !empty($project_data->responsible_person)){
+			$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$project_data->responsible_person.")")->result();
+			if(isset($responsible_person_qry[0])){
+				$responsible_person = $responsible_person_qry[0]->fullname;
+			}
+		}
+		$target_qry = $this->db->query("SELECT id,pj_detail FROM project_list where id = '".$project_id."' and type = '2_1'")->result();
+		if(isset($target_qry[0])){
+			$target = $target_qry[0]->pj_detail;
+		}
 		$year_list = array();
 		if($project_data->year_start == $project_data->year_end){
 			$year_list[$project_data->year_start] = $project_data->year_start+543;
@@ -146,11 +203,14 @@ class Evaluate_datas extends CI_Controller
 			}
 		}
 
+
 		$data['content_data'] = array(
 			'data' => $project_data,
 			'project_id' => $project_id,
 			'id' => $id,
 			'result' => $this->CriteriaDatas_model->getResult(array('id'=>$id))[0],
+			'responsible_person' => $responsible_person,
+			'target' => $target,
 			'year_list' => $year_list
  		);
 		$data['content_view'] = 'pages/form_evaluate_data';

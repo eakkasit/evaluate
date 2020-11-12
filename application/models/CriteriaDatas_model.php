@@ -444,4 +444,124 @@ class CriteriaDatas_model extends CI_Model
 			return $id;
 		}
 
+		public function insertAttachFile($data='')
+		{
+			$this->db->set('structure_id', $data['structure_id']);
+			$this->db->set('tree_id', $data['tree_id']);
+			$this->db->set('filename', $data['filename']);
+			$this->db->set('detail', $data['detail']);
+			$this->db->set('create_date', 'NOW()', false);
+			$this->db->insert('criteria_attach');
+			return $this->db->insert_id();
+		}
+
+		public function getAttachFiles($cond = array(), $order = array())
+		{
+			$this->db->select('*');
+			$this->db->from('criteria_attach');
+			if (!empty($cond)) {
+				foreach ($cond as $k => $v) {
+					if (is_string($k)) {
+						if (is_array($v)) {
+							$this->db->where_in($k, $v);
+						} else {
+							$this->db->where($k, $v);
+						}
+					} else {
+						$this->db->where($v);
+					}
+				}
+			}
+			if (!empty($order)) {
+				foreach ($order as $k => $v) {
+					if (is_string($k)) {
+						$this->db->order_by($k, $v);
+					} else {
+						$this->db->order_by($v);
+					}
+				}
+			} else { //default order
+				$this->db->order_by('id');
+			}
+			return $this->db->get()->result();
+		}
+
+		public function deleteAttachFile($id='')
+		{
+			$this->db->where('id', $id);
+			$this->db->delete('criteria_attach');
+			return $id;
+		}
+
+		public function getRemark($cond = array(), $order = array(), $limit = null, $start = 0)
+		{
+			$this->db->select('*');
+			$this->db->from('data_remark');
+			if (!empty($cond)) {
+				foreach ($cond as $k => $v) {
+					if (is_string($k)) {
+						if (is_array($v)) {
+							$this->db->where_in($k, $v);
+						} else {
+							$this->db->where($k, $v);
+						}
+					} else {
+						$this->db->where($v);
+					}
+				}
+			}
+			if (!empty($order)) {
+				foreach ($order as $k => $v) {
+					if (is_string($k)) {
+						$this->db->order_by($k, $v);
+					} else {
+						$this->db->order_by($v);
+					}
+				}
+			} else {//default order
+				$this->db->order_by('create_date', 'desc');
+			}
+			if ($limit != null) {
+				$this->db->limit($limit, $start);
+			}
+			return $this->db->get()->result();
+		}
+
+		public function insertRemark($data=array())
+		{
+			$this->db->set('project_id', $data['project_id']);
+			$this->db->set('remark', $data['remark']);
+			$this->db->set('create_date', 'NOW()', false);
+			$this->db->insert('data_remark');
+			return $this->db->insert_id();
+		}
+
+		public function updateRemark($id,$data=array())
+		{
+			$this->db->set('project_id', $data['project_id']);
+			$this->db->set('remark', $data['remark']);
+			$this->db->where('id', $id);
+			$this->db->update('data_remark');
+			return $this->db->insert_id();
+		}
+
+		public function replaceRemark($data=array())
+		{
+			$this->db->select('*');
+			$this->db->where('project_id',$data['project_id']);
+			$this->db->from('data_remark');
+			$query = $this->db->get();
+			if($query->num_rows() > 0){
+				$this->updateRemark($query->row('id'),$data);
+			}else{
+				$this->insertRemark($data);
+			}
+		}
+
+		public function deleteRemark($id = null)
+		{
+			$this->db->where('id', $id);
+			$this->db->delete('data_remark');
+			return $id;
+		}
 }

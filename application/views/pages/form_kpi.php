@@ -15,7 +15,7 @@ if (isset($data->kpi_id) && $data->kpi_id != '') {
 <div id="search-filter" class="widget-box">
 	<div class="widget-body">
 		<div class="widget-main">
-			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>" id="saveform" name="saveform">
 				<div class="row">
 
 					<div class="col-md-8">
@@ -27,7 +27,7 @@ if (isset($data->kpi_id) && $data->kpi_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" name="kpi_name" class="form-control"
+								<input type="text" name="kpi_name" class="form-control" id="kpi_name"
 									   value="<?php if (isset($data->kpi_name)) { echo $data->kpi_name;	} ?>" placeholder="ระบุ">
 							</div>
 							<label 	class="col-md-12 text-danger"><?php echo form_error("kpi_name"); ?></label>
@@ -492,5 +492,33 @@ function addRow(tableID) {
 		})
 	}
 }
+
+jQuery(document).ready(function () {
+	$( "#saveform" ).submit(function( event ) {
+		var msg = ''
+
+		if($("#kpi_name").val() == ''){
+			msg += 'กรุณาระบุชื่อเกณฑ์การประเมิน\n'
+		}
+
+		if($("#kpi_standard_type").val() == ''){
+			msg += 'กรุณาเลือกรูปแบบเกณฑ์การให้คะแนน'
+		}
+
+
+		if(msg != ''){
+			swal({
+							title: "กรุณาตรวจสอบข้อมูล",
+							text: msg,
+							type: "warning",
+					})
+					event.preventDefault();
+		}
+
+
+	});
+
+})
+
 
 </script>

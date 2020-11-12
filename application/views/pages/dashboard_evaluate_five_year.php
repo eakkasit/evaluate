@@ -46,11 +46,12 @@
 				?>
 
 
-				<th class="text-center" width="300px"  colspan="4">ผลการประเมิน</th>
+				<th class="text-center" width="300px"  colspan="5">ผลการประเมิน</th>
 				<th class="text-center" width="75px"  rowspan="2">ร้อยละความสำเร็จ</th>
 
 			<?php } ?>
 			<th class="text-center" width="75px"  rowspan="2">ร้อยละความสำเร็จทั้งโครงการ</th>
+			<th class="text-center" width="150px"  rowspan="2">หมายเหตุ</th>
 		</tr>
 		<tr>
 			<?php
@@ -77,6 +78,7 @@
 					<th class="text-center">คะแนนที่ได้</th>
 					<th class="text-center">ส่วนต่างน้ำหนัก</th>
 					<th class="text-center">ส่วนต่างคะแนน</th>
+					<th class="text-center">ส่วนต่างเป้าหมายร้อยละ</th>
 					<?php
 				}
 			?>
@@ -131,7 +133,7 @@
 								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" min="0" max="100" id="target_<?php echo "{$data->id}_".$i; ?>" class="form-control save_data" <?php //echo $disable; ?> oninput="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" id="target_<?php echo "{$data->id}_".$i; ?>" class="form-control save_data" <?php //echo $disable; ?> onblur="changeTarget(this)"  name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
@@ -157,7 +159,7 @@
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" min="0" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> oninput="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -167,6 +169,11 @@
 							<td class="text-center">
 								<span id="point_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point_diff'][$data->id][$search_year_start+$i])?$data_detail['point_diff'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+							</td>
+							<td class="text-center">
+								<span id="target_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
+									<?php echo isset($data_detail['target_diff'][$data->id][$search_year_start+$i])?$data_detail['target_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 							<td class="text-center">
@@ -181,7 +188,7 @@
 								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" min="0" max="100" class="form-control save_data" id="target_<?php echo "{$data->id}_".$i ; ?>" <?php //echo $disable; ?> oninput="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" class="form-control save_data" id="target_<?php echo "{$data->id}_".$i ; ?>" <?php //echo $disable; ?>  onblur="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
@@ -217,7 +224,7 @@
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
-								<input type="number" min="0" max="100" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> oninput="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
+								<input type="number" min="0" max="100" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
 							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
@@ -226,6 +233,11 @@
 							<td class="text-center">
 								<span id="point_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point_diff'][$data->id][$search_year_start+$i])?$data_detail['point_diff'][$data->id][$search_year_start+$i]:''; ?>
+								</span>
+							</td>
+							<td class="text-center">
+								<span id="target_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
+									<?php echo isset($data_detail['target_diff'][$data->id][$search_year_start+$i])?$data_detail['target_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 							<td class="text-center">
@@ -240,6 +252,14 @@
 					<td class="text-center">
 						<span id="result_all_<?php echo $data->id; ?>"><?php echo $result_all ?></span>
 					</td>
+					<td class="text-center">
+						<span id="remark_text_<?php echo $data->id; ?>" class="save_data_text"><?php echo isset($remark_data[$data->id])?$remark_data[$data->id]:''; ?></span>
+
+						<textarea cols="15" rows="3" id="remark_<?php echo $data->id; ?>" class="save_data" name="data[remark][<?php echo $data->id; ?>]">
+							<?php echo isset($remark_data[$data->id])?$remark_data[$data->id]:''; ?>
+						</textarea>
+					</td>
+
 				</tr>
 				<?php
 			}
@@ -320,6 +340,7 @@ table{
 				var score = $('#score_'+profile_id+'_'+index).val();
 				var weight_diff = $('#weight_diff_'+profile_id+'_'+index).html().trim();
 				var point_diff = $('#point_diff_'+profile_id+'_'+index).html().trim();
+				var target_diff = $('#target_diff_'+profile_id+'_'+index).html().trim();
 				var result = $('#result_'+profile_id+'_'+index).html().trim();
 
 				target_total += (target*1);
@@ -371,6 +392,7 @@ table{
 					$('#weight_result_'+profile_id+'_'+index).html(weight_result);
 					$('#weight_diff_'+profile_id+'_'+index).html(weight_diff);
 					$('#point_diff_'+profile_id+'_'+index).html(point_diff);
+					$('#target_diff_'+profile_id+'_'+index).html(point_diff);
 					$('#result_'+profile_id+'_'+index).html(result);
 				}else{
 					// console.log(target_total);
@@ -380,13 +402,9 @@ table{
 					// }
 					// console.log(year_search);
 					if(((year_search*1)+index) == year_end && (position < index)){
-						// console.log('ssa');
+
 						if(target_total > 100){
 
-							$('#target_text_'+profile_id+'_'+(position)).html($(ele).val()-1);
-							$('#target_'+profile_id+'_'+(position)).val($(ele).val()-1);
-							alert('เป้าหมายร้อยละไม่ถูกต้อง')
-							console.log('target',$(ele).val());
 						}
 
 						if($('#target_'+profile_id+'_'+(index+1)).val() != '' && typeof $('#target_'+profile_id+'_'+(index+1)).val() !== undefined){
@@ -407,22 +425,96 @@ table{
 						}else{
 							if(($('#target_'+profile_id+'_'+(index-1)).val() != '' && typeof $('#target_'+profile_id+'_'+(index-1)).val() !== undefined) ){
 								var temp_last = (100 - (target_total - target))
-								if(temp_last > 0){
+								if(temp_last >= 0){
 									target = temp_last ;
+								}else{
+									swal({
+			                title: "แจ้งเตือน",
+			                text: "เป้าหมายร้อยละเกิน 100 ",
+			                type: "warning",
+			                showCancelButton: false,
+			                confirmButtonText: "ตกลง",
+			                cancelButtonText: "ยกเลิก",
+			                closeOnConfirm: false,
+			                closeOnCancel: true
+			            },
+			            function (isConfirm) {
+			                if (isConfirm) {
+													$(ele).focus()
+													swal.close()
+			                }
+			            });
+
 								}
+								// console.log('b');
 							}
 
-							console.log('a');
+							// console.log('a');
 						}
 					}else if(((year_search*1)+index) == year_end && (position == index)){
 						index_last_year = index
 						if(target_total > 100 ){
-							target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
-							alert('เป้าหมายร้อยละไม่ถูกต้อง')
+							// target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+							// alert('เป้าหมายร้อยละไม่ถูกต้อง1')
+							swal({
+									title: "แจ้งเตือน",
+									text: "เป้าหมายร้อยละเกิน 100 ",
+									type: "warning",
+									showCancelButton: false,
+									confirmButtonText: "ตกลง",
+									cancelButtonText: "ยกเลิก",
+									closeOnConfirm: false,
+									closeOnCancel: true
+							},
+							function (isConfirm) {
+									if (isConfirm) {
+											$(ele).focus()
+											swal.close()
+									}
+							});
+							target = $(this).val()
+
 						}else{
 							var amount_target = (100 - target_total)
-							$('#target_text_'+profile_id+'_'+(index+1)).html(amount_target);
-							$('#target_'+profile_id+'_'+(index+1)).val(amount_target);
+							if(amount_target > 0 && ($('#target_'+profile_id+'_'+(index+1)).val() == '')){
+								swal({
+										title: "แจ้งเตือน",
+										text: "เป้าหมายร้อยละไม่ถึง 100 ในปีที่กำหนดท่านต้องการเพิ่มในปีถัดไปหรือไม่ ",
+										type: "warning",
+										showCancelButton: true,
+										confirmButtonText: "ตกลง",
+										cancelButtonText: "ยกเลิก",
+										closeOnConfirm: false,
+										closeOnCancel: false
+								},
+								function (isConfirm) {
+										if (isConfirm) {
+												// $(ele).focus()
+												$('#target_text_'+profile_id+'_'+(index+1)).html(amount_target);
+												$('#target_'+profile_id+'_'+(index+1)).val(amount_target);
+												swal.close()
+										}else{
+											swal({
+													title: "แจ้งเตือน",
+													text: "เป้าหมายร้อยละไม่ถึง 100 ในปีที่กำหนด",
+													type: "warning",
+													showCancelButton: false,
+													confirmButtonText: "ตกลง",
+													cancelButtonText: "ยกเลิก",
+													closeOnConfirm: false,
+													closeOnCancel: true
+											},
+											function (isConfirm) {
+													if (isConfirm) {
+															$(ele).focus()
+															swal.close()
+													}
+											});
+										}
+								});
+							}
+							// $('#target_text_'+profile_id+'_'+(index+1)).html(amount_target);
+							// $('#target_'+profile_id+'_'+(index+1)).val(amount_target);
 							// console.log(amount_target);
 						}
 						// if(position == index){
@@ -436,22 +528,79 @@ table{
 
 							// console.log('index_last_year',(year_end-year_search));
 							// console.log('year', ((year_search*1)+index)-year_end);
-							// console.log('index',index);
+							// console.log('index',(index - check_last_year));
+
 							if((index - check_last_year) > 1){
 								// console.log('gd');
-								alert('เป้าหมายร้อยละไม่ถูกต้อง กรุณาขยายระยะเวลาโครงการ / กิจจกรรม');
-								target = ''
-							}else{
-								if(target_total > 100){
-									target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
-									alert('เป้าหมายร้อยละไม่ถูกต้อง')
+								// alert('เป้าหมายร้อยละไม่ถูกต้อง4 กรุณาขยายระยะเวลาโครงการ / กิจจกรรม');
+								if(target_total < 100){
+									swal({
+											title: "แจ้งเตือน",
+											text: "เป้าหมายร้อยละไม่ครบ 100 กรุณาตรวจสอบรายการ",
+											type: "warning",
+											showCancelButton: false,
+											confirmButtonText: "ตกลง",
+											cancelButtonText: "ยกเลิก",
+											closeOnConfirm: false,
+											closeOnCancel: true
+									},
+									function (isConfirm) {
+											if (isConfirm) {
+													$(ele).focus()
+													swal.close()
+											}
+									});
+								}else if(target_total >100){
+									swal({
+											title: "แจ้งเตือน",
+											text: "เป้าหมายร้อยละเกิน 100 ",
+											type: "warning",
+											showCancelButton: false,
+											confirmButtonText: "ตกลง",
+											cancelButtonText: "ยกเลิก",
+											closeOnConfirm: false,
+											closeOnCancel: true
+									},
+									function (isConfirm) {
+											if (isConfirm) {
+													$(ele).focus()
+													swal.close()
+											}
+									});
+
+								}else{
+									// console.log('100%');
 								}
-								console.log('s');
+								// target = $(ele).val()
+								// target = ''
+							}else{
+								// console.log('target_total',target_total);
+								if(target_total > 100){
+									// target = 100 - target_data.reduce((prev, cur) => prev + (cur.target*1), 0)
+									// alert('เป้าหมายร้อยละไม่ถูกต้อง2')
+									swal({
+											title: "แจ้งเตือน",
+											text: "เป้าหมายร้อยละเกิน 100 ",
+											type: "warning",
+											showCancelButton: false,
+											confirmButtonText: "ตกลง",
+											cancelButtonText: "ยกเลิก",
+											closeOnConfirm: false,
+											closeOnCancel: true
+									},
+									function (isConfirm) {
+											if (isConfirm) {
+													$(ele).focus()
+													swal.close()
+											}
+									});
+								}
+								// console.log('s');
 							}
-						// console.log('target_total',target_total);
+						console.log('target_total',target_total);
 						// console.log('da');
 						}else{
-							// console.log('ss');
+							console.log('ss');
 						}
 					weight_per_year = ((weight * target)/100);
 					point = target;
@@ -517,7 +666,7 @@ table{
 
 					$('#target_text_'+profile_id+'_'+index).html(target);
 					$('#target_'+profile_id+'_'+index).val(target);
-					$('#target_total_text_'+profile_id+'_'+index).html(target_total);
+					$('#target_total_text_'+profile_id+'_'+index).html(point_new);
 					$('#weight_per_year_'+profile_id+'_'+index).html(weight_per_year);
 					$('#point_'+profile_id+'_'+index).html(point);
 					$('#weight_total_'+profile_id+'_'+index).html(weight_total);
@@ -525,11 +674,13 @@ table{
 					$('#weight_diff_'+profile_id+'_'+index).html(weight_diff);
 					$('#weight_result_'+profile_id+'_'+index).html(weight_result);
 					$('#point_diff_'+profile_id+'_'+index).html(point_diff);
+					$('#target_diff_'+profile_id+'_'+index).html(point_diff);
 					$('#result_'+profile_id+'_'+index).html(result);
 				}
 				var temp_val = {
 					'target_text': target_text,
 					'target':target,
+					'target_total':target_total,
 					'weight_per_year':weight_per_year,
 					'weight_total':weight_total,
 					'point':point,
@@ -539,6 +690,7 @@ table{
 					'score':score,
 					'weight_diff':weight_diff,
 					'point_diff':point_diff,
+					'target_diff':target_diff,
 					'result':result,
 				}
 				target_data.push(temp_val);

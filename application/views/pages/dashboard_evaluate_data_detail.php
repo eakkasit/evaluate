@@ -60,11 +60,11 @@
 						<td class="text-center">
 							<?php echo $data->year+543; ?>
 						</td>
-						<td class="text-left"> -
-							<?php //echo $data->department; ?>
+						<td class="text-left"> 
+							<?php echo isset($responsible_person[$data->id])&&$responsible_person[$data->id] != ''?$responsible_person[$data->id]:'-'; ?>
 						</td>
-						<td class="text-left"> -
-							<?php //echo $data->detail; ?>
+						<td class="text-left">
+							<?php echo isset($target[$data->id])&&$target[$data->id] != ''?strip_tags($target[$data->id]):'-'; ?>
 						</td>
 						<td class="text-left">
 							<?php echo word_limiter($data->project_result,10); ?>

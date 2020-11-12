@@ -33,7 +33,7 @@
 						<?php echo $data->year+543; ?>
 					</td>
 					<td class="text-left">
-						<?php //echo $data->department; ?>
+						<?php echo isset($responsible_person[$data->id])&&$responsible_person[$data->id] != ''?$responsible_person[$data->id]:'-'; ?>
 					</td>
 					<td class="text-left">
 						<?php echo $data->detail; ?>

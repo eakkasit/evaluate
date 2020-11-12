@@ -4,13 +4,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Criteria extends CI_Controller
 {
 	private $theme = 'default';
+	private $upload_config = array(
+		'upload_path' => '../assets/attaches/',
+		'allowed_types' => 'gif|jpg|jpeg|jpe|png|pdf|doc|docx',
+		'max_size' => 10240,// 10 MB
+	);
 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','Formula_model','Activities_model','CriteriaDatas_model'));
+		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','Formula_model','Activities_model','CriteriaDatas_model','CriteriaProjects_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
+		//rewrite upload path
+		$this->upload_config['upload_path']  = realpath(APPPATH . 	$this->upload_config['upload_path']).'/';
 
 		if ($this->session->userdata('user_id') == '') {
 			redirect(base_url("authentications"));
@@ -71,7 +78,7 @@ class Criteria extends CI_Controller
 	{
 		$data['content_data'] = array(
 			'structure_id' => $id,
-			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model
@@ -115,7 +122,7 @@ class Criteria extends CI_Controller
 			// 'year_list' => $this->Commons_model->getYearList(),
 			// 'data' => $this->Structure_model->getStructure(array('criteria_id'=>$id))[0]
 			'structure_id' => $id,
-			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model,
@@ -203,6 +210,53 @@ class Criteria extends CI_Controller
 			'units_list'=> $this->Commons_model->getUnitsList(),
 		);
 		$data['content_view'] = 'ajax/ajax_save_variable';
+		$this->load->view('ajax', $data);
+	}
+
+	public function ajax_project_data($structure_id,$tree_id){
+		$data = array();
+		$project_checked = array();
+		$bsc_checked = array();
+		$task_checked = array();
+		$other_data = '';
+		$check_list = $this->CriteriaProjects_model->getCriteriaProjects(array('structure_id'=>$structure_id,'tree_id'=>$tree_id));
+
+		if(isset($check_list[0]) && !empty($check_list[0])){
+			$checked_data = $check_list[0];
+			if(isset($checked_data->project_data) && !empty($checked_data->project_data)){
+				$project_checked = explode(',',$checked_data->project_data);
+			}
+
+			if(isset($checked_data->bsc_data) && !empty($checked_data->bsc_data)){
+				$bsc_checked = explode(',',$checked_data->bsc_data);
+			}
+
+			if(isset($checked_data->task_data) && !empty($checked_data->task_data)){
+				$task_checked = explode(',',$checked_data->task_data);
+			}
+
+			$other_data = $checked_data->other_data;
+		}
+		$data['content_data'] = array(
+			'project' => $this->Activities_model->getActivityLists(array('status >='=>'2')), // sbs
+			'bsc' => array(),
+			'task' => array(),
+			'project_checked' => $project_checked,
+			'bsc_checked' => $bsc_checked,
+			'task_checked' => $task_checked,
+			'other_data' => $other_data
+		);
+		$data['content_view'] = 'ajax/ajax_project_data';
+		$this->load->view('ajax', $data);
+	}
+
+	public function ajax_attach_data($structure_id,$tree_id){
+		$data = array();
+		$data['content_data'] = array(
+			'attach' => $this->CriteriaDatas_model->getAttachFiles(array('structure_id'=>$structure_id,'tree_id'=>$tree_id)),
+			'upload_path' => $this->upload_config['upload_path']
+		);
+		$data['content_view'] = 'ajax/ajax_attach_data';
 		$this->load->view('ajax', $data);
 	}
 
@@ -514,7 +568,7 @@ class Criteria extends CI_Controller
 			$data['content_data'] = array(
 				'data' => (object)array(
 					'structure_id' => $id,
-					'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+					'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 					'tree_db' => $this->KpiTree_model,
 					'kpi_db' => $this->Kpi_model,
 					'formula_db' => $this->Formula_model,
@@ -524,5 +578,139 @@ class Criteria extends CI_Controller
 			$data['content_view'] = 'pages/form_criteria';
 			$this->load->view($this->theme, $data);
 		}
+	}
+
+	public function ajax_save_project_data($value='')
+	{
+		$data = array();
+		foreach ($_POST as $key => $value) {
+			$data[$key] = $this->input->post($key);
+		}
+		$data_save = array();
+		if(isset($data['project'])){
+			$check_project = count($data['project']);
+			if($check_project > 1){
+				$data['project_data'] = implode(",",$data['project']);
+			}else{
+				if($check_project == 1){
+					$data['project_data'] = $data['project'];
+				}else{
+					$data['project_data'] = '';
+				}
+			}
+		}else{
+			$data['project_data'] = '';
+		}
+
+		unset($data['project']);
+
+		if(isset($data['bsc'])){
+			$check_bsc = count($data['bsc']);
+			if($check_bsc > 1){
+				$data['bsc_data'] = implode(",",$data['bsc']);
+			}else{
+				if($check_bsc == 1){
+					$data['bsc_data'] = $data['bsc'][0];
+				}else{
+					$data['bsc_data'] = '';
+				}
+			}
+		}else{
+			$data['bsc_data'] = '';
+		}
+
+		unset($data['bsc']);
+
+		if(isset($data['activity'])){
+			$check_activity = count($data['activity']);
+			if($check_activity > 1){
+				$data['task_data'] = implode(",",$data['activity']);
+			}else{
+				if($check_activity == 1){
+					$data['task_data'] = $data['activity'];
+				}else{
+					$data['task_data'] = '';
+				}
+			}
+		}else{
+			$data['task_data'] = '';
+		}
+
+		unset($data['activity']);
+
+		if(isset($data['other'])){
+			$data['other_data'] = $data['other'];
+		}else{
+			$data['other_data'] = '';
+		}
+
+		unset($data['other']);
+
+
+		$save = $this->CriteriaProjects_model->saveProjectdata($data);
+		echo json_encode($save);
+	}
+
+	public function ajax_save_attach_data($value='')
+	{
+		$data = array();
+		foreach ($_POST as $key => $value) {
+			$data[$key] = $this->input->post($key);
+		}
+		if (!empty($_FILES) && $_FILES['attaches_file']['name'][0] != '') {
+			$config = $this->upload_config;
+			$this->load->library('upload', $config);
+			$config['upload_path'] .= "{$data['structure_id']}_{$data['tree_id']}/";
+
+			if (!file_exists($config['upload_path'])) {
+				mkdir($config['upload_path'], 0777);
+				chmod($config['upload_path'], 0777);
+			}
+
+			$files = $_FILES;
+			$cpt = count($_FILES['attaches_file']['name']);
+			for ($i = 0; $i < $cpt; $i++) {
+				$_FILES['attaches_file']['name'] = $files['attaches_file']['name'][$i];
+				$_FILES['attaches_file']['type'] = $files['attaches_file']['type'][$i];
+				$_FILES['attaches_file']['tmp_name'] = $files['attaches_file']['tmp_name'][$i];
+				$_FILES['attaches_file']['error'] = $files['attaches_file']['error'][$i];
+				$_FILES['attaches_file']['size'] = $files['attaches_file']['size'][$i];
+
+				$config['file_name'] = "{$data['structure_id']}_{$data['tree_id']}_" . time();
+				$this->upload->initialize($config);
+				if ($this->upload->do_upload('attaches_file')) {
+					$upload = array('upload_data' => $this->upload->data());
+
+					$file = array(
+						'structure_id' => $data['structure_id'],
+						'tree_id' => $data['tree_id'],
+						'filename' => $upload['upload_data']['file_name'],
+						'detail' => $files['attaches_file']['name'][$i]
+					);
+					$save = $this->CriteriaDatas_model->insertAttachFile($file);
+					echo json_encode($save);
+				} else {
+					$upload_msg = $this->upload->display_errors();
+					echo json_encode($upload_msg);
+				}
+			}
+		}else{
+			echo json_encode('done');
+		}
+	}
+
+	public function ajax_delete_file($structure_id='',$id='')
+	{
+		if($id != ''){
+			$file_data = $this->CriteriaDatas_model->getAttachFiles(array('id'=>$id))[0];
+			$tree_id = $file_data->tree_id;
+			$filename = $file_data->filename;
+			$this->CriteriaDatas_model->deleteAttachFile($id);
+			// echo $this->upload_config['upload_path']."{$structure_id}_{$file_data->tree_id}/{$file_data->filename}";
+			unlink($this->upload_config['upload_path']."{$structure_id}_{$file_data->tree_id}/{$file_data->filename}");
+
+		}
+		redirect(base_url("criteria/edit_criteria/$structure_id"));
+
 	}
 }

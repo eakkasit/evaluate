@@ -96,6 +96,14 @@ class Report_five_years extends CI_Controller
 				$result_data[$value->project_id][$value->year] = $value->assessment_results;
 			}
 		}
+
+		$remark_data_temp = $this->CriteriaDatas_model->getRemark();
+		$remark_data = array();
+		if(isset($remark_data_temp) && !empty($remark_data_temp)){
+			foreach ($remark_data_temp as $key => $value) {
+				$remark_data[$value->project_id] = $value->remark;
+			}
+		}
 		$year_start = date('Y');
 		$year_end = date('Y')+5;
 
@@ -108,6 +116,7 @@ class Report_five_years extends CI_Controller
 			'count_rows' => $count_rows,
 			'target_data' => $target_data,
 			'result_data' => $result_data,
+			'remark_data' => $remark_data,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
 			'year_list' => $this->Commons_model->getYearList(),
@@ -655,6 +664,15 @@ class Report_five_years extends CI_Controller
 				$result_data[$value->project_id][$value->year] = $value->assessment_results;
 			}
 		}
+
+		$remark_data_temp = $this->CriteriaDatas_model->getRemark();
+		$remark_data = array();
+		if(isset($remark_data_temp) && !empty($remark_data_temp)){
+			foreach ($remark_data_temp as $key => $value) {
+				$remark_data[$value->project_id] = $value->remark;
+			}
+		}
+
 		$year_start = date('Y');
 		$year_end = date('Y')+5;
 
@@ -667,6 +685,7 @@ class Report_five_years extends CI_Controller
 			'count_rows' => $count_rows,
 			'target_data' => $target_data,
 			'result_data' => $result_data,
+			'remark_data' => $remark_data,
 			'year_start' => $year_start,
 			'year_end' => $year_end,
 			'year_list' => $this->Commons_model->getYearList(),
@@ -722,6 +741,9 @@ class Report_five_years extends CI_Controller
 			$chr++;
 			$objWorkSheet->setCellValue($this->numberToColumn($chr).'1','ร้อยละความสำเร็จทั้งโครงการ');
 			$objWorkSheet->getColumnDimension($this->numberToColumn($chr))->setWidth('25');
+			$chr++;
+			$objWorkSheet->setCellValue($this->numberToColumn($chr).'1','หมายเหตุ');
+			$objWorkSheet->getColumnDimension($this->numberToColumn($chr))->setWidth('40');
 			// $chr = 1;
 			// foreach ($columns as $value) {
 			// 	$objWorkSheet->setCellValue(numberToColumn($chr).'1', $value['name']);
@@ -761,6 +783,12 @@ class Report_five_years extends CI_Controller
 					}
 					$chr++;
 					$objWorkSheet->setCellValue($this->numberToColumn($chr).$index,$result_all);
+					$chr++;
+					$remark = '';
+					if(isset($remark_data[$data->id])){
+						$remark = $remark_data[$data->id];
+					}
+					$objWorkSheet->setCellValue($this->numberToColumn($chr).$index,$remark);
 
 				}
 			}
