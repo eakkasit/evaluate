@@ -41,8 +41,8 @@ class Users extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element')['text'] && !empty($fields)) {
-			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+		if ($this->input->get('search') && !empty($fields)) {
+			$search_text = explode(' ', $this->input->get('search'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);

@@ -33,16 +33,20 @@
 			<th class="text-center" width="100px"  rowspan="2">ปีงบประมาณ</th>
 			<th class="text-center" width="100px"  rowspan="2">น้ำหนักโครงการ</th>
 			<?php
+			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
 				if($i == 0){
+					$column+=4;
 					?>
 					<th class="text-center" width="260px"  colspan="4">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
 					<?php
 				}else{
+					$column+=6;
 					?>
 					<th class="text-center" width="410px"  colspan="6">เป้าหมาย <?php echo $search_year_start+$i+543; ?></th>
 					<?php
 				}
+				$column+=8;
 				?>
 
 
@@ -263,6 +267,12 @@
 				</tr>
 				<?php
 			}
+		}else{
+			?>
+			<tr>
+				<td colspan="<?php echo $column; ?>" align="center">- <b>ไม่พบข้อมูล</b> -</td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>

@@ -34,8 +34,8 @@ class Criteria extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element')['text'] != '' && !empty($fields)) {
-			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+		if ($this->input->get('search') && !empty($fields)) {
+			$search_text = explode(' ', $this->input->get('search'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);
@@ -52,7 +52,7 @@ class Criteria extends CI_Controller
 
 	public function dashboard_criteria()
 	{
-		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
+		$cond = $this->search_form(array('structure_name', 'profile_year', 'structure_status'));
 
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("criteria/dashboard_criteria");

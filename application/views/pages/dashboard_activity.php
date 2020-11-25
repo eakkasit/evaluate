@@ -81,6 +81,12 @@
 				</tr>
 				<?php
 			}
+		}else{
+			?>
+			<tr>
+				<td colspan="7" align="center">- <b>ไม่พบข้อมูล</b> -</td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>

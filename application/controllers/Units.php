@@ -27,8 +27,8 @@ class Units extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element')['text'] != '' && !empty($fields)) {
-			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+		if ($this->input->get('search') && !empty($fields)) {
+			$search_text = explode(' ', $this->input->get('search'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);
@@ -93,11 +93,22 @@ class Units extends CI_Controller
 
 	public function validate()
 	{
-		$this->form_validation->set_rules('unit_name', 'หน่วยวัด', 'required|trim');
+		$this->form_validation->set_rules('unit_name', 'หน่วยวัด', 'required|trim|callback_unit_name_check');
 		$this->form_validation->set_message('required', 'กรุณาระบุ {field}');
 
 		return $this->form_validation->run();
 	}
+
+	public function unit_name_check($unit_name)
+  {
+      $unit_check = $this->Units_model->getUnits(array('TRIM(unit_name)' => $unit_name));
+			if($unit_check){
+				$this->form_validation->set_message('unit_name_check', 'ไม่สามารถใช้ชื่อหน่วยวัดเกณฑ์การประเมิน "'. $unit_name.'" ซ้ำได้');
+				return false;
+			}else{
+				 return true;
+			}
+  }
 
 	public function save($unit_id = null)
 	{

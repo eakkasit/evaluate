@@ -4,7 +4,7 @@
 		<div class="widget-main">
 			<form action="<?php if (isset($search_url)) {
 				echo $search_url;
-			}; ?>" method="POST" class="form-horizontal" role="form">
+			}; ?>" method="GET" class="form-horizontal" role="form">
 				<div class="row">
 					<div class="col-md-12">
 						<label for="stext">ค้นหา</label>
@@ -13,9 +13,9 @@
 
 				<div class="row">
 					<div class="col-md-12">
-						<input type="text" id="text" name="form_search_element[text]"
+						<input type="text" id="text" name="search"
 							   class="form-control"
-							   value=""
+							   value="<?php echo $this->input->get('search') ? $this->input->get('search') : ''; ?>"
 							   placeholder="ค้นหา">
 								 <label></label>
 					</div>

@@ -32,7 +32,7 @@
 					<td class="text-left">
 						<?php echo $data->unit_name; ?>
 					</td>
-					
+
 					<td class="text-center white">
 						<div>
 							<a href="<?php echo base_url("units/view_units/{$data->unit_id}"); ?>"
@@ -60,6 +60,12 @@
 				</tr>
 				<?php
 			}
+		}else{
+			?>
+			<tr>
+				<td colspan="3" align="center">- <b>ไม่พบข้อมูล</b> -</td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>

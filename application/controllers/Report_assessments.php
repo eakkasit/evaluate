@@ -27,8 +27,8 @@ class Report_assessments extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element')['text'] && !empty($fields)) {
-			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+		if ($this->input->get('search') && !empty($fields)) {
+			$search_text = explode(' ', $this->input->get('search'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);
@@ -46,10 +46,10 @@ class Report_assessments extends CI_Controller
 	public function dashboard_report_assessments()
 	{
 
-		$cond = $this->search_form(array('profile_name', 'year', 'detail', 'status'));
+		$cond = $this->search_form(array('structure_name', 'profile_year', 'structure_status'));
 
 		$config_pager = $this->config->item('pager');
-		$config_pager['base_url'] = base_url("criteria/dashboard_criteria");
+		$config_pager['base_url'] = base_url("report_assessments/dashboard_report_assessments");
 		$count_rows = $this->Structure_model->countStructure($cond);
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);
@@ -57,7 +57,7 @@ class Report_assessments extends CI_Controller
 		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 
 		$data['content_data'] = array(
-			'search_url' => base_url("criteria/dashboard_criteria"),
+			'search_url' => base_url("report_assessments/dashboard_report_assessments"),
 			'status_list' => $this->Commons_model->getActiveList(),
 			'datas' => $this->Structure_model->getStructure($cond, array(), $config_pager['per_page'], $page),
 			'pages' => $this->pagination->create_links(),

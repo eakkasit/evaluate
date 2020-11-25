@@ -27,8 +27,8 @@ class Evaluate_five_years extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->post('form_search_element')['text'] && !empty($fields)) {
-			$search_text = explode(' ', $this->input->post('form_search_element')['text']);
+		if ($this->input->get('search') && !empty($fields)) {
+			$search_text = explode(' ', $this->input->get('search'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
 				$text = trim($text);
@@ -50,18 +50,18 @@ class Evaluate_five_years extends CI_Controller
 		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
 		$search_year_start = date('Y');
 		$search_year_end = date('Y')+4;
-		if(isset($_POST['search_year_start']) &&  isset($_POST['search_year_end'])){
-			$search_year_start = $_POST['search_year_start'];
-			$search_year_end = $_POST['search_year_end'];
+		if($this->input->get('search_year_start') != '' &&  $this->input->get('search_year_end') != ''){
+			$search_year_start = $this->input->get('search_year_start');
+			$search_year_end = $this->input->get('search_year_end');
 			$con = "year BETWEEN '{$search_year_start}' AND '{$search_year_end}'";
 			array_push($cond,$con);
 
-		}else if(isset($_POST['search_year_start'])){
-			$search_year_start = $_POST['search_year_start'];
+		}else if($this->input->get('search_year_start') != ''){
+			$search_year_start = $this->input->get('search_year_start');
 			$con = "year >= '{$search_year_start}'";
 			array_push($cond,$con);
-		}else if(isset($_POST['search_year_end'])){
-			$search_year_end = $_POST['search_year_end'];
+		}else if($this->input->get('search_year_end') != ''){
+			$search_year_end = $this->input->get('search_year_end');
 			$con = "year <= '{$search_year_end}'";
 			array_push($cond,$con);
 		}else{
@@ -149,6 +149,7 @@ class Evaluate_five_years extends CI_Controller
 		$point_result = array();
 		$weight_diff = array(); //น้ำหนักส่วนต่าง
 		$point_diff = array(); // คะแนนส่วนต่าง
+		$target_diff = array(); // คะแนนส่วนต่าง
 		$result = array(); // ร้อยละความสำเร็จ
 
 		$point_new = array(); // คะแนนเต็มใหม่
@@ -371,9 +372,15 @@ class Evaluate_five_years extends CI_Controller
 									$weight_diff[$activity_data->id][$search_year_start+$i-1] = '';
 								}
 
+								if(!isset($target_diff[$activity_data->id][$search_year_start+$i-1])){
+									$target_diff[$activity_data->id][$search_year_start+$i-1] = '';
+								}
+
 								if(!isset($point_diff[$activity_data->id][$search_year_start+$i-1])){
 									$point_diff[$activity_data->id][$search_year_start+$i-1] = '';
 								}
+
+
 								// น้ำหนักรวม
 								$weight_total[$activity_data->id][$search_year_start+$i] = $weight_per_year[$activity_data->id][$search_year_start+$i] + $weight_diff[$activity_data->id][$search_year_start+$i-1];
 								// echo "$weight_total";

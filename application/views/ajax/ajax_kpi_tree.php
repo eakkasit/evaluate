@@ -28,7 +28,10 @@
           <?php foreach ($value->data as $key_child => $child) { ?>
             <li class="dd-item" data-id="<?php echo $key_child+1; ?>">
               <div class="dd-handle">
-                <?php echo $child->criteria_name; ?>
+                <div>
+                  <?php echo $child->criteria_name; ?>
+                </div>
+
                 <div class="pull-right action-buttons">
                   <a class="blue" href="#"  onclick="editData('<?php echo $child->id; ?>')">
                     <i class="ace-icon fa fa-pencil bigger-130"></i>

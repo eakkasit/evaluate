@@ -29,12 +29,16 @@
 			<th class="text-center" width="100px"  >ปีงบประมาณ</th>
 			<th class="text-center" width="100px"  >น้ำหนักโครงการ</th>
 			<?php
+			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+				$column += 3;
 				?>
 				<th class="text-center" width="100px"  >เป้าหมายปี <?php echo $search_year_start+$i+543; ?></th>
 				<th class="text-center" width="100px"  >ผลการประเมิน</th>
 				<th class="text-center" width="100px"  >ร้อยละความสำเร็จ</th>
-			<?php } ?>
+			<?php }
+			$column += 2;
+			 ?>
 			<th class="text-center" width="75px"  >ร้อยละความสำเร็จทั้งโครงการ</th>
 			<th class="text-center" width="100px"  >หมายเหตุ</th>
 		</tr>
@@ -129,6 +133,12 @@
 				</tr>
 				<?php
 			}
+		}else{
+			?>
+			<tr>
+				<td colspan="<?php echo $column; ?>" align="center">- <b>ไม่พบข้อมูล</b> -</td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>

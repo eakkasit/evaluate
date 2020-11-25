@@ -19,7 +19,7 @@
 
   <div class="tab-content">
     <div id="project" class="tab-pane in active">
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height:230px">
          <table role="grid" id="table-example"
               class="table table-bordered table-hover dataTable no-footer">
            <thead>

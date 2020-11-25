@@ -43,6 +43,12 @@
 				</tr>
 				<?php
 			}
+		}else{
+			?>
+			<tr>
+				<td colspan="4" align="center">- <b>ไม่พบข้อมูล</b> -</td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>
