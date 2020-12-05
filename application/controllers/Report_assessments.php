@@ -95,7 +95,7 @@ class Report_assessments extends CI_Controller
 				if(!empty($project_data)){
 					$project_detail = $project_data[0];
 					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
-						$project = $activity_model->query("select group_concat(project_name) as project_name from `activities_project` WHERE id in (" . $project_detail->project_data .")")->result();
+						$project = $activity_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
 						if(!empty($project)){
 							$project_content .= $project[0]->project_name;
 						}
@@ -143,7 +143,7 @@ class Report_assessments extends CI_Controller
 				if(!empty($project_data)){
 					$project_detail = $project_data[0];
 					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
-						$project = $activity_model->query("select group_concat(project_name) as project_name from `activities_project` WHERE id in (" . $project_detail->project_data .")")->result();
+						$project = $activity_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
 						if(!empty($project)){
 							$project_content .= $project[0]->project_name;
 						}

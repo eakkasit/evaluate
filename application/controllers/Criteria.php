@@ -76,13 +76,46 @@ class Criteria extends CI_Controller
 
 	public function view_criteria($id = null)
 	{
+		$result_query = $this->CriteriaDatas_model->getCriteriaDataResult(array('structure_id'=>$id));
+		$evaluate_model = $this->load->database('default',true);
+		$result = array();
+		if(isset($result_query) && !empty($result_query)){
+			foreach ($result_query as $key => $value) {
+				$result['tree_id'][$value->tree_id] = $value->tree_id;
+				$result['structure_id'][$value->tree_id] = $value->structure_id;
+				$result['tree_number'][$value->tree_id] = $value->tree_number;
+				$result['criteria_name'][$value->tree_id] = $value->criteria_name;
+				$result['project_id'][$value->tree_id] = $value->project_id;
+				$result['result'][$value->tree_id] = $value->result;
+				$result['percent'][$value->tree_id] = $value->percent;
+				$result['weight'][$value->tree_id] = $value->weight;
+				$result['total'][$value->tree_id] = $value->total;
+				$project_content = '';
+				$project_data = $evaluate_model->query("select * from `evaluate_criteria_project` where structure_id = '".$value->structure_id."' and tree_id = '{$value->tree_id}'")->result();
+				if(!empty($project_data)){
+					$project_detail = $project_data[0];
+					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
+						$project = $evaluate_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
+						if(!empty($project)){
+							$project_content .= $project[0]->project_name;
+						}
+					}
+				}
+				$result['project_name_list'][$value->tree_id] = $project_content;
+			}
+		}
 		$data['content_data'] = array(
 			'structure_id' => $id,
 			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
-			'formula_db' => $this->Formula_model
+			'formula_db' => $this->Formula_model,
+			'activity' => $this->Activities_model->getActivityLists(array('status >='=>'2')), // sbs
+			'result' => $result
 		);
+		// echo "<pre>";
+		// print_r($data['content_data']);
+		// die();
 		$data['content_view'] = 'pages/view_criteria';
 		$this->load->view($this->theme, $data);
 	}

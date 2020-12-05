@@ -45,7 +45,7 @@ class Config_variables extends CI_Controller
 
 	public function dashboard_config_variables()
 	{
-		$cond = $this->search_form(array('unit_name'));
+		$cond = $this->search_form(array('name'));
 
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("config_variables/dashboard_config_variables");
@@ -132,7 +132,8 @@ class Config_variables extends CI_Controller
 			$data['content_data'] = array(
 				'data' => (object)array(
 					'id' => $id,
-					'unit_name' => $this->input->post('unit_name'),
+					'name' => $this->input->post('name'),
+					'sql' => $this->input->post('sql'),
 				)
 			);
 			$data['content_view'] = 'pages/form_config_variables';

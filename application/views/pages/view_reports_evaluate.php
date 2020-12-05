@@ -1,7 +1,7 @@
 <?php //$this->load->view("template/search"); ?>
 <div class="row">
 	<div class="col-md-12 text-right">
-		<a href="<?php echo base_url("evaluate_datas/dashboard_evaluate_datas"); ?>"
+		<a href="<?php echo base_url("report_evaluates/dashboard_report_evaluates"); ?>"
 			 class="table-link" title="ย้อนกลับ">
 			<button type="button" class="btn btn-xs btn-info">
 				<i class="fa fa-arrow-left"></i> ย้อนกลับ

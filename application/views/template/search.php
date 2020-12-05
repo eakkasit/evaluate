@@ -28,7 +28,7 @@
 							ค้นหา
 						</button>
 						&nbsp;&nbsp;
-						<a href="<?php echo (isset($search_url)) ? $search_url : '#'; ?>"
+						<a href="<?php echo (isset($search_url)) ? $search_url : current_url(); ?>"
 						   class="table-link" title="ล้างค่า">
 							<button type="button" class="btn btn-sm btn-warning">
 								<i class="fa fa-eye"></i> ล้างค่า

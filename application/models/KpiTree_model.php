@@ -280,7 +280,10 @@ class KpiTree_model extends CI_Model
 			}
 			$html .= '<li class="dd-item" data-id="'.($key+1).'">';
 			$html .= '	<div class="dd-handle">';
+			$html .= '	<div class="row">';
+			$html .= '	<div class="col-md-9">';
 			$html .= $value->tree_number.' '.$name;
+			$html .= '	</div >';
 			$html .= '		<div class="pull-right action-buttons">';
 			$html .= '			<a class="light-blue" href="#" onclick="showData(\''.$structure_id.'\',\''.$value->tree_id.'\')">';
 			$html .= '				<i class="ace-icon fa fa-eye bigger-130"></i>';
@@ -292,6 +295,7 @@ class KpiTree_model extends CI_Model
 			$html .= '				<i class="ace-icon fa fa-trash-o bigger-130"></i>';
 			$html .= '			</a>';
 			$html .= '		</div>';
+			$html .= '	</div>';
 			$html .= '	</div>';
 			$html .= '</li>';
 			$html .= $this->loopTreeListSub($value->tree_id,$structure_id,'');

@@ -62,9 +62,11 @@ class Evaluate_datas extends CI_Controller
 
 		$responsible_person = array();
 		foreach ($project_data as $key => $value) {
-			$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$value->responsible_person.")")->result();
-			if(isset($responsible_person_qry[0])){
-				$responsible_person[$value->id] = $responsible_person_qry[0]->fullname;
+			if($value->responsible_person != ''){
+				$responsible_person_qry = $this->db->query("select group_concat(concat_ws('',prename,fname,' ',lname)) AS fullname from tu_plan_users.users where id in (".$value->responsible_person.")")->result();
+				if(isset($responsible_person_qry[0])){
+					$responsible_person[$value->id] = $responsible_person_qry[0]->fullname;
+				}
 			}
 		}
 
