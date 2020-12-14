@@ -518,7 +518,9 @@ class Evaluate_five_years extends CI_Controller
 			if($key == 'target'){
 				foreach ($value as $key_target => $value_target) {
 					foreach ($value_target as $key_profile => $target) {
-						if($target != ''){
+						$check_data = $this->CriteriaDatas_model->getTarget(array('project_id'=>$key_target,'year'=>$key_profile));
+
+						if($check_data ||$target != ''){
 							$target_array['project_id'] = $key_target;
 							$target_array['year'] = $key_profile;
 							$target_array['target'] = $target;
@@ -530,12 +532,16 @@ class Evaluate_five_years extends CI_Controller
 			}elseif ($key == 'result') {
 				foreach ($value as $key_result => $value_result) {
 					foreach ($value_result as $key_r_profile => $result) {
-						if($result != ''){
+						$check_data = $this->CriteriaDatas_model->getResult(array('project_id'=>$key_result,'year'=>$key_r_profile));
+						if($check_data || $result != ''){
 							$result_array['project_id'] = $key_result;
 							$result_array['year'] = $key_r_profile;
-							$result_array['result'] = $result;
+							$result_array['assessment_results'] = $result;
 							$this->CriteriaDatas_model->replaceResult($result_array);
 						}
+						// if($result != ''){
+
+						// }
 
 					}
 				}

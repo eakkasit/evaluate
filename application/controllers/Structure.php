@@ -9,7 +9,7 @@ class Structure extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library(array('session', 'pagination', 'form_validation'));
-		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model'));
+		$this->load->model(array('Commons_model','Structure_model','KpiTree_model','Kpi_model','CriteriaDatas_model'));
 		$this->load->helper(array('Commons_helper', 'form', 'url'));
 
 		if ($this->session->userdata('user_id') == '') {
@@ -47,6 +47,7 @@ class Structure extends CI_Controller
 	{
 		$cond = $this->search_form(array('structure_name', 'profile_year'));
 
+
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("structure/dashboard_structure");
 		$count_rows = $this->Structure_model->countStructure($cond);
@@ -55,12 +56,23 @@ class Structure extends CI_Controller
 		$page = 0;
 		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 
+		$active_data = array();
+		$aviable_structure = $this->db->query("select structure_id from evaluate_criteria_result GROUP BY structure_id")->result();
+
+		if(!empty($aviable_structure)){
+			foreach ($aviable_structure as $key => $value) {
+				// code...
+				$active_data[$value->structure_id] = $value->structure_id;
+			}
+		}
+		$cond['structure_status'] = 1;
 		$data['content_data'] = array(
 			'search_url' => base_url("structure/dashboard_structure"),
 			'status_list' => $this->Commons_model->getActiveList(),
 			'datas' => $this->Structure_model->getStructure($cond, array(), $config_pager['per_page'], $page),
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
+			'active_data' => $active_data
 		);
 
 		$data['content_view'] = 'pages/dashboard_structure';

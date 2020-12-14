@@ -244,7 +244,7 @@ class CriteriaDatas_model extends CI_Model
 		$this->db->where('year',$data['year']);
 		$this->db->from('data_result');
 		$query = $this->db->get();
-		$data['assessment_results'] = $data['result'];
+		$data['assessment_results'] = $data['assessment_results'];
 		if($query->num_rows() > 0){
 			$this->updateResult($query->row('id'),$data);
 		}else{

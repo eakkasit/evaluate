@@ -101,8 +101,9 @@ class Structure_model extends CI_Model
 
 	public function deleteStructure($structure_id = null)
 	{
+		$this->db->set('structure_status',0);
 		$this->db->where('structure_id', $structure_id);
-		$this->db->delete('structure');
+		$this->db->update('structure');
 		return $structure_id;
 	}
 }

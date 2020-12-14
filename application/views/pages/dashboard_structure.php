@@ -53,11 +53,23 @@
 								<button type="button" class="btn btn-xs btn-warning">
 									<i class="fa fa-edit"></i> แก้ไข
 								</button></a>
+
 								<a href="<?php echo base_url("structure/new_structure_tree/{$data->structure_id}"); ?>"
 								   class="table-link" title="เพิ่มเกณฑ์การประเมิน">
 									<button type="button" class="btn btn-xs btn-success">
 										<i class="fa fa-add"></i> เกณฑ์การประเมิน
 									</button></a>
+									<?php
+									if(!isset($active_data[$data->structure_id])){
+										?>
+										<a href="#" onclick="delete_structure('<?php echo $data->structure_id; ?>')"
+										   class="table-link" title="ลบ">
+											<button type="button" class="btn btn-xs btn-danger">
+												<i class="fa fa-trash-o"></i> ลบ
+											</button></a>
+										<?php
+									}
+									 ?>
 						</div>
 					</td>
 				</tr>
@@ -81,10 +93,10 @@
     function delete_structure(id) {
         swal({
                 title: "แจ้งเตือน",
-                text: "ต้องการระงับผู้ใช้งานนี้",
+                text: "ต้องการลบแม่แบบเกณฑ์การประเมิน",
                 type: "warning",
                 showCancelButton: true,
-                confirmButtonText: "ระงับ",
+                confirmButtonText: "ลบ",
                 cancelButtonText: "ยกเลิก",
                 closeOnConfirm: false,
                 closeOnCancel: true
