@@ -418,10 +418,10 @@ table{
 						}
 
 						if($('#target_'+profile_id+'_'+(index+1)).val() != '' && typeof $('#target_'+profile_id+'_'+(index+1)).val() !== undefined){
-							var temp_last = (100 - target_total )
+							var temp_last = (100 - (target_total - target) )
 							// if(temp_last > 0){
-								// target = temp_last ;
-								console.log('temp_last',temp_last);
+								target = temp_last ;
+								// console.log('temp_last',temp_last);
 								if(temp_last >= 0){
 									$('#target_text_'+profile_id+'_'+(index+1)).html(temp_last);
 									$('#target_'+profile_id+'_'+(index+1)).val(temp_last);
