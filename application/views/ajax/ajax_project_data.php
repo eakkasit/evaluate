@@ -74,7 +74,7 @@
     </div>
 
     <div id="bsc" class="tab-pane">
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height:230px">
        <table role="grid" id="table-example"
             class="table table-bordered table-hover dataTable no-footer">
          <thead>
@@ -96,16 +96,48 @@
          $array_tmp = array();
          if (isset($bsc) && !empty($bsc)) {
            foreach ($bsc as $key => $bsc_name) {
+             $check_parent = isset($bsc_name['parent'])?true:false;
              ?>
              <tr class="odd" role="row">
                <td class="text-center">
-                 <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $key; ?>" <?php echo in_array($key,$bsc_checked)?'checked':'';?> />
+                 <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_name['id']; ?>" <?php echo $check_parent?'disabled':''; ?> <?php echo in_array($bsc_name['id'],$bsc_checked)?'checked':'';?> />
                </td>
                <td class="text-left">
-                 <?php echo $bsc_name; ?>
+                 <?php echo $bsc_name['name']; ?>
                </td>
              </tr>
              <?php
+             if($check_parent){
+               foreach ($bsc_name['parent'] as $sub_key => $bsc_sub_name) {
+                  $check_parent_sub = isset($bsc_sub_name['parent'])?true:false;
+                 ?>
+                 <tr class="odd" role="row">
+                   <td class="text-center">
+                     <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_sub_name['id']; ?>" <?php echo $check_parent_sub?'disabled':''; ?> <?php echo in_array($bsc_sub_name['id'],$bsc_checked)?'checked':'';?> />
+                   </td>
+                   <td class="text-left">
+                     <?php echo "&emsp;".$bsc_sub_name['name']; ?>
+                   </td>
+                 </tr>
+                 <?php
+                 if($check_parent_sub){
+                   foreach ($bsc_sub_name['parent'] as $sub_detail_key => $bsc_sub_detail_name) {
+                      // $check_parent_sub = isset($bsc_sub_name['parent'])?true:false;
+                     ?>
+                     <tr class="odd" role="row">
+                       <td class="text-center">
+                         <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_sub_detail_name['id']; ?>" <?php echo in_array($bsc_sub_detail_name['id'],$bsc_checked)?'checked':'';?> />
+                       </td>
+                       <td class="text-left">
+                         <?php echo "&emsp;&emsp;".$bsc_sub_detail_name['name']; ?>
+                       </td>
+                     </tr>
+
+                     <?php
+                   }
+                 }
+               }
+             }
            }
          } else {
            ?>
@@ -129,7 +161,7 @@
     </div>
 
     <div id="activity" class="tab-pane">
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height:230px">
        <table role="grid" id="table-example"
             class="table table-bordered table-hover dataTable no-footer">
          <thead>

@@ -26,11 +26,21 @@ class Structure extends CI_Controller
 
 	public function search_form($fields = array())
 	{
+
 		$cond = array();
-		if ($this->input->get('search') && !empty($fields)) {
+		if (($this->input->get('search')||$this->input->get('keyword')) && !empty($fields)) {
 			$search_text = explode(' ', $this->input->get('search'));
+			$search_key_text = explode(';', $this->input->get('keyword'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
+				$text = trim($text);
+				if ($text != '') {
+					foreach ($fields as $field) {
+						$cond_str .= "{$field} LIKE '%{$text}%' OR ";
+					}
+				}
+			}
+			foreach ($search_key_text as $text) {
 				$text = trim($text);
 				if ($text != '') {
 					foreach ($fields as $field) {
@@ -72,7 +82,8 @@ class Structure extends CI_Controller
 			'datas' => $this->Structure_model->getStructure($cond, array(), $config_pager['per_page'], $page),
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
-			'active_data' => $active_data
+			'active_data' => $active_data,
+			'search_keyword' => 'on'
 		);
 
 		$data['content_view'] = 'pages/dashboard_structure';

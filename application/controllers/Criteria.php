@@ -34,10 +34,19 @@ class Criteria extends CI_Controller
 	public function search_form($fields = array())
 	{
 		$cond = array();
-		if ($this->input->get('search') && !empty($fields)) {
+		if (($this->input->get('search')||$this->input->get('keyword')) && !empty($fields)) {
 			$search_text = explode(' ', $this->input->get('search'));
+			$search_key_text = explode(';', $this->input->get('keyword'));
 			$cond_str = "( ";
 			foreach ($search_text as $text) {
+				$text = trim($text);
+				if ($text != '') {
+					foreach ($fields as $field) {
+						$cond_str .= "{$field} LIKE '%{$text}%' OR ";
+					}
+				}
+			}
+			foreach ($search_key_text as $text) {
 				$text = trim($text);
 				if ($text != '') {
 					foreach ($fields as $field) {
@@ -68,6 +77,7 @@ class Criteria extends CI_Controller
 			'datas' => $this->Structure_model->getStructure($cond, array(), $config_pager['per_page'], $page),
 			'pages' => $this->pagination->create_links(),
 			'count_rows' => $count_rows,
+			'search_keyword' => 'on'
 		);
 
 		$data['content_view'] = 'pages/dashboard_criteria';
@@ -99,6 +109,31 @@ class Criteria extends CI_Controller
 						if(!empty($project)){
 							$project_content .= $project[0]->project_name;
 						}
+					}
+					if(!empty($project_detail->bsc_data) && $project_detail->bsc_data != ''){
+						$bsc = $evaluate_model->query("SELECT group_concat( IFNULL( task_name ,( SELECT project_name FROM project WHERE id = project_id))) AS title_name FROM bsc_person_indicators WHERE bsc_ps_inct_id in(".$project_detail->bsc_data.")")->result();
+						if(!empty($bsc)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $bsc[0]->title_name;
+						}
+					}
+					if(!empty($project_detail->task_data) && $project_detail->task_data != ''){
+						$task = $evaluate_model->query("select group_concat(task_name) as task_name from `task` WHERE task_id in (" . $project_detail->task_data .")")->result();
+
+						if(!empty($task)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $task[0]->task_name;
+						}
+					}
+					if(!empty($project_detail->other_data) && $project_detail->other_data != ''){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $project_detail->other_data;
 					}
 				}
 				$result['project_name_list'][$value->tree_id] = $project_content;
@@ -270,10 +305,53 @@ class Criteria extends CI_Controller
 
 			$other_data = $checked_data->other_data;
 		}
+
+		$bsc_data = $this->db->query('SELECT * FROM bsc_person ORDER BY bsc_ps_pubyear DESC, bsc_ps_id DESC')->result();
+		$bsc = array();
+		if(isset($bsc_data) && !empty($bsc_data)){
+			foreach ($bsc_data as $key => $value) {
+				$bsc[$value->bsc_ps_id]['id'] = $value->bsc_ps_id;
+				$bsc[$value->bsc_ps_id]['name'] = $value->bsc_ps_title;
+				// (รายการเพิ่มเติมไม่เกี่ยวข้องกับโครงการ)
+				$bsc_sub_data = $this->db->query('SELECT *, IFNULL(task_name, (SELECT project_name FROM project WHERE id = project_id)) as title_name FROM bsc_person_indicators WHERE bsc_ps_id = '.$value->bsc_ps_id.' AND ( type_task = 3 AND parent_task = 0 ) ORDER BY task_enddate ASC')->result();
+
+				if(!empty($bsc_sub_data)){
+					$sub_temp_data = array();
+					foreach ($bsc_sub_data as $sub_key => $sub_value) {
+						$sub_temp_data[$sub_value->bsc_ps_inct_id]['id'] = $sub_value->bsc_ps_inct_id;
+						$sub_temp_data[$sub_value->bsc_ps_inct_id]['name'] = $sub_value->title_name;
+
+						$bsc_sub_data_detail = $this->db->query('SELECT *, IFNULL( task_name ,( SELECT task_name FROM task WHERE task_id = bsc_person_indicators.task_id)) AS title_name FROM bsc_person_indicators WHERE bsc_ps_id = '.$value->bsc_ps_id.' AND type_task = 3 AND parent_task = '.$sub_value->bsc_ps_inct_id.' ORDER BY task_enddate ASC')->result();
+						if(!empty($bsc_sub_data_detail)){
+							$sub_detail_temp_data = array();
+							foreach ($bsc_sub_data_detail as $key_detail => $value_detail) {
+								$sub_detail_temp_data[$value_detail->bsc_ps_inct_id]['id'] = $value_detail->bsc_ps_inct_id;
+								$sub_detail_temp_data[$value_detail->bsc_ps_inct_id]['name'] = $value_detail->title_name;
+							}
+							if(!empty($sub_detail_temp_data)){
+								$sub_temp_data[$sub_value->bsc_ps_inct_id]['parent'] = $sub_detail_temp_data;
+							}
+						}
+					}
+					if(!empty($sub_temp_data)){
+						$bsc[$value->bsc_ps_id]['parent'] = $sub_temp_data;
+					}
+				}
+			}
+
+		}
+
+		$task_data = $this->db->query('SELECT * FROM task ORDER BY task_id DESC')->result();
+		$task = array();
+		if(isset($task_data) && !empty($task_data)){
+			foreach ($task_data as $key => $value) {
+				$task[$value->task_id] =  $value->task_name;
+			}
+		}
 		$data['content_data'] = array(
 			'project' => $this->Activities_model->getActivityLists(array('status >='=>'2')), // sbs
-			'bsc' => array(),
-			'task' => array(),
+			'bsc' => $bsc,
+			'task' => $task,
 			'project_checked' => $project_checked,
 			'bsc_checked' => $bsc_checked,
 			'task_checked' => $task_checked,
@@ -626,7 +704,7 @@ class Criteria extends CI_Controller
 				$data['project_data'] = implode(",",$data['project']);
 			}else{
 				if($check_project == 1){
-					$data['project_data'] = $data['project'];
+					$data['project_data'] = $data['project'][0];
 				}else{
 					$data['project_data'] = '';
 				}
@@ -656,11 +734,12 @@ class Criteria extends CI_Controller
 
 		if(isset($data['activity'])){
 			$check_activity = count($data['activity']);
+
 			if($check_activity > 1){
 				$data['task_data'] = implode(",",$data['activity']);
 			}else{
 				if($check_activity == 1){
-					$data['task_data'] = $data['activity'];
+					$data['task_data'] = $data['activity'][0];
 				}else{
 					$data['task_data'] = '';
 				}

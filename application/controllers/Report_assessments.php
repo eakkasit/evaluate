@@ -95,12 +95,38 @@ class Report_assessments extends CI_Controller
 				if(!empty($project_data)){
 					$project_detail = $project_data[0];
 					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
-						$project = $activity_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
+						$project = $evaluate_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
 						if(!empty($project)){
 							$project_content .= $project[0]->project_name;
 						}
 					}
+					if(!empty($project_detail->bsc_data) && $project_detail->bsc_data != ''){
+						$bsc = $evaluate_model->query("SELECT group_concat( IFNULL( task_name ,( SELECT project_name FROM project WHERE id = project_id))) AS title_name FROM bsc_person_indicators WHERE bsc_ps_inct_id in(".$project_detail->bsc_data.")")->result();
+						if(!empty($bsc)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $bsc[0]->title_name;
+						}
+					}
+					if(!empty($project_detail->task_data) && $project_detail->task_data != ''){
+						$task = $evaluate_model->query("select group_concat(task_name) as task_name from `task` WHERE task_id in (" . $project_detail->task_data .")")->result();
+
+						if(!empty($task)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $task[0]->task_name;
+						}
+					}
+					if(!empty($project_detail->other_data) && $project_detail->other_data != ''){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $project_detail->other_data;
+					}
 				}
+
 				$result['project_name_list'][$value->tree_id] = $project_content;
 
 			}
@@ -143,10 +169,35 @@ class Report_assessments extends CI_Controller
 				if(!empty($project_data)){
 					$project_detail = $project_data[0];
 					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
-						$project = $activity_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
+						$project = $evaluate_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
 						if(!empty($project)){
 							$project_content .= $project[0]->project_name;
 						}
+					}
+					if(!empty($project_detail->bsc_data) && $project_detail->bsc_data != ''){
+						$bsc = $evaluate_model->query("SELECT group_concat( IFNULL( task_name ,( SELECT project_name FROM project WHERE id = project_id))) AS title_name FROM bsc_person_indicators WHERE bsc_ps_inct_id in(".$project_detail->bsc_data.")")->result();
+						if(!empty($bsc)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $bsc[0]->title_name;
+						}
+					}
+					if(!empty($project_detail->task_data) && $project_detail->task_data != ''){
+						$task = $evaluate_model->query("select group_concat(task_name) as task_name from `task` WHERE task_id in (" . $project_detail->task_data .")")->result();
+
+						if(!empty($task)){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $task[0]->task_name;
+						}
+					}
+					if(!empty($project_detail->other_data) && $project_detail->other_data != ''){
+							if($project_content != ''){
+								$project_content .= " , ";
+							}
+							$project_content .= $project_detail->other_data;
 					}
 				}
 				$result['project_name_list'][$value->tree_id] = $project_content;

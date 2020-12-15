@@ -20,6 +20,24 @@
 					</div>
 				</div>
 
+				<?php
+				if(isset($search_keyword)){
+					?>
+				<div class="row">
+					<div class="col-md-12">
+						<label for="stext">keyword</label>
+					</div>
+				</div>
+
+				<div class="row ">
+					<div class="col-md-12">
+						<input type="text" class="w100 tagInputRewrite" name="keyword" id="keyword" value="<?php echo $this->input->get('keyword') ? $this->input->get('keyword') : ''; ?>" style="display: none;">
+					</div>
+				</div>
+				<?php
+				}
+				?>
+
 				<div class="row">
 					<div class="col-md-12 text-right">
 						<button class="btn btn-sm btn-primary"
@@ -34,6 +52,7 @@
 								<i class="fa fa-eye"></i> ล้างค่า
 							</button></a>
 					</div>
+
 				</div>
 			</form>
 		</div>

@@ -73,7 +73,15 @@
 
 	<!-- Custom -->
 	<!--link rel="stylesheet" href="http://sbs-app.com/tu_plan/shared/layout/default/custom_style.css" type="text/css" media="screen"/-->
+	<style type="text/css">
+	    .tagsinput {
+	        width: 100% !important;
+	    }
 
+	    div.tagsinput input {
+	        width: 300px !important;
+	    }
+	</style>
 	<style>
 		.img-thumbnail.img-custom {
 			padding: 0;
@@ -241,5 +249,33 @@
 <script src="<?php echo base_url(); ?>docs/assets/js/language/html.js"></script>
 <script src="<?php echo base_url(); ?>docs/assets/js/language/css.js"></script>
 <script src="<?php echo base_url(); ?>docs/assets/js/language/javascript.js"></script>
+
+<!--tagsInput-->
+  <link rel="stylesheet" type="text/css" href="http://sbs-app.com/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.css"/>
+  <script type="text/javascript" src="http://sbs-app.com/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.js"></script>
+
+
+<script type="text/javascript">
+		// addClass เพราะพิมพ์ ม กับ , ไม่ได้ start
+		jQuery(document).ready(function($) {
+		 $('.tagInput').each(function(index, el) {
+						$(this).addClass('tagInputRewrite');
+						$('.tagInputRewrite').hide();
+						$(this).removeClass('tagInput');
+				});
+		});
+
+		window.onload = function() {
+		$('.tagInputRewrite').tagsInput({
+				defaultText: 'พิมพ์เสร็จแล้วกด Enter เพื่อเริ่มต้นข้อความใหม่',
+				delimiter: ';',
+				// width: 250,
+		});
+		// $('.tagInputRewrite').show();
+		}
+		// addClass เพราะพิมพ์ ม กับ , ไม่ได้ end
+
+
+</script>
 </body>
 </html>
