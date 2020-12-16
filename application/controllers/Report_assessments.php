@@ -46,7 +46,7 @@ class Report_assessments extends CI_Controller
 	public function dashboard_report_assessments()
 	{
 
-		$cond = $this->search_form(array('structure_name', 'profile_year', 'structure_status'));
+		$cond = $this->search_form(array('structure_name', 'profile_year', 'structure_status','keyword'));
 
 		$config_pager = $this->config->item('pager');
 		$config_pager['base_url'] = base_url("report_assessments/dashboard_report_assessments");
@@ -55,7 +55,7 @@ class Report_assessments extends CI_Controller
 		$this->pagination->initialize($config_pager);
 		$page = 0;
 		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
-
+		$cond['structure_status'] = 1;
 		$data['content_data'] = array(
 			'search_url' => base_url("report_assessments/dashboard_report_assessments"),
 			'status_list' => $this->Commons_model->getActiveList(),
