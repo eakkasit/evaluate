@@ -251,8 +251,8 @@
 <script src="<?php echo base_url(); ?>docs/assets/js/language/javascript.js"></script>
 
 <!--tagsInput-->
-  <link rel="stylesheet" type="text/css" href="http://sbs-app.com/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.css"/>
-  <script type="text/javascript" src="http://sbs-app.com/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.css"/>
+<script src="<?php echo base_url(); ?>/tu_plan/shared/statics/js/tagsInput/jquery.tagsinput.js"></script>
 
 
 <script type="text/javascript">
