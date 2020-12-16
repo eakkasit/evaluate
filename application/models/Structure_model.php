@@ -81,6 +81,7 @@ class Structure_model extends CI_Model
 		$this->db->set('profile_year', $data['profile_year']);
 		$this->db->set('frequency_id', '4');
 		$this->db->set('structure_status', $data['structure_status']);
+		$this->db->set('keyword', $data['keyword']);
 		$this->db->set('create_date', 'NOW()', false);
 		$this->db->insert('structure');
 		return $this->db->insert_id();
@@ -92,6 +93,7 @@ class Structure_model extends CI_Model
 		$this->db->set('profile_year', $data['profile_year']);
 		$this->db->set('frequency_id', '4');
 		$this->db->set('structure_status', $data['structure_status']);
+		$this->db->set('keyword', $data['keyword']);
 		$this->db->where('structure_id', $structure_id);
 		$this->db->update('structure');
 		return $structure_id;

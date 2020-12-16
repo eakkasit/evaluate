@@ -21,9 +21,9 @@
 				</div>
 
 				<?php
-				if(isset($search_keyword)){
+				// if(isset($search_keyword)){
 					?>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-md-12">
 						<label for="stext">keyword</label>
 					</div>
@@ -33,9 +33,9 @@
 					<div class="col-md-12">
 						<input type="text" class="w100 tagInputRewrite" name="keyword" id="keyword" value="<?php echo $this->input->get('keyword') ? $this->input->get('keyword') : ''; ?>" style="display: none;">
 					</div>
-				</div>
+				</div> -->
 				<?php
-				}
+				// }
 				?>
 
 				<div class="row">

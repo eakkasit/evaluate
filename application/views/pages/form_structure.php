@@ -54,6 +54,17 @@ if (isset($data->structure_id) && $data->structure_id != '') {
 						</div>
 						<div class="row">
 							<div class="col-md-12">
+								<label for="stext">คำค้น</label>
+							</div>
+						</div>
+
+						<div class="row ">
+							<div class="col-md-12">
+								<input type="text" class="w100 tagInputRewrite" name="keyword" id="keyword" value="<?php if (isset($data->keyword)) { echo $data->keyword;	} ?>" style="display: none;">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
 								<label for="stext">สถานะการใช้งาน</label>
 							</div>
 						</div>

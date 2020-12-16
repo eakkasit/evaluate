@@ -40,14 +40,14 @@ class Structure extends CI_Controller
 					}
 				}
 			}
-			foreach ($search_key_text as $text) {
-				$text = trim($text);
-				if ($text != '') {
-					foreach ($fields as $field) {
-						$cond_str .= "{$field} LIKE '%{$text}%' OR ";
-					}
-				}
-			}
+			// foreach ($search_key_text as $text) {
+			// 	$text = trim($text);
+			// 	if ($text != '') {
+			// 		foreach ($fields as $field) {
+			// 			$cond_str .= "{$field} LIKE '%{$text}%' OR ";
+			// 		}
+			// 	}
+			// }
 			$cond = array(substr($cond_str, 0, -3) . " )");
 		}
 		return $cond;
@@ -55,7 +55,7 @@ class Structure extends CI_Controller
 
 	public function dashboard_structure()
 	{
-		$cond = $this->search_form(array('structure_name', 'profile_year'));
+		$cond = $this->search_form(array('structure_name', 'profile_year','keyword'));
 
 
 		$config_pager = $this->config->item('pager');
@@ -168,7 +168,8 @@ class Structure extends CI_Controller
 					'structure_id' => $structure_id,
 					'structure_name' => $this->input->post('structure_name'),
 					'profile_name' => $this->input->post('profile_year'),
-					'structure_status' => $this->input->post('structure_status')
+					'structure_status' => $this->input->post('structure_status'),
+					'keyword' => $this->input->post('keyword')
 				)
 			);
 			$data['content_view'] = 'pages/form_structure';
