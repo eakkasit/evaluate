@@ -107,16 +107,20 @@ class Criteria extends CI_Controller
 					if(!empty($project_detail->project_data) && $project_detail->project_data != ''){
 						$project = $evaluate_model->query("select group_concat(project_name) as project_name from `project` WHERE id in (" . $project_detail->project_data .")")->result();
 						if(!empty($project)){
-							$project_content .= $project[0]->project_name;
+							$temp_project_ex = explode(",",$project[0]->project_name);
+							$temp_project = array_map(function($val) { return '- '.$val; }, $temp_project_ex);
+							$project_content .= implode("<br>",$temp_project);
 						}
 					}
 					if(!empty($project_detail->bsc_data) && $project_detail->bsc_data != ''){
 						$bsc = $evaluate_model->query("SELECT group_concat( IFNULL( task_name ,( SELECT project_name FROM project WHERE id = project_id))) AS title_name FROM bsc_person_indicators WHERE bsc_ps_inct_id in(".$project_detail->bsc_data.")")->result();
 						if(!empty($bsc)){
 							if($project_content != ''){
-								$project_content .= " , ";
+								$project_content .= "<br>";
 							}
-							$project_content .= $bsc[0]->title_name;
+							$temp_bsc_ex = explode(",",$bsc[0]->title_name);
+							$temp_bsc = array_map(function($val) { return '- '.$val; }, $temp_bsc_ex);
+							$project_content .= implode("<br>",$temp_bsc);
 						}
 					}
 					if(!empty($project_detail->task_data) && $project_detail->task_data != ''){
@@ -124,16 +128,20 @@ class Criteria extends CI_Controller
 
 						if(!empty($task)){
 							if($project_content != ''){
-								$project_content .= " , ";
+								$project_content .= "<br>";
 							}
-							$project_content .= $task[0]->task_name;
+							$temp_task_ex = explode(",",$task[0]->task_name);
+							$temp_task = array_map(function($val) { return '- '.$val; }, $temp_task_ex);
+							$project_content .= implode("<br>",$temp_task);
 						}
 					}
 					if(!empty($project_detail->other_data) && $project_detail->other_data != ''){
 							if($project_content != ''){
-								$project_content .= " , ";
+								$project_content .= "<br>";
 							}
-							$project_content .= $project_detail->other_data;
+							$temp_other_ex = explode(",",$project_detail->other_data);
+							$temp_other = array_map(function($val) { return '- '.$val; }, $temp_other_ex);
+							$project_content .= implode("<br>",$temp_other);
 					}
 				}
 				$result['project_name_list'][$value->tree_id] = $project_content;

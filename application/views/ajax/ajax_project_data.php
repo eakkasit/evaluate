@@ -75,7 +75,7 @@
 
     <div id="bsc" class="tab-pane">
       <div class="table-responsive" style="max-height:230px">
-       <table role="grid" id="table-example"
+       <table role="grid" id="table-bsc-example"
             class="table table-bordered table-hover dataTable no-footer">
          <thead>
          <tr role="row">
@@ -100,7 +100,13 @@
              ?>
              <tr class="odd" role="row">
                <td class="text-center">
-                 <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_name['id']; ?>" <?php echo $check_parent?'disabled':''; ?> <?php echo in_array($bsc_name['id'],$bsc_checked)?'checked':'';?> />
+                 <?php
+                  if(!$check_parent){
+                    ?>
+                     <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_name['id']; ?>" <?php echo $check_parent?'disabled':''; ?> <?php echo in_array($bsc_name['id'],$bsc_checked)?'checked':'';?> />
+                     <?php
+                   }
+                  ?>
                </td>
                <td class="text-left">
                  <?php echo $bsc_name['name']; ?>
@@ -113,7 +119,14 @@
                  ?>
                  <tr class="odd" role="row">
                    <td class="text-center">
-                     <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_sub_name['id']; ?>" <?php echo $check_parent_sub?'disabled':''; ?> <?php echo in_array($bsc_sub_name['id'],$bsc_checked)?'checked':'';?> />
+                     <?php
+                      if(!$check_parent_sub){
+                        ?>
+                        <input type="checkbox" name="bsc[]" class="checkChild" value="<?php echo $bsc_sub_name['id']; ?>" <?php echo $check_parent_sub?'disabled':''; ?> <?php echo in_array($bsc_sub_name['id'],$bsc_checked)?'checked':'';?> />
+                        <?php
+                      }
+                     ?>
+
                    </td>
                    <td class="text-left">
                      <?php echo "&emsp;".$bsc_sub_name['name']; ?>
@@ -162,7 +175,7 @@
 
     <div id="activity" class="tab-pane">
       <div class="table-responsive" style="max-height:230px">
-       <table role="grid" id="table-example"
+       <table role="grid" id="table-activity-example"
             class="table table-bordered table-hover dataTable no-footer">
          <thead>
          <tr role="row">
@@ -219,3 +232,33 @@
     </div>
   </div>
 </div>
+<script src="<?php echo base_url(); ?>assets/js/dataTables/jquery.dataTables.js"></script>
+<script>
+$('#table-example').DataTable({
+  "paging": false,
+  "bInfo" : false,
+  "ordering": false,
+  "language": {
+    "search": "ค้นหา:",
+    "zeroRecords":"ไม่พบข้อมูล"
+  }
+});
+$('#table-bsc-example').DataTable({
+  "paging": false,
+  "bInfo" : false,
+  "ordering": false,
+  "language": {
+    "search": "ค้นหา:",
+    "zeroRecords":"ไม่พบข้อมูล"
+  }
+});
+$('#table-activity-example').DataTable({
+  "paging": false,
+  "bInfo" : false,
+  "ordering": false,
+  "language": {
+    "search": "ค้นหา:",
+    "zeroRecords":"ไม่พบข้อมูล"
+  }
+});
+</script>

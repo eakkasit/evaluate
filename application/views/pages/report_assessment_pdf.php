@@ -60,9 +60,9 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$html .= '<tr>';
 					$html	.= '<td class="text-left">'.$symbol.$value->tree_number.' '.$kpi->kpi_name.'</td>';
 					$html	.= '<td class="text-left">'.$project_name.'</td>';
-					$html	.= '<td class="text-right">'.$target.'</td>';
-					$html	.= '<td class="text-right">'.$result.'</td>';
-					$html	.= '<td class="text-right">'.$weight.'</td>';
+					$html	.= '<td class="text-right"  align="right">'.$target.'</td>';
+					$html	.= '<td class="text-right"  align="right">'.$result.'</td>';
+					$html	.= '<td class="text-right"  align="right">'.$weight.'</td>';
 					$html .= '</tr>';
 				}
 
@@ -81,7 +81,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 					$html .= '<tr>';
 					$html	.= '<td colspan="2">&emsp;&emsp;&emsp;&emsp;<b>รวม</b></td>';
 					$html	.= '<td></td>';
-					$html	.= '<td class="text-right">'.$sum_result.'</td>';
+					$html	.= '<td class="text-right"  align="right">'.$sum_result.'</td>';
 					$html	.= '<td></td>';
 					$html .= '</tr>';
 				}
@@ -130,7 +130,7 @@ table#table_assessment td {
 						?>
 						<tr>
 							<td align="left" ><b><?php echo $value->tree_number.' '.$value->tree_name; ?></b></td>
-							<td align="center">โครงการ</td>
+							<td align="center">ข้อมูลที่เชื่อมโยง</td>
 							<td align="center">ผลลัพธ์</td>
 							<td align="center">เปอร์เซนต์</td>
 							<td align="center">ค่าน้ำหนัก</td>
@@ -143,7 +143,7 @@ table#table_assessment td {
 							<tr>
 								<td colspan="2" align="center">&emsp;&emsp;&emsp;&emsp;<b>คะแนนเฉลี่ยรวมรายหมวด</b></td>
 								<td></td>
-								<td class="text-right">
+								<td class="text-right" align="right">
 									<?php  echo (isset($result['total'][$value->tree_id]))? number_format($result['total'][$value->tree_id],2):''; ?>
 								</td>
 								<td></td>

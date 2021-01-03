@@ -349,7 +349,7 @@ class Evaluate_five_years extends CI_Controller
 						if((($search_year_start+$i)-$activity_data->year_end) > 1){
 							$target[$activity_data->id][$search_year_start+$i] = '';
 						}else{
-							if($target[$activity_data->id][$search_year_start+$i-1] != ''){
+							if(isset($target[$activity_data->id][$search_year_start+$i-1]) && $target[$activity_data->id][$search_year_start+$i-1] != ''){
 
 								// echo "$target_all";
 								// die();

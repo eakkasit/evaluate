@@ -48,7 +48,16 @@
 						<?php echo $data->project_name; ?>
 					</td>
 					<td class="text-center">
-						<?php echo $data->year+543; ?>
+						<?php
+						if($data->year_start == $data->year_end){
+							echo $data->year_start+543;
+						}else{
+							$year_start = $data->year_start+543;
+							$year_end = $data->year_end+543;
+							echo "$year_start - $year_end" ;
+						}
+
+						?>
 					</td>
 					<td class="text-left">
 						<?php echo $data->detail; ?>

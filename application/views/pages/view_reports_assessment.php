@@ -96,6 +96,11 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 
 
 ?>
+<style>
+	table tr:not(:first-child) td{
+    border: 1px solid #ccc !important;
+	}
+</style>
 <p class="h4 header text-success">
 	<i class="fa fa-file-text-o"></i> รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด
 </p>
@@ -131,10 +136,10 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 col-md-offset-2 col-md-8 text-center">
+				<div class="col-xs-12 col-md-offset-1 col-md-10 text-center">
 					<table class="table borderless" >
 						<tr>
-							<td class="text-center h4 strong" colspan="3">
+							<td class="text-center h4 strong" colspan="5">
 								รายงานเป้าหมายการดำเนินงานตามตัวชี้วัด
 							</td>
 						</tr>
@@ -143,11 +148,11 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 							foreach ($tree as $key => $value) {
 								?>
 								<tr>
-									<td class="text-left"><b><?php echo $value->tree_number.' '.$value->tree_name; ?></b></td>
-									<td>โครงการ</td>
-									<td>ผลลัพธ์</td>
-									<td>เปอร์เซนต์</td>
-									<td>ค่าน้ำหนัก</td>
+									<td class="text-left" width="40%"><b><?php echo $value->tree_number.' '.$value->tree_name; ?></b></td>
+									<td  width="30%">ข้อมูลที่เชื่อมโยง</td>
+									<td  width="10%">ผลลัพธ์</td>
+									<td  width="10%">เปอร์เซนต์</td>
+									<td  width="10%">ค่าน้ำหนัก</td>
 								</tr>
 								<?php
 								echo loopTreeFormListSub($value->tree_id,$structure_id,$tree_db,$kpi_db,$formula_db,'','&emsp;&emsp;',$result);
@@ -161,7 +166,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 											<?php  echo (isset($result['total'][$value->tree_id]))? number_format($result['total'][$value->tree_id],2):''; ?>
 										</td>
 										<td></td>
-										<td></td>
+
 									</tr>
 									<?php
 								}

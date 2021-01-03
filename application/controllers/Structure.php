@@ -341,4 +341,67 @@ class Structure extends CI_Controller
 	{
 		$this->KpiTree_model->treeweightsum($id,$kpi);
 	}
+
+	public function duplicate_structure()
+	{
+		// code...
+		$id = $this->input->post('id');
+		// echo "<pre>";
+		// print_r($input);
+		// die();
+		if($id != ''){
+			$structure_check = $this->db->query("SELECT * FROM kpi_structure WHERE structure_id = '".$id."'")->result();
+			if(!empty($structure_check)){
+				$save_stucture = (array) $structure_check[0];
+				unset($save_stucture['structure_id']);
+				$structure_id = $this->Structure_model->insertStructure($save_stucture);
+				$tree_data = $this->db->query("SELECT * FROM kpi_tree WHERE structure_id = '".$id."' and  tree_parent = 0")->result();
+				if(!empty($tree_data)){
+					try {
+						$this->db->trans_start();
+
+						foreach ($tree_data as $key => $value) {
+							$save_data = (array) $value;
+							$save_data['structure_id'] = $structure_id;
+							$save_id = $this->KpiTree_model->insertKpiTree($save_data);
+							$this->duplicate_structure_tree($id,$structure_id,$value->tree_id,$save_id);
+						}
+
+						$this->db->trans_complete();
+						if ($this->db->trans_status() === FALSE) {
+								$this->db->trans_rollback();
+								echo "false";
+						}
+						else {
+								$this->db->trans_commit();
+								echo "true";
+						}
+
+					}catch (Exception $e) {
+						echo "false";
+					}
+				}
+			}else{
+				echo "false";
+			}
+
+		}else{
+			echo "false";
+		}
+	}
+
+	public function duplicate_structure_tree($structure_old_id='',$structure_new_id='',$parent_old_id='',$parent_new_id='')
+	{
+		$tree_data = $this->db->query("SELECT * FROM kpi_tree WHERE structure_id = '".$structure_old_id."' and  tree_parent = '".$parent_old_id."'")->result();
+		if(!empty($tree_data)){
+			foreach ($tree_data as $key => $value) {
+				$save_data = (array) $value;
+				$save_data['structure_id'] = $structure_new_id;
+				$save_data['tree_parent'] = $parent_new_id;
+				$save_id = $this->KpiTree_model->insertKpiTree($save_data);
+				$this->duplicate_structure_tree($structure_old_id,$structure_new_id,$value->tree_id,$save_id);
+			}
+		}
+
+	}
 }

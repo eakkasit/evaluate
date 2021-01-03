@@ -70,6 +70,11 @@
 										<?php
 									}
 									 ?>
+								 <a href="#" onclick="duplicate_structure('<?php echo $data->structure_id; ?>')"
+										class="table-link" title="คัดลอก">
+									 <button type="button" class="btn btn-xs btn-info">
+										 <i class="fa fa-copy"></i> คัดลอก
+									 </button></a>
 						</div>
 					</td>
 				</tr>
@@ -107,4 +112,51 @@
                 }
             });
     }
+
+		function duplicate_structure(id) {
+			$.ajax({
+						url: '<?php echo base_url("structure/duplicate_structure/"); ?>',
+						type: "POST",
+						data:  {id:id},
+						success: function (data) {
+							if(data == "true"){
+								swal({
+				                title: "คัดลอก",
+				                text: "คัดลอกข้อมูลสำเร็จ",
+				                type: "success",
+				                showCancelButton: false,
+				                confirmButtonText: "ตกลง",
+				                cancelButtonText: "ยกเลิก",
+				                closeOnConfirm: false,
+				                closeOnCancel: true
+				            },
+				            function (isConfirm) {
+				                if (isConfirm) {
+				                    window.location.reload();
+				                }
+				            });
+
+							}else{
+								swal({
+										title: "ไม่สามารถคัดลอกข้อมูลได้",
+										text: "",
+										type: "error",
+										showCancelButton: false,
+										confirmButtonText: "ตกลง",
+								})
+							}
+
+						},
+						error:function (e) {
+							swal({
+									title: "ไม่สามารถคัดลอกข้อมูลได้",
+									text: "",
+									type: "error",
+									showCancelButton: false,
+									confirmButtonText: "ตกลง",
+							})
+						}
+				})
+
+		}
 </script>
