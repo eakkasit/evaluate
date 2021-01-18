@@ -1,4 +1,66 @@
 <?php $this->load->view("template/search_year"); ?>
+<style>
+
+.td-border-top-bottom-odd{
+	border-top:2px solid #dac400 !important;
+	border-bottom:2px solid #dac400 !important;
+}
+
+.td-border-top-bottom-even{
+	border-top:2px solid #0078d8 !important;
+	border-bottom:2px solid #0078d8 !important;
+}
+
+.td-border-left-top-odd{
+	border-top:2px solid #dac400 !important;
+	border-left:2px solid #dac400 !important;
+	border-bottom:2px solid #dac400 !important;
+}
+
+.td-border-left-top-even{
+	border-top:2px solid #0078d8 !important;
+	border-left:2px solid #0078d8 !important;
+	border-bottom:2px solid #0078d8 !important;
+}
+
+
+.td-border-right-top-odd{
+	border-top:2px solid #dac400 !important;
+	border-right:2px solid #dac400 !important;
+	border-bottom:2px solid #dac400 !important;
+}
+
+.td-border-right-top-even{
+	border-top:2px solid #0078d8 !important;
+	border-right:2px solid #0078d8 !important;
+	border-bottom:2px solid #0078d8 !important;
+}
+
+.table > tbody > tr:last-child >td.td-bottom-odd{
+	border-bottom:2px solid #dac400 !important;
+}
+
+.table > tbody > tr:last-child >td.td-bottom-even{
+	border-bottom:2px solid #0078d8 !important;
+}
+
+.td-left-odd{
+	border-left:2px solid #dac400 !important;
+}
+
+.td-left-even{
+	border-left:2px solid #0078d8 !important;
+}
+
+.td-right-odd{
+	border-right:2px solid #dac400 !important;
+}
+
+.td-right-even{
+	border-right:2px solid #0078d8 !important;
+}
+
+</style>
 <div class="row">
 	<div class="col-md-12 text-right">
 		<a href="<?php echo base_url("report_five_years/export/pdf"); ?>"  class="table-link" title="พิมพ์ PDF" target="_blank">
@@ -31,11 +93,16 @@
 			<?php
 			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
+				if(($i%2)==0){
+					$cls = "odd";
+				}else{
+					$cls = "even";
+				}
 				$column += 3;
 				?>
-				<th class="text-center" width="100px"  >เป้าหมายปี <?php echo $search_year_start+$i+543; ?></th>
-				<th class="text-center" width="100px"  >ผลการประเมิน</th>
-				<th class="text-center" width="100px"  >ร้อยละความสำเร็จ</th>
+				<th class="text-center td-border-left-top-<?php echo $cls; ?>" width="100px"  >เป้าหมายปี <?php echo $search_year_start+$i+543; ?></th>
+				<th class="text-center td-border-top-bottom-<?php echo $cls; ?>" width="100px"  >ผลการประเมิน</th>
+				<th class="text-center td-border-right-top-<?php echo $cls; ?>" width="100px"  >ร้อยละความสำเร็จ</th>
 			<?php }
 			$column += 2;
 			 ?>
@@ -81,22 +148,27 @@
 						if(isset($data_detail['score'][$data->id][$search_year_start+$i])){
 							$result_all += $data_detail['score'][$data->id][$search_year_start+$i];
 						}
+						if(($i%2)==0){
+							$cls = "odd";
+						}else{
+							$cls = "even";
+						}
 
 						if($i == 0){
 							?>
-							<td class="text-center">
+							<td class="text-center td-left-odd td-bottom-odd">
 								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 
-							<td class="text-center">
+							<td class="text-center td-bottom-odd">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 
 							</td>
-							<td class="text-center">
+							<td class="text-center td-right-odd td-bottom-odd">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>
@@ -104,18 +176,18 @@
 							<?php
 						}else{
 							?>
-							<td class="text-center">
+							<td class="text-center td-left-<?php echo $cls; ?>  td-bottom-<?php echo $cls; ?>">
 								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 
-							<td class="text-center">
+							<td class="text-center td-bottom-<?php echo $cls; ?>">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center">
+							<td class="text-center td-right-<?php echo $cls; ?> td-bottom-<?php echo $cls; ?>">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != ''?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>

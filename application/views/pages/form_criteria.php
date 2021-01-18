@@ -186,7 +186,7 @@ function loopTreeFormListSub($tree_id,$structure_id,$tree_db,$kpi_db,$formula_db
 									if($no == 1){
 										?>
 										<td align="center">ผลลัพธ์</td>
-										<td>เปอร์เซนต์</td>
+										<td>เปอร์เซนต์/ระดับ</td>
 										<td>ค่าน้ำหนัก</td>
 
 										<?php

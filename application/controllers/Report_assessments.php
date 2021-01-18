@@ -148,7 +148,7 @@ class Report_assessments extends CI_Controller
 		}
 		$data['content_data'] = array(
 			'structure_id' => $id,
-			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model,
@@ -229,7 +229,7 @@ class Report_assessments extends CI_Controller
 		}
 		$data = array(
 			'structure_id' => $id,
-			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0)),
+			'tree' => $this->KpiTree_model->getKpiTree(array('structure_id' => $id,'tree_parent' => 0),array('ABS(tree_number)'=>'ASC','tree_id'=>'ASC')),
 			'tree_db' => $this->KpiTree_model,
 			'kpi_db' => $this->Kpi_model,
 			'formula_db' => $this->Formula_model,
