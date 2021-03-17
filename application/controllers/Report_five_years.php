@@ -51,18 +51,18 @@ class Report_five_years extends CI_Controller
 		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
 		$search_year_start = date('Y');
 		$search_year_end = date('Y')+4;
-		if(isset($_POST['search_year_start']) &&  isset($_POST['search_year_end'])){
-			$search_year_start = $_POST['search_year_start'];
-			$search_year_end = $_POST['search_year_end'];
+		if($this->input->get('search_year_start') != '' &&  $this->input->get('search_year_end') != ''){
+			$search_year_start = $this->input->get('search_year_start');
+			$search_year_end = $this->input->get('search_year_end');
 			$con = "year BETWEEN '{$search_year_start}' AND '{$search_year_end}'";
 			array_push($cond,$con);
 
-		}else if(isset($_POST['search_year_start'])){
-			$search_year_start = $_POST['search_year_start'];
+		}else if($this->input->get('search_year_start') != ''){
+			$search_year_start = $this->input->get('search_year_start');
 			$con = "year >= '{$search_year_start}'";
 			array_push($cond,$con);
-		}else if(isset($_POST['search_year_end'])){
-			$search_year_end = $_POST['search_year_end'];
+		}else if($this->input->get('search_year_end') != ''){
+			$search_year_end = $this->input->get('search_year_end');
 			$con = "year <= '{$search_year_end}'";
 			array_push($cond,$con);
 		}else{

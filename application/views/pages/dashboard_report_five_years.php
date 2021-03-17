@@ -80,6 +80,44 @@ th.even,td.even{
 	background-color: #7ea3e6;
 }
 
+th[class^='color_']{
+	color: white;
+	/* background-color: #FDC12E;
+	font-weight: bold; */
+}
+
+th.color_1{
+	color: white;
+	background-color: #FDC12E !important;
+	font-weight: bold;
+}
+
+th.color_2{
+	color: white;
+	background-color: #FD4263 !important;
+	font-weight: bold;
+}
+
+th.color_3{
+	color: white;
+	background-color: #35C2AD !important;
+	font-weight: bold;
+}
+
+th.color_4{
+	color: white;
+	background-color: #45C7E0 !important;
+	font-weight: bold;
+}
+
+th.color_5{
+	color: white;
+	background-color: #3197FC !important;
+	font-weight: bold;
+}
+
+
+
 </style>
 <div class="row">
 	<div class="col-md-12 text-right">
@@ -113,11 +151,13 @@ th.even,td.even{
 			<?php
 			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-				if(($i%2)==0){
-					$cls = "odd";
-				}else{
-					$cls = "even";
-				}
+				// if(($i%2)==0){
+				// 	$cls = "odd";
+				// }else{
+				// 	$cls = "even";
+				// }
+				$cls = "color_".($i+1);
+
 				$column += 3;
 				?>
 				<th class="text-center <?php echo $cls; ?>" width="100px"  >เป้าหมายปี <?php echo $search_year_start+$i+543; ?></th>
@@ -176,19 +216,19 @@ th.even,td.even{
 
 						if($i == 0){
 							?>
-							<td class="text-center odd">
+							<td class="text-center">
 								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 
-							<td class="text-center odd">
+							<td class="text-center">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 
 							</td>
-							<td class="text-center odd">
+							<td class="text-center">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>
@@ -196,18 +236,18 @@ th.even,td.even{
 							<?php
 						}else{
 							?>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
 
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != ''?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>

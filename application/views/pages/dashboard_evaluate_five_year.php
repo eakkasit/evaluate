@@ -60,6 +60,42 @@ th.odd,td.odd{
 th.even,td.even{
 	background-color: #7ea3e6;
 }
+
+th[class^='color_']{
+	color: white;
+	/* background-color: #FDC12E;
+	font-weight: bold; */
+}
+
+th.color_1{
+	color: white;
+	background-color: #FDC12E !important;
+	font-weight: bold;
+}
+
+th.color_2{
+	color: white;
+	background-color: #FD4263 !important;
+	font-weight: bold;
+}
+
+th.color_3{
+	color: white;
+	background-color: #35C2AD !important;
+	font-weight: bold;
+}
+
+th.color_4{
+	color: white;
+	background-color: #45C7E0 !important;
+	font-weight: bold;
+}
+
+th.color_5{
+	color: white;
+	background-color: #3197FC !important;
+	font-weight: bold;
+}
 </style>
 <form method="post" enctype="multipart/form-data" action="<?php echo $action; ?>">
 <div class="row">
@@ -93,11 +129,7 @@ th.even,td.even{
 			<?php
 			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-				if(($i%2)==0){
-					$cls = "odd";
-				}else{
-					$cls = "even";
-				}
+				$cls = "color_".($i+1);
 				if($i == 0){
 					$column+=4;
 
@@ -124,11 +156,7 @@ th.even,td.even{
 		<tr>
 			<?php
 				for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-					if(($i%2)==0){
-						$cls = "odd";
-					}else{
-						$cls = "even";
-					}
+					$cls = "color_".($i+1);
 					?>
 					<th class="text-center <?php echo $cls; ?>">*เป้าหมายร้อยละ</th>
 					<th class="text-center <?php echo $cls; ?>">เป้าหมายร้อยละ(รวม)</th>
@@ -207,54 +235,54 @@ th.even,td.even{
 						}
 						if($i == 0){
 							?>
-							<td class="text-center odd-left  <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_text_<?php echo "{$data->id}_".$i; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 								<input type="number" min="0" max="100" id="target_<?php echo "{$data->id}_".$i; ?>" class="form-control save_data" <?php //echo $disable; ?> onblur="changeTarget(this)"  name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
-							<td class="text-center  <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
 									<?php echo isset($data_detail['target_total'][$data->id][$search_year_start+$i])?$data_detail['target_total'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center  <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_per_year_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_per_year'][$data->id][$search_year_start+$i])?$data_detail['weight_per_year'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?> <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="point_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point'][$data->id][$search_year_start+$i]) ?$data_detail['point'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 								<input type="number" min="0" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_result'][$data->id][$search_year_start+$i])?$data_detail['weight_result'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_diff'][$data->id][$search_year_start+$i])?$data_detail['weight_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="point_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point_diff'][$data->id][$search_year_start+$i])?$data_detail['point_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?> <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['target_diff'][$data->id][$search_year_start+$i])?$data_detail['target_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?> <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != '' ?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>
@@ -262,63 +290,63 @@ th.even,td.even{
 							<?php
 						}else{
 							?>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 								<input type="number" min="0" max="100" class="form-control save_data" id="target_<?php echo "{$data->id}_".$i ; ?>" <?php //echo $disable; ?>  onblur="changeTarget(this)" name="data[target][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['target'][$data->id][$search_year_start+$i])?$data_detail['target'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_total_text_<?php echo "{$data->id}_".$i; ?>" class="">
 									<?php echo isset($data_detail['target_total'][$data->id][$search_year_start+$i])?$data_detail['target_total'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_per_year_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_per_year'][$data->id][$search_year_start+$i])?$data_detail['weight_per_year'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_total_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_total'][$data->id][$search_year_start+$i])?$data_detail['weight_total'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="point_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point'][$data->id][$search_year_start+$i])?$data_detail['point'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?> <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="point_new_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point_new'][$data->id][$search_year_start+$i])?$data_detail['point_new'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="score_text_<?php echo "{$data->id}_".$i ; ?>" class="save_data_text">
 									<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 								<input type="number" min="0" max="100" max="100" class="form-control save_data" id="score_<?php echo "{$data->id}_".$i ; ?>"  <?php //echo $disable; ?> onchange="changeResult(this)" name="data[result][<?php echo $data->id; ?>][<?php echo $search_year_start+$i; ?>]" value="<?php echo isset($data_detail['score'][$data->id][$search_year_start+$i])?$data_detail['score'][$data->id][$search_year_start+$i]:''; ?>" >
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_result'][$data->id][$search_year_start+$i])?$data_detail['weight_result'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="weight_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['weight_diff'][$data->id][$search_year_start+$i])?$data_detail['weight_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span></td>
-							<td class="text-center <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="point_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['point_diff'][$data->id][$search_year_start+$i])?$data_detail['point_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?> <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="target_diff_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['target_diff'][$data->id][$search_year_start+$i])?$data_detail['target_diff'][$data->id][$search_year_start+$i]:''; ?>
 								</span>
 							</td>
-							<td class="text-center <?php echo $cls; ?>  <?php echo $cls; ?>">
+							<td class="text-center">
 								<span id="result_<?php echo "{$data->id}_".$i ; ?>" class="">
 									<?php echo isset($data_detail['result'][$data->id][$search_year_start+$i]) && $data_detail['result'][$data->id][$search_year_start+$i] != ''?number_format($data_detail['result'][$data->id][$search_year_start+$i],2):''; ?>
 								</span>
