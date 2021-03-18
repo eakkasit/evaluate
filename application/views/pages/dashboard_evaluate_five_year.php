@@ -129,7 +129,11 @@ th.color_5{
 			<?php
 			$column = 4;
 			for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-				$cls = "color_".($i+1);
+				$number = ($i+1)%5;
+				if($number == 0){
+					$number = 5;
+				}
+				$cls = "color_".($number);
 				if($i == 0){
 					$column+=4;
 
@@ -156,7 +160,11 @@ th.color_5{
 		<tr>
 			<?php
 				for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
-					$cls = "color_".($i+1);
+					$number = ($i+1)%5;
+					if($number == 0){
+						$number = 5;
+					}
+					$cls = "color_".($number);
 					?>
 					<th class="text-center <?php echo $cls; ?>">*เป้าหมายร้อยละ</th>
 					<th class="text-center <?php echo $cls; ?>">เป้าหมายร้อยละ(รวม)</th>
@@ -227,11 +235,6 @@ th.color_5{
 					for ($i=0; $search_year_start+$i <= $search_year_end; $i++) {
 						if(isset($data_detail['score'][$data->id][$search_year_start+$i])){
 							$result_all += $data_detail['score'][$data->id][$search_year_start+$i];
-						}
-						if(($i%2)==0){
-							$cls = "odd";
-						}else{
-							$cls = "even";
 						}
 						if($i == 0){
 							?>
