@@ -48,7 +48,7 @@ class Evaluate_targets extends CI_Controller
 
 		$cond = $this->search_form(array('project_name'));
 		$config_pager = $this->config->item('pager');
-		$config_pager['base_url'] = base_url("evaluate_datas/dashboard_evaluate_datas");
+		$config_pager['base_url'] = base_url("evaluate_targets/dashboard_evaluate_targets");
 		$count_rows = $this->Activities_model->countActivities($cond);
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);

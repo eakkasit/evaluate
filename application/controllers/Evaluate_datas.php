@@ -58,6 +58,7 @@ class Evaluate_datas extends CI_Controller
 		$config_pager['total_rows'] = $count_rows;
 		$this->pagination->initialize($config_pager);
 		$page = 0;
+		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
 		$project_data = $this->Activities_model->getActivities($cond, array('year'=>'DESC'), $config_pager['per_page'], $page);
 
 		$responsible_person = array();
@@ -70,7 +71,7 @@ class Evaluate_datas extends CI_Controller
 			}
 		}
 
-		if (isset($_GET['per_page'])) $page = $_GET['per_page'];
+
 		$data['content_data'] = array(
 			'datas'=>$project_data,
 			'year_list' => $this->Commons_model->getYearList(),
