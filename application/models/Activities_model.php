@@ -26,6 +26,7 @@ class Activities_model extends CI_Model
 				}
 			}
 		}
+		$this->db->where('status >=', 0);
 		return $this->db->get()->num_rows();
 	}
 
@@ -45,6 +46,7 @@ class Activities_model extends CI_Model
 					$this->db->where($v);
 				}
 			}
+
 		}
 		if (!empty($order)) {
 			foreach ($order as $k => $v) {
@@ -60,6 +62,7 @@ class Activities_model extends CI_Model
 		if ($limit != null) {
 			$this->db->limit($limit, $start);
 		}
+		$this->db->where('status >=', 0);
 		return $this->db->get()->result();
 	}
 
